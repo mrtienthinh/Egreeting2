@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Backend/Egreeting/Egreeting.Domain/obj/Debug
+/Backend/Egreeting/Egreeting.Models/obj/Debug
+/Backend/Egreeting/Egreeting.Web/obj/Debug
+/Backend/Egreeting/.vs/Egreeting
+/Backend/Egreeting/Egreeting.Web/bin
