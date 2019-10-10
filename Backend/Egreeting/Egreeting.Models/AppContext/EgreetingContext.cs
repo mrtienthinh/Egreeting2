@@ -25,6 +25,8 @@ namespace Egreeting.Models.AppContext
         public virtual DbSet<EgreetingUser> EgreetingUsers { get; set; }
         public virtual DbSet<EgreetingRole> EgreetingRoles { get; set; }
         public virtual DbSet<Subcriber> Subcribers { get; set; }
+        public virtual DbSet<ScheduleSender> ScheduleSenders { get; set; }
+
 
 
         public static EgreetingContext Create()

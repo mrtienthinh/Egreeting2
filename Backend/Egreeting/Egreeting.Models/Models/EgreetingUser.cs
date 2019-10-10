@@ -53,5 +53,7 @@ namespace Egreeting.Models.Models
         public DateTime? PaymentDueDate { get; set; }
 
         public virtual ICollection<Ecard> Ecards { get; set; }
+        public virtual ICollection<Ecard> ScheduleSender { get; set; }
+
     }
 }

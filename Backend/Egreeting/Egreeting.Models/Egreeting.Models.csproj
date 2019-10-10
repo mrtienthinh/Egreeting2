@@ -65,6 +65,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderDetail.cs" />
     <Compile Include="Models\Payment.cs" />
+    <Compile Include="Models\ScheduleSender.cs" />
     <Compile Include="Models\Subcriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
