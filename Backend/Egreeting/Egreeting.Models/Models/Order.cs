@@ -15,7 +15,7 @@ namespace Egreeting.Models.Models
 
         [StringLength(100, ErrorMessage = "Tên người gửi không được vượt quá {1} ký tự!")]
         [DisplayName("Tên người gửi")]
-        public int SenderName { get; set; }
+        public string SenderName { get; set; }
 
         [EmailAddress]
         [Required]

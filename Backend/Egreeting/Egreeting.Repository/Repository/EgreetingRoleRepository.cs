@@ -16,6 +16,7 @@ namespace Egreeting.Repository.Repository
         }
 
         public EgreetingRoleRepository(EgreetingContext context)
+            : base(context)
         {
         }
     }

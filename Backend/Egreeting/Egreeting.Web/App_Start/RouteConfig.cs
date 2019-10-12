@@ -11,8 +11,8 @@ namespace Egreeting.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            string[] nameSpaceFrontend = { "EGreeting.Controllers.Frontend" };
-            string[] nameSpaceAdmin = { "EGreeting.Controllers.Admin" };
+            string[] nameSpaceFrontend = { "EGreeting.Web.Controllers.Frontend" };
+            string[] nameSpaceAdmin = { "EGreeting.Web.Controllers.Admin" };
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 

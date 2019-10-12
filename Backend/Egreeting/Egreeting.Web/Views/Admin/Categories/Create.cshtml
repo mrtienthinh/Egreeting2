@@ -44,7 +44,7 @@
 
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <button class="btn btn-primary">Cancel</button>
+                <button class="btn btn-primary" type="button" onclick="BackToIndex()">Cancel</button>
             </div>
                 
 </form>
@@ -90,6 +90,11 @@
             slug = slug.replace(/\s/g, '');
             //In slug ra textbox có id “slug”
             document.getElementById('categorySlug').value = slug;
+        }
+
+        function BackToIndex()
+        {
+            window.location.replace('@Url.Action("Index")');
         }
     </script>
 }

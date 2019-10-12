@@ -16,6 +16,7 @@ namespace Egreeting.Repository.Repository
         }
 
         public SubcriberRepository(EgreetingContext context)
+            : base(context)
         {
         }
     }

@@ -19,6 +19,7 @@ namespace Egreeting.Business.Business
         public CategoryBusiness(ILog logger, EgreetingContext context = null)
           : base(logger)
         {
+
             if (context == null)
             {
                 context = new EgreetingContext();

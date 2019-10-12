@@ -1,50 +1,65 @@
 ﻿@model Egreeting.Models.Models.Category
 
 @{
-    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Create";
 }
 
-<h2>Details</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Category Management
+        <small>Edit</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li>Admin</li>
+        <li><a href="@Url.Action("Index")">Categories</a></li>
+        <li class="active">Edit</li>
+    </ol>
+</section>
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CategorySlug)
-        </dt>
+<!-- Main content -->
+<section class="content">
 
-        <dd>
-            @Html.DisplayFor(model => model.CategorySlug)
-        </dd>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Edit category</h3>
+        </div><!-- /.box-header -->
+        <form>
+            <div class="box-body">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <input type="hidden" name="CategoryID" value="@Model.CategoryID">
+                <div class="form-group">
+                    <label for="">Category Name</label>
+                    <input type="text" class="form-control" id="categoryName" placeholder="Category name" name="CategoryName" onblur="CreateSlug()" value="@Model.CategoryName" readonly>
+                    @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="">Category Slug</label>
+                    <input type="text" class="form-control" id="categorySlug" placeholder="Category slug" name="CategorySlug" value="@Model.CategorySlug" readonly>
+                    @Html.ValidationMessageFor(model => model.CategorySlug, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
+            <div class="box-footer">
+                <button class="btn btn-primary" type="button" onclick="BackToIndex()">Back to index</button>
+            </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
+        </form>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
+</section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+<!-- Main content -->
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
+@section scripts{
+    <script>
 
-        <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CategoryID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+        function BackToIndex()
+        {
+            window.location.replace('@Url.Action("Index")');
+        }
+    </script>
+}

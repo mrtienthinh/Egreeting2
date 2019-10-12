@@ -14,6 +14,7 @@ namespace Egreeting.Repository.Repository
     {
         internal EgreetingContext Context;
         internal DbSet<T> DbSet;
+        public string connectionString;
 
         public GenericRepository()
         {

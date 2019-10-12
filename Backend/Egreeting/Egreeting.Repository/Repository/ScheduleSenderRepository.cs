@@ -16,6 +16,7 @@ namespace Egreeting.Repository.Repository
         }
 
         public ScheduleSenderRepository(EgreetingContext context)
+            : base(context)
         {
         }
     }

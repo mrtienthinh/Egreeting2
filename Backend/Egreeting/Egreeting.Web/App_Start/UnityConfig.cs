@@ -1,5 +1,6 @@
 ﻿using Egreeting.Business.Business;
 using Egreeting.Business.IBusiness;
+using Egreeting.Models.AppContext;
 using Egreeting.Repository.IRepository;
 using Egreeting.Repository.Repository;
 using log4net;
@@ -20,8 +21,8 @@ namespace Egreeting.Web.App_Start
         public static void RegisterComponents()
         {
             var container = new UnityContainer();
-            container.RegisterType<Controllers.Admin.AccountController>(new InjectionConstructor());
-            //container.RegisterType<Controllers.Admin.EcardsController>(new InjectionConstructor());
+            //container.RegisterType<Controllers.Admin.AccountController>(new InjectionConstructor());
+            container.RegisterType<EgreetingContext>(new InjectionConstructor());
 
 
             // register all your components with the container here 

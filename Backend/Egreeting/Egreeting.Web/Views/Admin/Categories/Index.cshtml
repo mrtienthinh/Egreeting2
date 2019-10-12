@@ -1,5 +1,4 @@
-﻿@using EGreeting.GlobalConstant
-@model IEnumerable<Egreeting.Models.Models.Category>
+﻿@model IEnumerable<Egreeting.Models.Models.Category>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -175,16 +174,14 @@
 
 @section scripts{
     <script>
-            function DeleteItem(id) {
+            function DeleteItem(ItemID) {
                 var confirmDelete = confirm('Do you really want to delete this item!');
                 if (confirmDelete) {
                     var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("DeleteConfirmed")',
-                        data: JSON.stringify({ id, __RequestVerificationToken }), //use id here
-                        dataType: "json",
-                        contentType: "application/json",
+                        url: '@Url.Action("Delete")',
+                        data: {ItemID, __RequestVerificationToken }, //use id here
                         success: function () {
                             LoadData();
                         },
@@ -196,6 +193,17 @@
 
             }
 
+            function ShowItem(id) {
+                window.location.replace('@Url.Action("Details")'+'/' + id);
+            }
+
+            function AddItem(){
+                window.location.replace('@Url.Action("Create")');
+            }
+
+            function EditItem(id){
+                window.location.replace('@Url.Action("Edit")' + '/' + id);
+            }
 
             function LoadData() {
                 console.log('acb');
@@ -216,13 +224,7 @@
                 window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
             }
 
-            function AddItem(){
-                window.location.replace('@Url.Action("Create")');
-            }
-
             
-
-
     </script>
 }
 

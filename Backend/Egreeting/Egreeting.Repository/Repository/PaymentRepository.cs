@@ -16,6 +16,7 @@ namespace Egreeting.Repository.Repository
         }
 
         public PaymentRepository(EgreetingContext context)
+            : base(context)
         {
         }
     }

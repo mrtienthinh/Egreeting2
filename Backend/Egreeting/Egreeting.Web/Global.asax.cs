@@ -15,6 +15,7 @@ namespace Egreeting.Web
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(config =>
             {
                 WebApiConfig.Register(config);

@@ -46,14 +46,20 @@ namespace Egreeting.Models.Models
         [MinLength(12)]
         public string CreditCardNumber { get; set; }
 
+        [StringLength(3, ErrorMessage = "CVG chỉ bao gồm {1} ký tự!")]
+        [MinLength(3)]
+        [MaxLength(3)]
         public string CreditCardCVG { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? PaymentDueDate { get; set; }
 
+        public virtual EgreetingRole EgreetingRole { get; set; }
+        public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Ecard> Ecards { get; set; }
-        public virtual ICollection<Ecard> ScheduleSender { get; set; }
+        public virtual ICollection<Subcriber> Subcribers { get; set; }
+        public virtual ICollection<ScheduleSender> ScheduleSenders { get; set; }
 
     }
 }

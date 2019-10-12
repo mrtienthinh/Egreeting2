@@ -101,7 +101,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategorySlug,CategoryName")] Category Category)
+        public ActionResult Edit([Bind(Include = "CategoryID,CategorySlug,CategoryName")] Category Category)
         {
             if (ModelState.IsValid)
             {
@@ -112,28 +112,11 @@ namespace Egreeting.Web.Controllers.Admin
             return View(ViewNamesConstant.AdminCategoriesEdit, Category);
         }
 
-        // GET: Categorys/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Category Category = CategoryBusiness.Find(id);
-            if (Category == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminCategoriesDelete,Category);
-        }
-
-        // POST: Categorys/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int ItemID)
         {
-            Category Category = CategoryBusiness.Find(id);
-            CategoryBusiness.Delete(Category);
+            CategoryBusiness.Delete(ItemID);
             CategoryBusiness.Save();
             return RedirectToAction("Index");
         }

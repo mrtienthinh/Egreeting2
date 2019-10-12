@@ -16,6 +16,7 @@ namespace Egreeting.Repository.Repository
         }
 
         public OrderDetailRepository(EgreetingContext context)
+            : base(context)
         {
         }
     }
