@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
-    public class FeedbacksController : Controller
+    public class FeedbacksController : BaseAdminController
     {
         private IFeedbackBusiness FeedbackBusiness;
         public FeedbacksController(IFeedbackBusiness FeedbackBusiness)

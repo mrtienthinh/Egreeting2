@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
-    public class EcardsController : Controller
+    public class EcardsController : BaseAdminController
     {
         private IEcardBusiness EcardBusiness;
         public EcardsController(IEcardBusiness EcardBusiness)

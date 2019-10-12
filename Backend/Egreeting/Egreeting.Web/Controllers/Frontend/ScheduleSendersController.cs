@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Frontend
 {
     [LogAction]
-    public class ScheduleSendersController : Controller
+    public class ScheduleSendersController : BaseController
     {
         private IScheduleSenderBusiness ScheduleSenderBusiness;
         public ScheduleSendersController(IScheduleSenderBusiness ScheduleSenderBusiness)

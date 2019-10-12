@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Frontend
 {
     [LogAction]
-    public class EgreetingUsersController : Controller
+    public class EgreetingUsersController : BaseController
     {
         private IEgreetingUserBusiness EgreetingUserBusiness;
         public EgreetingUsersController(IEgreetingUserBusiness EgreetingUserBusiness)

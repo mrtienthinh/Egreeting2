@@ -15,7 +15,7 @@ using Egreeting.Web.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseAdminController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
-    public class OrdersController : Controller
+    public class OrdersController : BaseAdminController
     {
         private IOrderBusiness OrderBusiness;
         public OrdersController(IOrderBusiness OrderBusiness)

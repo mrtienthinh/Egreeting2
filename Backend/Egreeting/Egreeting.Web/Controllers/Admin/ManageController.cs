@@ -13,7 +13,7 @@ using Egreeting.Web.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseAdminController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

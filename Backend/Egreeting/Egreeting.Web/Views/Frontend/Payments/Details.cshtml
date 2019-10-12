@@ -1,0 +1,50 @@
+﻿@model Egreeting.Models.Models.Payment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PaymentRequest</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceiveMoney)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceiveMoney)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsReceived)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsReceived)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PaymentRequestID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

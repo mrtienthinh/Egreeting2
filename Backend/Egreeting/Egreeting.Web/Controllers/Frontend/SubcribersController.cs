@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Frontend
 {
     [LogAction]
-    public class SubcribersController : Controller
+    public class SubcribersController : BaseController
     {
         private ISubcriberBusiness SubcriberBusiness;
         public SubcribersController(ISubcriberBusiness SubcriberBusiness)
@@ -54,7 +54,7 @@ namespace Egreeting.Web.Controllers.Frontend
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SubcriberID,SubcriberEmail,CreatedDate,ModifiedDate")] Subcriber subcriber)
+        public ActionResult Create([Bind(Include = "SubcriberEmail,CreatedDate,ModifiedDate")] Subcriber subcriber)
         {
             if (ModelState.IsValid)
             {

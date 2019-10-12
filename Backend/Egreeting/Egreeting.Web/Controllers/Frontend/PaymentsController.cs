@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Frontend
 {
     [LogAction]
-    public class PaymentsController : Controller
+    public class PaymentsController : BaseController
     {
         private IPaymentBusiness PaymentBusiness;
         public PaymentsController(IPaymentBusiness PaymentBusiness)

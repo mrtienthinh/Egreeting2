@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Frontend
 {
     [LogAction]
-    public class CategoriesController : Controller
+    public class CategoriesController : BaseController
     {
         private ICategoryBusiness CategoryBusiness;
         public CategoriesController(ICategoryBusiness CategoryBusiness)

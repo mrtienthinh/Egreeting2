@@ -14,7 +14,7 @@ using Egreeting.Models.Models;
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
-    public class SubcribersController : Controller
+    public class SubcribersController : BaseAdminController
     {
         private ISubcriberBusiness SubcriberBusiness;
         public SubcribersController(ISubcriberBusiness SubcriberBusiness)
