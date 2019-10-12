@@ -21,7 +21,7 @@ namespace Egreeting.Models.AppContext
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
-        public virtual DbSet<Payment> PaymentRequests { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<EgreetingUser> EgreetingUsers { get; set; }
         public virtual DbSet<EgreetingRole> EgreetingRoles { get; set; }
         public virtual DbSet<Subcriber> Subcribers { get; set; }

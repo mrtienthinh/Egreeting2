@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egreeting.Business", "Egree
 		{C0AD58DE-653F-4130-BBE4-E3A29AEFDEA6} = {C0AD58DE-653F-4130-BBE4-E3A29AEFDEA6}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Egreeting.Utils", "Egreeting.Utils\Egreeting.Utils.csproj", "{EDD15CA4-EA38-433D-B783-AB19D73D37B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{6FC778C6-3906-4BED-AA03-9D70F8687C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FC778C6-3906-4BED-AA03-9D70F8687C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FC778C6-3906-4BED-AA03-9D70F8687C21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD15CA4-EA38-433D-B783-AB19D73D37B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD15CA4-EA38-433D-B783-AB19D73D37B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD15CA4-EA38-433D-B783-AB19D73D37B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD15CA4-EA38-433D-B783-AB19D73D37B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

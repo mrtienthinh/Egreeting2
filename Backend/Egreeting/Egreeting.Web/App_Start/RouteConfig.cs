@@ -11,13 +11,27 @@ namespace Egreeting.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            string[] nameSpaceFrontend = { "EGreeting.Controllers.Frontend" };
+            string[] nameSpaceAdmin = { "EGreeting.Controllers.Admin" };
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                name: "Admin",
+                url: "admin/{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                null,
+                nameSpaceAdmin
             );
+            routes.MapRoute(
+                name: "Frontend",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                null,
+                nameSpaceFrontend
+            );
+            routes.MapMvcAttributeRoutes();
+
         }
     }
 }

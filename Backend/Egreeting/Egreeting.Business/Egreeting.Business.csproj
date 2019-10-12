@@ -66,6 +66,7 @@
     <Compile Include="Business\OrderBusiness.cs" />
     <Compile Include="Business\OrderDetailBusiness.cs" />
     <Compile Include="Business\PaymentBusiness.cs" />
+    <Compile Include="Business\SubcriberBusiness.cs" />
     <Compile Include="Business\ScheduleSenderBusiness.cs" />
     <Compile Include="IBusiness\ICategoryBusiness.cs" />
     <Compile Include="IBusiness\IEcardBusiness.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="IBusiness\IOrderBusiness.cs" />
     <Compile Include="IBusiness\IOrderDetailBusiness.cs" />
     <Compile Include="IBusiness\IPaymentBusiness.cs" />
+    <Compile Include="IBusiness\ISubcriberBusiness.cs" />
     <Compile Include="IBusiness\IScheduleSenderBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

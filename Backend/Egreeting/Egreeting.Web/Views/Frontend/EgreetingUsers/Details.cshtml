@@ -1,0 +1,90 @@
+﻿@model EGreeting.Models.EgreetingUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>EgreetingUser</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EgreetingUserSlug)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EgreetingUserSlug)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BirthDay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthDay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCardNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCardNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCardCVG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCardCVG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentDueDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PaymentDueDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.EgreetingUserID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

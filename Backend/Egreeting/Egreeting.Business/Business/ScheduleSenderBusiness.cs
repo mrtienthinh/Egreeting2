@@ -28,5 +28,5 @@ namespace Egreeting.Business.Business
             this.ScheduleSenderRepository = new ScheduleSenderRepository(context);
             repository = ScheduleSenderRepository;
         }
-    }`
+    }
 }
