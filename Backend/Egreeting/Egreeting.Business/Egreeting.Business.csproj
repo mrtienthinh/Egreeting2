@@ -31,7 +31,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,11 +57,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\CategoryBusiness.cs" />
+    <Compile Include="Business\EcardBusiness.cs" />
+    <Compile Include="Business\EgreetingRoleBusiness.cs" />
+    <Compile Include="Business\EgreetingUserBusiness.cs" />
+    <Compile Include="Business\FeedbackBusiness.cs" />
+    <Compile Include="Business\GenericBusiness.cs" />
+    <Compile Include="Business\OrderBusiness.cs" />
+    <Compile Include="Business\OrderDetailBusiness.cs" />
+    <Compile Include="Business\PaymentBusiness.cs" />
+    <Compile Include="Business\ScheduleSenderBusiness.cs" />
+    <Compile Include="IBusiness\ICategoryBusiness.cs" />
+    <Compile Include="IBusiness\IEcardBusiness.cs" />
+    <Compile Include="IBusiness\IEgreetingRoleBusiness.cs" />
+    <Compile Include="IBusiness\IEgreetingUserBusiness.cs" />
+    <Compile Include="IBusiness\IFeedbackBusiness.cs" />
+    <Compile Include="IBusiness\IGenericBusiness.cs" />
+    <Compile Include="IBusiness\IOrderBusiness.cs" />
+    <Compile Include="IBusiness\IOrderDetailBusiness.cs" />
+    <Compile Include="IBusiness\IPaymentBusiness.cs" />
+    <Compile Include="IBusiness\IScheduleSenderBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Business\" />
-    <Folder Include="IBusiness\" />
+    <ProjectReference Include="..\Egreeting.Models\Egreeting.Models.csproj">
+      <Project>{15EEBB3E-3AD4-4E61-AB12-DC851BC7C614}</Project>
+      <Name>Egreeting.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Egreeting.Repository\Egreeting.Repository.csproj">
+      <Project>{C0AD58DE-653F-4130-BBE4-E3A29AEFDEA6}</Project>
+      <Name>Egreeting.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

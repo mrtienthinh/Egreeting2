@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Egreeting.Web.Models;
+using Egreeting.Models.Models;
 
 namespace Egreeting.Web.Controllers
 {
