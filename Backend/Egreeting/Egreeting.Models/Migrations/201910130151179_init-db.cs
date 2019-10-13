@@ -59,12 +59,9 @@ namespace Egreeting.Models.Migrations
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
                         Status = c.Boolean(nullable: false),
-                        EgreetingRole_EgreetingRoleID = c.Int(),
                     })
                 .PrimaryKey(t => t.EgreetingUserID)
-                .ForeignKey("dbo.EgreetingRoles", t => t.EgreetingRole_EgreetingRoleID)
-                .Index(t => t.EgreetingUserSlug, unique: true)
-                .Index(t => t.EgreetingRole_EgreetingRoleID);
+                .Index(t => t.EgreetingUserSlug, unique: true);
             
             CreateTable(
                 "dbo.EgreetingRoles",
@@ -258,6 +255,19 @@ namespace Egreeting.Models.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
             
+            CreateTable(
+                "dbo.EgreetingRoleEgreetingUsers",
+                c => new
+                    {
+                        EgreetingRole_EgreetingRoleID = c.Int(nullable: false),
+                        EgreetingUser_EgreetingUserID = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.EgreetingRole_EgreetingRoleID, t.EgreetingUser_EgreetingUserID })
+                .ForeignKey("dbo.EgreetingRoles", t => t.EgreetingRole_EgreetingRoleID, cascadeDelete: true)
+                .ForeignKey("dbo.EgreetingUsers", t => t.EgreetingUser_EgreetingUserID, cascadeDelete: true)
+                .Index(t => t.EgreetingRole_EgreetingRoleID)
+                .Index(t => t.EgreetingUser_EgreetingUserID);
+            
         }
         
         public override void Down()
@@ -276,9 +286,12 @@ namespace Egreeting.Models.Migrations
             DropForeignKey("dbo.ScheduleSenders", "Ecard_EcardID", "dbo.Ecards");
             DropForeignKey("dbo.Feedbacks", "EgreetingUser_EgreetingUserID", "dbo.EgreetingUsers");
             DropForeignKey("dbo.Feedbacks", "Ecard_EcardID", "dbo.Ecards");
-            DropForeignKey("dbo.EgreetingUsers", "EgreetingRole_EgreetingRoleID", "dbo.EgreetingRoles");
+            DropForeignKey("dbo.EgreetingRoleEgreetingUsers", "EgreetingUser_EgreetingUserID", "dbo.EgreetingUsers");
+            DropForeignKey("dbo.EgreetingRoleEgreetingUsers", "EgreetingRole_EgreetingRoleID", "dbo.EgreetingRoles");
             DropForeignKey("dbo.Ecards", "EgreetingUser_EgreetingUserID", "dbo.EgreetingUsers");
             DropForeignKey("dbo.Ecards", "Category_CategoryID", "dbo.Categories");
+            DropIndex("dbo.EgreetingRoleEgreetingUsers", new[] { "EgreetingUser_EgreetingUserID" });
+            DropIndex("dbo.EgreetingRoleEgreetingUsers", new[] { "EgreetingRole_EgreetingRoleID" });
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", new[] { "EgreetingUser_EgreetingUserID" });
@@ -296,13 +309,13 @@ namespace Egreeting.Models.Migrations
             DropIndex("dbo.Feedbacks", new[] { "EgreetingUser_EgreetingUserID" });
             DropIndex("dbo.Feedbacks", new[] { "Ecard_EcardID" });
             DropIndex("dbo.EgreetingRoles", new[] { "EgreetingRoleName" });
-            DropIndex("dbo.EgreetingUsers", new[] { "EgreetingRole_EgreetingRoleID" });
             DropIndex("dbo.EgreetingUsers", new[] { "EgreetingUserSlug" });
             DropIndex("dbo.Ecards", new[] { "EgreetingUser_EgreetingUserID" });
             DropIndex("dbo.Ecards", new[] { "Category_CategoryID" });
             DropIndex("dbo.Ecards", new[] { "EcardSlug" });
             DropIndex("dbo.Categories", new[] { "CategoryName" });
             DropIndex("dbo.Categories", new[] { "CategorySlug" });
+            DropTable("dbo.EgreetingRoleEgreetingUsers");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");

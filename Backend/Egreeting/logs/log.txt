@@ -103,3 +103,8 @@ INFO  2019-10-12 23:05:11,621 94524ms EGreetingLog           OnActionExecuting  
 INFO  2019-10-12 23:06:13,796 156700ms EGreetingLog           OnActionExecuting  - Controller:categories action:Index
 INFO  2019-10-12 23:06:52,099 195003ms EGreetingLog           OnActionExecuting  - Controller:categories action:Index
 INFO  2019-10-12 23:06:57,616 200519ms EGreetingLog           OnActionExecuting  - Controller:categories action:Delete
+INFO  2019-10-13 08:55:12,915  2041ms EGreetingLog           OnActionExecuting  - Controller:categories action:Index
+INFO  2019-10-13 08:55:16,839  5965ms EGreetingLog           OnActionExecuting  - Controller:categories action:Index
+INFO  2019-10-13 08:55:19,657  8782ms EGreetingLog           OnActionExecuting  - Controller:categories action:Create
+INFO  2019-10-13 08:55:25,270 14396ms EGreetingLog           OnActionExecuting  - Controller:categories action:Create
+INFO  2019-10-13 08:55:25,399 14525ms EGreetingLog           OnActionExecuting  - Controller:categories action:Index

@@ -55,7 +55,7 @@ namespace Egreeting.Models.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? PaymentDueDate { get; set; }
 
-        public virtual EgreetingRole EgreetingRole { get; set; }
+        public virtual ICollection<EgreetingRole> EgreetingRoles { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Ecard> Ecards { get; set; }
         public virtual ICollection<Subcriber> Subcribers { get; set; }

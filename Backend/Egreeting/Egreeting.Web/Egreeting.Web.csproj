@@ -285,6 +285,7 @@
     <Compile Include="Controllers\Frontend\SubcribersController.cs" />
     <Compile Include="Controllers\Frontend\OrdersController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Security\CustomRoleProvider.cs" />
     <Compile Include="Utils\GlobalInfo.cs" />
     <Compile Include="Controllers\OdataAPI\CategoriesController.cs" />
     <Compile Include="Controllers\OdataAPI\EcardsController.cs" />
