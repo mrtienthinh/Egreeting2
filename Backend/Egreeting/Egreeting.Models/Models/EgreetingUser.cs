@@ -74,6 +74,7 @@ namespace Egreeting.Models.Models
         public virtual ICollection<EgreetingRole> EgreetingRoles { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Ecard> Ecards { get; set; }
+
         public virtual Subcriber Subcriber { get; set; }
         public virtual ICollection<ScheduleSender> ScheduleSenders { get; set; }
     }

@@ -29,8 +29,8 @@ namespace Egreeting.Models.Migrations
                         EcardID = c.Int(nullable: false, identity: true),
                         EcardSlug = c.String(maxLength: 200),
                         EcardType = c.Int(nullable: false),
-                        EcardUrl = c.String(nullable: false, maxLength: 150),
-                        ThumbnailUrl = c.String(nullable: false, maxLength: 150),
+                        EcardUrl = c.String(maxLength: 150),
+                        ThumbnailUrl = c.String(maxLength: 150),
                         Price = c.Double(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
@@ -47,9 +47,10 @@ namespace Egreeting.Models.Migrations
                 c => new
                     {
                         EgreetingUserID = c.Int(nullable: false, identity: true),
-                        EgreetingUserSlug = c.String(nullable: false, maxLength: 100),
-                        FirstName = c.String(nullable: false, maxLength: 50),
-                        LastName = c.String(nullable: false, maxLength: 100),
+                        EgreetingUserSlug = c.String(maxLength: 100),
+                        FirstName = c.String(maxLength: 50),
+                        Email = c.String(maxLength: 100),
+                        LastName = c.String(maxLength: 100),
                         Avatar = c.Binary(),
                         BirthDay = c.DateTime(),
                         CreditCardNumber = c.String(maxLength: 12),
@@ -80,8 +81,8 @@ namespace Egreeting.Models.Migrations
                 c => new
                     {
                         FeedbackID = c.Int(nullable: false, identity: true),
-                        Subject = c.String(nullable: false, maxLength: 200),
-                        Message = c.String(nullable: false, maxLength: 500),
+                        Subject = c.String(maxLength: 200),
+                        Message = c.String(maxLength: 500),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
                         Status = c.Boolean(nullable: false),
@@ -102,8 +103,8 @@ namespace Egreeting.Models.Migrations
                         ScheduleTime = c.DateTime(),
                         ScheduleType = c.Int(nullable: false),
                         SenderName = c.String(maxLength: 100),
-                        RecipientEmail = c.String(nullable: false, maxLength: 100),
-                        SendSubject = c.String(nullable: false, maxLength: 100),
+                        RecipientEmail = c.String(maxLength: 100),
+                        SendSubject = c.String(maxLength: 100),
                         SendMessage = c.String(maxLength: 500),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
@@ -122,7 +123,8 @@ namespace Egreeting.Models.Migrations
                 c => new
                     {
                         SubcriberID = c.Int(nullable: false),
-                        Email = c.String(nullable: false, maxLength: 100),
+                        Email = c.String(maxLength: 100),
+                        EgreetingUserID = c.Int(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
                         Status = c.Boolean(nullable: false),
@@ -157,8 +159,8 @@ namespace Egreeting.Models.Migrations
                     {
                         OrderID = c.Int(nullable: false, identity: true),
                         SenderName = c.String(maxLength: 100),
-                        RecipientEmail = c.String(nullable: false, maxLength: 100),
-                        SendSubject = c.String(nullable: false, maxLength: 100),
+                        RecipientEmail = c.String(maxLength: 100),
+                        SendSubject = c.String(maxLength: 100),
                         SendMessage = c.String(maxLength: 500),
                         SendStatus = c.Boolean(nullable: false),
                         TotalPrice = c.Double(nullable: false),

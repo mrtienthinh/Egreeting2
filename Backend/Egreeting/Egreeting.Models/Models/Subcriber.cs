@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Egreeting.Models.Models
 {
     public class Subcriber : BaseModel
     {
-        [Key]
+        [Key, ForeignKey("EgreetingUser")]
         public int SubcriberID { get; set; }
 
         [EmailAddress]
@@ -17,8 +18,9 @@ namespace Egreeting.Models.Models
         [StringLength(100, ErrorMessage = "Email không được vượt quá {1} ký tự!")]
         public string Email { get; set; }
 
-        public EgreetingUser EgreetingUser { get; set; }
+        public int EgreetingUserID { get; set; }
 
-
+        [ForeignKey("EgreetingUserID")]
+        public virtual EgreetingUser EgreetingUser { get; set; }
     }
 }
