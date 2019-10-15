@@ -109,9 +109,16 @@
                             <div class="col-xs-6">
                                 <div class="dataTables_paginate paging_bootstrap">
                                     <ul class="pagination">
-                                        @if (totalPage <= 5)
+                                        @if (totalPage <= 10)
                                         {
-                                            <li class="prev disabled"><a>← Previous</a></li>
+                                            if (currentPage == 1)
+                                            {
+                                                <li class="prev disabled"><a>← Previous</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="prev" onclick="LoadPage(@currentPage -1)"><a>← Previous</a></li>
+                                            }
                                             for (int i = 1; i <= totalPage; i++)
                                             {
                                                 if (currentPage == i)
@@ -123,38 +130,52 @@
                                                     <li onclick="LoadPage(@i)" style="cursor: pointer;"><a>@i</a></li>
                                                 }
                                             }
-                                            <li class="next disabled" style="cursor: pointer;"><a>Next → </a></li>
-                                        }
-                                        @if (totalPage > 5)
-                                        {
-                                            if (currentPage <= 3)
+                                            if (currentPage == totalPage)
                                             {
-                                                <li class="prev disabled" style="cursor: pointer;"><a>← Previous</a></li>
+                                                <li class="next disabled" style="cursor: pointer;"><a>Next → </a></li>
                                             }
                                             else
                                             {
-                                                <li style="cursor: pointer;" class="prev" onclick="LoadPage(@currentPage -2)"><a>← Previous</a></li>
+                                                <li class="next" onclick="LoadPage(@currentPage +1)" style="cursor: pointer;"><a>Next → </a></li>
+                                            }
+                                        }
+                                        @if (totalPage > 10)
+                                        {
+                                            if (currentPage < 3)
+                                            {
+                                                <li class="prev disabled" style="cursor: pointer;"><a>← First</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li style="cursor: pointer;" class="prev" onclick="LoadPage(1)"><a>← First</a></li>
+                                            }
+                                            if (currentPage >= 4)
+                                            {
+                                                <li><a>...</a></li>
                                             }
 
-                                            for (int i = currentPage - 2; i > 0 && i < currentPage + 2 && i <= totalPage; i++)
+                                            for (int i = currentPage - 2 <= 0 ? 1 : currentPage - 2; i > 0 && i <= currentPage + 2 && i <= totalPage; i++)
                                             {
                                                 if (currentPage == i)
                                                 {
-                                                    <li style="cursor: pointer;" class="active" onclick="LoadPage(@i)"><a >@i</a></li>
+                                                    <li style="cursor: pointer;" class="active" onclick="LoadPage(@i)"><a>@i</a></li>
                                                 }
                                                 else
                                                 {
                                                     <li style="cursor: pointer;" onclick="LoadPage(@i)"><a>@i</a></li>
                                                 }
                                             }
-
+                                            if (currentPage <= totalPage - 3)
+                                            {
+                                                <li><a>...</a></li>
+                                            }
                                             if (currentPage + 2 <= totalPage)
                                             {
-                                                <li style="cursor: pointer;" class="next disabled"><a>← Previous</a></li>
+                                                <li style="cursor: pointer;" class="next" onclick="LoadPage(@totalPage)"><a>Last → </a></li>
                                             }
                                             else
                                             {
-                                                <li style="cursor: pointer;" class="next" onclick="LoadPage(@currentPage + 3)"><a>Next → </a></li>
+                                                <li style="cursor: pointer;" class="next disabled"><a>Last → </a></li>
                                             }
 
                                         }

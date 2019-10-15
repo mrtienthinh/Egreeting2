@@ -13,7 +13,7 @@ namespace Egreeting.Models.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201910130151179_init-db"; }
+            get { return "201910151426403_init-db"; }
         }
         
         string IMigrationMetadata.Source

@@ -37,8 +37,7 @@ namespace Egreeting.Models.Models
         public string ThumbnailUrl { get; set; }
 
         [Required]
-        [StringLength(150, ErrorMessage = "Thumbnail thiệp không được quá {1} ký tự!")]
-        [DisplayName("Thumbnail")]
+        [DisplayName("Ecard's price")]
         public double Price { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
