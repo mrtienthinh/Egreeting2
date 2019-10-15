@@ -29,13 +29,11 @@ namespace Egreeting.Models.Models
         public string SenderName { get; set; }
 
         [EmailAddress]
-        [Required]
         [DisplayName("Địa chỉ email người nhận")]
         [StringLength(100, ErrorMessage = "Email người nhận không được vượt quá {1} ký tự!")]
         public string RecipientEmail { get; set; }
 
         [StringLength(100, ErrorMessage = "Chủ đề thiệp không được quá {1} ký tự!")]
-        [Required]
         [DisplayName("Chủ đề lời chúc")]
         public string SendSubject { get; set; }
 

@@ -22,21 +22,18 @@ namespace Egreeting.Models.Models
 
         //Enum EcardType
         [Range(1, 3, ErrorMessage = "Loại thiệp không chính xác!")]
-        [Required]
+
         [DisplayName("Loại thiệp")]
         public int EcardType { get; set; }
 
-        [Required]
         [StringLength(150, ErrorMessage = "Đường dẫn lưu thiệp không được quá {1} ký tự!")]
         [DisplayName("Ecard's link")]
         public string EcardUrl { get; set; }
 
-        [Required]
         [StringLength(150, ErrorMessage = "Thumbnail thiệp không được quá {1} ký tự!")]
         [DisplayName("Thumbnail")]
         public string ThumbnailUrl { get; set; }
 
-        [Required]
         [DisplayName("Ecard's price")]
         public double Price { get; set; }
 

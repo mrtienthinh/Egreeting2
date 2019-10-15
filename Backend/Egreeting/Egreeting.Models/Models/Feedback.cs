@@ -13,12 +13,10 @@ namespace Egreeting.Models.Models
         [Key]
         public int FeedbackID { get; set; }
 
-        [Required]
         [DisplayName("Chủ đề phản hồi")]
         [StringLength(200, ErrorMessage = "Chủ đề không được quá {1} ký tự!")]
         public string Subject { get; set; }
 
-        [Required]
         [DisplayName("Nội dung phản hồi")]
         [StringLength(500, ErrorMessage = "Nội dung không được quá {1} ký tự!")]
         public string Message { get; set; }

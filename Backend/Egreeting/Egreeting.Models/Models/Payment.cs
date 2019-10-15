@@ -13,16 +13,13 @@ namespace Egreeting.Models.Models
         [Key]
         public int PaymentID { get; set; }
 
-        [Required]
         [Range(1,12)]
         [DisplayName("Tháng tính phí")]
         public int Month { get; set; }
 
-        [Required]
         [DisplayName("Năm tính phí")]
         public int Year { get; set; }
 
-        [Required]
         [DisplayName("Trạng thái tính phí")]
         public bool PaymentStatus { get; set; }
 

@@ -18,7 +18,6 @@ namespace Egreeting.Models.Models
         [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
         public DateTime? ScheduleTime { get; set; }
 
-        [Required]
         [DisplayName("Trạng thái thư")]
         public bool SendStatus { get; set; }
 

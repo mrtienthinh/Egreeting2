@@ -23,18 +23,31 @@ namespace Egreeting.Models.Models
         public int EgreetingUserID { get; set; }
 
         [DisplayName("Tên đường link tùy biến")]
-        [Required]
         [Index(IsUnique = true)]
         [StringLength(100, ErrorMessage = "Tên đường link tùy biến không được quá {1} ký tự!")]
         public string EgreetingUserSlug { get; set; }
 
         [DisplayName("Tên")]
-        [Required]
         [StringLength(50, ErrorMessage = "Tên không được quá {1} ký tự!")]
         public string FirstName { get; set; }
 
+        [DisplayName("Email")]
+        [StringLength(100, ErrorMessage = "Email không được quá {1} ký tự!")]
+        public string Email { get; set; }
+
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        [NotMapped]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [NotMapped]
+        public string ConfirmPassword { get; set; }
+
         [DisplayName("Họ")]
-        [Required]
         [StringLength(100, ErrorMessage = "Họ không được quá {1} ký tự!")]
         public string LastName { get; set; }
 
