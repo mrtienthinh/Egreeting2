@@ -37,6 +37,8 @@ namespace Egreeting.Models.Models
         [DisplayName("Trạng thái gửi")]
         public bool SendStatus { get; set; }
 
+        public double TotalPrice { get; set; }
+
         public virtual EgreetingUser User { get; set; }
     }
 }

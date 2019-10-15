@@ -21,7 +21,7 @@ namespace Egreeting.Models.Models
         [Required]
         [DisplayName("Nội dung phản hồi")]
         [StringLength(500, ErrorMessage = "Nội dung không được quá {1} ký tự!")]
-        public string Content { get; set; }
+        public string Message { get; set; }
 
         public virtual Ecard Ecard { get; set; }
 

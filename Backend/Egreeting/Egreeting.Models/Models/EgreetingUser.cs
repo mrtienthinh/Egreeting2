@@ -14,6 +14,9 @@ namespace Egreeting.Models.Models
         public EgreetingUser()
         {
             Ecards = new HashSet<Ecard>();
+            Feedbacks = new HashSet<Feedback>();
+            ScheduleSenders = new HashSet<ScheduleSender>();
+            EgreetingRoles = new HashSet<EgreetingRole>();
         }
 
         [Key]
@@ -58,8 +61,7 @@ namespace Egreeting.Models.Models
         public virtual ICollection<EgreetingRole> EgreetingRoles { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }
         public virtual ICollection<Ecard> Ecards { get; set; }
-        public virtual ICollection<Subcriber> Subcribers { get; set; }
+        public virtual Subcriber Subcriber { get; set; }
         public virtual ICollection<ScheduleSender> ScheduleSenders { get; set; }
-
     }
 }

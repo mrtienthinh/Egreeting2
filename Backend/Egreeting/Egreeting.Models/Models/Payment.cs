@@ -24,7 +24,7 @@ namespace Egreeting.Models.Models
 
         [Required]
         [DisplayName("Trạng thái tính phí")]
-        public bool StatusPayment { get; set; }
+        public bool PaymentStatus { get; set; }
 
         public virtual EgreetingUser EgreetingUser { get; set; }
     }

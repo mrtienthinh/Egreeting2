@@ -22,6 +22,11 @@ namespace Egreeting.Models.Models
         [DisplayName("Trạng thái thư")]
         public bool SendStatus { get; set; }
 
+        [DisplayName("Giờ gửi thành công")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
+        public DateTime? SendTime { get; set; }
+
         public virtual Ecard Ecard { get; set; }
 
         public virtual Order Order { get; set; }

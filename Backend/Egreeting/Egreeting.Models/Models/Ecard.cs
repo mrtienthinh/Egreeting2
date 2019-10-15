@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,11 @@ namespace Egreeting.Models.Models
 {
     public class Ecard : BaseModel
     {
+        public Ecard()
+        {
+            Categories = new HashSet<Category>();
+        }
+
         [Key]
         public int EcardID { get; set; }
 
@@ -21,11 +27,21 @@ namespace Egreeting.Models.Models
         public int EcardType { get; set; }
 
         [Required]
-        [StringLength(150, ErrorMessage = "Link rút gọn của thiệp không được quá {1} ký tự!")]
-        [DisplayName("Đường link của thiệp")]
+        [StringLength(150, ErrorMessage = "Đường dẫn lưu thiệp không được quá {1} ký tự!")]
+        [DisplayName("Ecard's link")]
         public string EcardUrl { get; set; }
 
-        public virtual Category Category { get; set; }
+        [Required]
+        [StringLength(150, ErrorMessage = "Thumbnail thiệp không được quá {1} ký tự!")]
+        [DisplayName("Thumbnail")]
+        public string ThumbnailUrl { get; set; }
+
+        [Required]
+        [StringLength(150, ErrorMessage = "Thumbnail thiệp không được quá {1} ký tự!")]
+        [DisplayName("Thumbnail")]
+        public double Price { get; set; }
+
+        public virtual ICollection<Category> Categories { get; set; }
 
         public virtual EgreetingUser EgreetingUser { get; set; }
     }
