@@ -55,9 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\EgreetingContext.cs" />
-    <Compile Include="Migrations\201910151426403_init-db.cs" />
-    <Compile Include="Migrations\201910151426403_init-db.Designer.cs">
-      <DependentUpon>201910151426403_init-db.cs</DependentUpon>
+    <Compile Include="Migrations\201910151607463_init-db.cs" />
+    <Compile Include="Migrations\201910151607463_init-db.Designer.cs">
+      <DependentUpon>201910151607463_init-db.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -79,8 +79,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201910151426403_init-db.resx">
-      <DependentUpon>201910151426403_init-db.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201910151607463_init-db.resx">
+      <DependentUpon>201910151607463_init-db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -30,7 +30,7 @@ namespace Egreeting.Web.Filters
             {
                 try
                 {
-                    Database.SetInitializer<EgreetingContext>(new MigrateDatabaseToLatestVersion<EgreetingContext, Egreeting.Models.Migrations.Configuration>());
+                    //Database.SetInitializer<EgreetingContext>(new MigrateDatabaseToLatestVersion<EgreetingContext, Egreeting.Models.Migrations.Configuration>());
 
                     using (var context = new EgreetingContext())
                     {
