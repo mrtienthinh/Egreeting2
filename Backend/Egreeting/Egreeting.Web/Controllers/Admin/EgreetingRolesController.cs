@@ -28,13 +28,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<EgreetingRole>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = EgreetingRoleBusiness.All.Where(x => x.EgreetingRoleName.Contains(search)).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => x.EgreetingRoleName.Contains(search));
+                listModel = EgreetingRoleBusiness.All.Where(x => x.EgreetingRoleName.Contains(search) && !x.Status).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => x.EgreetingRoleName.Contains(search) && !x.Status);
             }
             else
             {
-                ViewBag.totalItem = EgreetingRoleBusiness.All.Count();
-                listModel = EgreetingRoleBusiness.All.OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => !x.Status);
+                listModel = EgreetingRoleBusiness.All.Where(x => !x.Status).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -116,7 +116,8 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int ItemID)
         {
-            EgreetingRoleBusiness.Delete(ItemID);
+            var role = EgreetingRoleBusiness.Find(ItemID);
+            EgreetingRoleBusiness.Update(role);
             EgreetingRoleBusiness.Save();
             return RedirectToAction("Index");
         }
