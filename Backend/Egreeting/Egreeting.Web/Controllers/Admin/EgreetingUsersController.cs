@@ -21,6 +21,8 @@ namespace Egreeting.Web.Controllers.Admin
     {
         private ApplicationUserManager _userManager;
         private IEgreetingUserBusiness EgreetingUserBusiness;
+        private IEgreetingRoleBusiness EgreetingRoleBusiness;
+
         public ApplicationUserManager UserManager
         {
             get
@@ -32,9 +34,10 @@ namespace Egreeting.Web.Controllers.Admin
                 _userManager = value;
             }
         }
-        public EgreetingUsersController(IEgreetingUserBusiness EgreetingUserBusiness)
+        public EgreetingUsersController(IEgreetingUserBusiness EgreetingUserBusiness, IEgreetingRoleBusiness EgreetingRoleBusiness)
         {
             this.EgreetingUserBusiness = EgreetingUserBusiness;
+            this.EgreetingRoleBusiness = EgreetingRoleBusiness;
         }
 
         // GET: EgreetingUsers
@@ -74,6 +77,7 @@ namespace Egreeting.Web.Controllers.Admin
         // GET: EgreetingUsers/Create
         public ActionResult Create()
         {
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersCreate);
         }
 
@@ -82,7 +86,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser)
+        public async Task<ActionResult> Create([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser, string ListRole)
         {
             var file = Request.Files["Avatar"];
             byte[] image = new byte[file.ContentLength];
@@ -95,8 +99,11 @@ namespace Egreeting.Web.Controllers.Admin
 
             if (ModelState.IsValid)
             {
+                var lstRoleId = ListRole.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                var lstEgreetingRole = EgreetingRoleBusiness.All.Where(x => !x.Status && lstRoleId.Contains(x.EgreetingRoleID)).ToList();
                 egreetingUser.CreatedDate = DateTime.Now;
                 egreetingUser.Avatar = image;
+                egreetingUser.EgreetingRoles = lstEgreetingRole;
                 var applicationUser = new ApplicationUser { Email = egreetingUser.Email, UserName = egreetingUser.Email, EgreetingUser = egreetingUser };
                 var result = await UserManager.CreateAsync(applicationUser, egreetingUser.Password);
                 if (result.Succeeded)

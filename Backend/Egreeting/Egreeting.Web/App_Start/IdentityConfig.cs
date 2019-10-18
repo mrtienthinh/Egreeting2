@@ -12,6 +12,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Egreeting.Web.Models;
 using Egreeting.Models.Models;
+using Egreeting.Repository.IRepository;
 using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web
