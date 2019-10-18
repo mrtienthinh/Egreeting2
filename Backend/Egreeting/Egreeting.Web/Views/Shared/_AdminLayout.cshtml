@@ -321,10 +321,19 @@
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active treeview">
                         <a href="#">
+                            <i class="fa fa-dashboard"></i> <span>Users</span> <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="active"><a href="@Url.Action("Index","EgreetingUsers")"><i class="fa fa-circle-o"></i> Index users</a></li>
+                            <li><a href="@Url.Action("Create","EgreetingUsers")"><i class="fa fa-circle-o"></i> Create users</a></li>
+                        </ul>
+                    </li>
+                    <li class="active treeview">
+                        <a href="#">
                             <i class="fa fa-dashboard"></i> <span>Roles</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="active"><a href="@Url.Action("Index","EgreetingRoles")"><i class="fa fa-circle-o"></i> Index role</a></li>
+                            <li class="active"><a href="@Url.Action("Index","EgreetingRoles")"><i class="fa fa-circle-o"></i> Index roles</a></li>
                             <li><a href="@Url.Action("Create","EgreetingRoles")"><i class="fa fa-circle-o"></i> Create role</a></li>
                         </ul>
                     </li>

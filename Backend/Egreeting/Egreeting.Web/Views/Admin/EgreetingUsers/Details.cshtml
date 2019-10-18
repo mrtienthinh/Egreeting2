@@ -30,6 +30,15 @@
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.AntiForgeryToken()
+                <div class="form-group" id="ListRoleView">
+                    @if (Model.EgreetingRoles != null && Model.EgreetingRoles.Count > 0)
+                    {
+                        foreach(var role  in Model.EgreetingRoles)
+                        {
+                            <span class="badge badge-primary">@role.EgreetingRoleName</span>
+                        }
+                    }
+                </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.FirstName)
                     @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "FirstName", @id = "FirstName", @onblur = "CreateSlug()", @disabled = "disabled" } })
@@ -86,7 +95,7 @@
                         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                     }
                     @Html.LabelFor(m => m.Avatar)
-                    <img src="@imgSrc" alt="Avatar" height="200px" width="200px" />
+                    <img src="@imgSrc" alt="Avatar" height="200px" width="200px"/>
                     @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
                 </div>
             </div>

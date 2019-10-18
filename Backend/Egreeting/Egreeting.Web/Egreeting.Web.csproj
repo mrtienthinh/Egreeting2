@@ -1080,7 +1080,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24799</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44383/</IISUrl>
+          <IISUrl>http://localhost:44383/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:44383/</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -92,8 +92,8 @@
                                         <td>@sttApplicationUser</td>
                                         <td>@user.Email</td>
                                         <td>@user.EgreetingUser.EgreetingUserSlug</td>
-                                        <td>@user.EgreetingUser.EgreetingUserSlug  @user.EgreetingUser.EgreetingUserSlug</td>
-                                        <td>@user.EgreetingUser.BirthDay</td>
+                                        <td>@user.EgreetingUser.FirstName  @user.EgreetingUser.LastName</td>
+                                        <td>@Html.DisplayFor(x => user.EgreetingUser.BirthDay)</td>
                                         <td>************</td>
                                         <td>***</td>
                                         <td>@user.EgreetingUser.PaymentDueDate</td>
@@ -101,7 +101,7 @@
                                             var base64 = user.EgreetingUser.Avatar != null ? Convert.ToBase64String(user.EgreetingUser.Avatar) : "";
                                             var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                                         }
-                                        <td><img src="imgSrc" alt="Avatar" /></td>
+                                        <td><img src="@imgSrc" alt="Avatar" width="100px" height="100px" /></td>
 
                                         <td>
                                             <button type="button" class="btn btn-success" onclick="ShowItem('@user.Id')"><i class="fa fa-info-circle"></i> Show</button>

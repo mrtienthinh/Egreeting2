@@ -13,6 +13,8 @@ using Egreeting.Models.Models;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Egreeting.Business.Business;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -41,7 +43,7 @@ namespace Egreeting.Web.Controllers.Admin
         }
 
         // GET: EgreetingUsers
-        public ActionResult Index(string search, int page = 1, int pageSize = 10)
+        public ActionResult Index(string search, int page = 1, int pageSize = 10, bool draft = false)
         {
             var listModel = new List<ApplicationUser>();
             if (!string.IsNullOrEmpty(search))
@@ -86,7 +88,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser, string ListRole)
+        public ActionResult Create([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser, string ListRole)
         {
             var file = Request.Files["Avatar"];
             byte[] image = new byte[file.ContentLength];
@@ -99,19 +101,26 @@ namespace Egreeting.Web.Controllers.Admin
 
             if (ModelState.IsValid)
             {
-                var lstRoleId = ListRole.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
-                var lstEgreetingRole = EgreetingRoleBusiness.All.Where(x => !x.Status && lstRoleId.Contains(x.EgreetingRoleID)).ToList();
                 egreetingUser.CreatedDate = DateTime.Now;
                 egreetingUser.Avatar = image;
-                egreetingUser.EgreetingRoles = lstEgreetingRole;
+                //egreetingUser.EgreetingRoles = lstEgreetingRole;
                 var applicationUser = new ApplicationUser { Email = egreetingUser.Email, UserName = egreetingUser.Email, EgreetingUser = egreetingUser };
-                var result = await UserManager.CreateAsync(applicationUser, egreetingUser.Password);
+                var result = UserManager.Create(applicationUser, egreetingUser.Password);
                 if (result.Succeeded)
                 {
+                    using (var context = new EgreetingContext())
+                    {
+                        var lstRoleId = ListRole.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                        var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
+                        eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => lstRoleId.Contains(x.EgreetingRoleID)).ToList();
+                        context.Set<EgreetingUser>().Attach(eUser);
+                        context.SaveChanges();
+                    }
                     return RedirectToAction("Index");
                 }
                 AddErrors(result);
             }
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersCreate,egreetingUser);
         }
 
@@ -124,6 +133,7 @@ namespace Egreeting.Web.Controllers.Admin
             }
             EgreetingUser egreetingUser = UserManager.FindById(id).EgreetingUser;
             ViewBag.UserId = id;
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
             if (egreetingUser == null)
             {
                 return HttpNotFound();
@@ -136,7 +146,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser, string UserId)
+        public ActionResult Edit([Bind(Include = "EgreetingUserSlug,FirstName,LastName,Email,Password,ConfirmPassword,BirthDay,CreditCardNumber,CreditCardCVG,PaymentDueDate")] EgreetingUser egreetingUser, string UserId, string ListRole)
         {
             var file = Request.Files["Avatar"];
             byte[] image = new byte[file.ContentLength];
@@ -149,14 +159,14 @@ namespace Egreeting.Web.Controllers.Admin
                 user.EgreetingUser.FirstName = egreetingUser.FirstName;
                 user.EgreetingUser.LastName = egreetingUser.LastName;
                 user.EgreetingUser.BirthDay = egreetingUser.BirthDay;
-                user.EgreetingUser.CreditCardNumber = egreetingUser.EgreetingUserSlug;
+                user.EgreetingUser.CreditCardNumber = egreetingUser.CreditCardNumber;
                 user.EgreetingUser.CreditCardCVG = egreetingUser.CreditCardCVG;
                 user.EgreetingUser.PaymentDueDate = egreetingUser.PaymentDueDate;
                 if(file.ContentLength > 0)
                 {
                     user.EgreetingUser.Avatar = image;
                 }
-                if (string.IsNullOrEmpty(egreetingUser.Password))
+                if (!string.IsNullOrEmpty(egreetingUser.Password))
                 {
                     UserManager.RemovePassword(user.Id);
                     UserManager.AddPassword(user.Id, user.EgreetingUser.Password);
@@ -165,6 +175,14 @@ namespace Egreeting.Web.Controllers.Admin
                 else
                 {
                     UserManager.Update(user);
+                }
+                using (var context = new EgreetingContext())
+                {
+                    var lstRoleId = ListRole.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                    var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
+                    eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => lstRoleId.Contains(x.EgreetingRoleID)).ToList();
+                    context.Set<EgreetingUser>().Attach(eUser);
+                    context.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
@@ -186,7 +204,10 @@ namespace Egreeting.Web.Controllers.Admin
                 return HttpNotFound();
             }
             user.EgreetingUser.Status = true;
-
+            UserManager.RemovePassword(user.Id);
+            string password = UserManager.PasswordHasher.HashPassword("delete123456Aa@");
+            UserManager.AddPassword(user.Id, password);
+            UserManager.Update(user);
             var resultUpdate = UserManager.Update(user);
             if (resultUpdate.Succeeded)
             {

@@ -1,5 +1,5 @@
 ﻿@model Egreeting.Models.Models.EgreetingUser
-
+@using Egreeting.Models.Models
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = "Create";
@@ -30,7 +30,34 @@
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="UserId" value="@ViewBag.Id"/>
+                @{
+                    string ListRoleString = "";
+                    if (Model.EgreetingRoles != null && Model.EgreetingRoles.Count > 0)
+                    {
+                        ListRoleString = String.Join("-", Model.EgreetingRoles.Select(x => x.EgreetingRoleID.ToString()).ToArray());
+                    }
+                }
+                <input type="hidden" name="UserId" id="UserId" value="@ViewBag.UserId" />
+                <input type="hidden" name="ListRole" id="ListRole" value="@ListRoleString" />
+                <div class="form-group">
+                    <label for="select-role">Role</label>
+                    <select id="select-role" class="form-control" onchange="SelectMultiple(this)">
+                        <option value=""></option>
+                        @foreach (var role in ViewBag.ListRole as List<EgreetingRole>)
+                        {
+                            <option value="@role.EgreetingRoleID">@role.EgreetingRoleName</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group" id="ListRoleView">
+                    @if (Model.EgreetingRoles != null && Model.EgreetingRoles.Count > 0)
+                    {
+                        foreach (var role in Model.EgreetingRoles)
+                        {
+                            <span class="badge badge-primary" onclick="RemoveBadge(this)" value="@role.EgreetingRoleID">@role.EgreetingRoleName</span>
+                        }
+                    }
+                </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.FirstName)
                     @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control", @placeholder = "FirstName", @id = "FirstName", @onblur = "CreateSlug()" } })
@@ -48,7 +75,7 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.Email)
-                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email", @id = "Email" , @disabled = "disabled"} })
+                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email", @id = "Email", @disabled = "disabled" } })
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
@@ -82,11 +109,11 @@
                     @Html.ValidationMessageFor(model => model.PaymentDueDate, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
+                    @Html.LabelFor(m => m.Avatar)
                     @{
                         var base64 = Model.Avatar != null ? Convert.ToBase64String(Model.Avatar) : "";
                         var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
                     }
-                    @Html.LabelFor(m => m.Avatar)
                     <img src="@imgSrc" alt="Avatar" height="200px" width="200px" />
                     <input type="file" name="Avatar" id="Avatar" class="form-control">
                     @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
@@ -143,6 +170,30 @@
             slug = slug.replace(/\s/g, '');
             //In slug ra textbox có id “slug”
             document.getElementById('EgreetingUserSlug').value = slug;
+        }
+
+        function SelectMultiple(e)
+        {
+            var ListRoleArray = $('#ListRole').val().split('-').filter(x => x.length > 0);
+            if (!ListRoleArray.includes(e.value)) {
+                ListRoleArray.push(e.value);
+                var htmlresult = $('#select-role').find(":selected").text();
+                var html = `<span class="badge badge-primary" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
+                $('#ListRoleView').append(html);
+            };
+            var ListRole = ListRoleArray.join('-');
+            $('#ListRole').val(ListRole);
+        }
+
+        function RemoveBadge(e) {
+            var roleRemove = $(e).attr('value');
+            var ListRoleArray = $('#ListRole').val().split('-').filter(x => x.length > 0);
+            if (ListRoleArray.includes(roleRemove)) {
+                ListRoleArray = ListRoleArray.filter(x => x !== roleRemove);
+            };
+            var ListRole = ListRoleArray.join('-');
+            $('#ListRole').val(ListRole);
+            e.remove();
         }
 
         function BackToIndex()
