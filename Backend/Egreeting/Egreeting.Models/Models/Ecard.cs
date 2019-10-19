@@ -15,6 +15,10 @@ namespace Egreeting.Models.Models
         [Key]
         public int EcardID { get; set; }
 
+        [StringLength(150, ErrorMessage = "Tên thiệp không được quá {1} ký tự!")]
+        [DisplayName("Ecard's name")]
+        public string EcardName { get; set; }
+
         [Index(IsUnique = true)]
         [StringLength(200, ErrorMessage = "Đường link của thiệp không được quá {1} ký tự!")]
         [DisplayName("Đường link của thiệp")]
