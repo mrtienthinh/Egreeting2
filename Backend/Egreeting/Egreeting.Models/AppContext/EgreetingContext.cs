@@ -33,5 +33,10 @@ namespace Egreeting.Models.AppContext
         {
             return new EgreetingContext();
         }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
