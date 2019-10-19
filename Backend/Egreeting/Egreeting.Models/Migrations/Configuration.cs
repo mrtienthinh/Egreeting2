@@ -26,6 +26,18 @@ namespace Egreeting.Models.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            context.Categories.AddOrUpdate(
+                new Models.Category { CategoryName = "Birthday", CategorySlug = "birthday"},
+                new Models.Category { CategoryName = "Wedding", CategorySlug = "wedding" },
+                new Models.Category { CategoryName = "New year", CategorySlug = "new-year" },
+                new Models.Category { CategoryName = "Festivals", CategorySlug = "festivals" }
+            );
+            context.EgreetingRoles.AddOrUpdate(
+                new Models.EgreetingRole { EgreetingRoleName = "Admin"},
+                new Models.EgreetingRole { EgreetingRoleName = "User"},
+                new Models.EgreetingRole { EgreetingRoleName = "Subcriber"}
+            );
         }
     }
 }
