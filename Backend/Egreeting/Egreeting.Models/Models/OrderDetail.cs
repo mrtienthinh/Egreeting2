@@ -13,15 +13,10 @@ namespace Egreeting.Models.Models
         [Key]
         public int OrderDetailID { get; set; }
 
-        [DisplayName("Hẹn giờ gửi")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
-        public DateTime? ScheduleTime { get; set; }
-
-        [DisplayName("Trạng thái thư")]
+        [DisplayName("Sending Status")]
         public bool SendStatus { get; set; }
 
-        [DisplayName("Giờ gửi thành công")]
+        [DisplayName("Sended Time")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
         public DateTime? SendTime { get; set; }
