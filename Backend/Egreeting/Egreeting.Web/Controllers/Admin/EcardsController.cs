@@ -88,16 +88,23 @@ namespace Egreeting.Web.Controllers.Admin
                 string pathThumbnail = Server.MapPath("~/Uploads/Thumbnails/");
                 string pathEcardFiles = Server.MapPath("~/Uploads/EcardFiles/");
 
-
-                if (!Directory.Exists(pathEcardFiles) && ecardFile != null)
+                if (!Directory.Exists(pathEcardFiles))
                 {
                     Directory.CreateDirectory(pathEcardFiles);
-                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
-                    ecardFile.SaveAs(pathEcardFiles + ecard.ThumbnailUrl);
-
-                    if (!Directory.Exists(pathThumbnail) && thumbnailFile != null)
+                    if (!Directory.Exists(pathThumbnail) )
                     {
                         Directory.CreateDirectory(pathThumbnail);
+                    }
+                }
+
+
+                if ( ecardFile != null)
+                {
+                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
+                    ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
+
+                    if ( thumbnailFile != null)
+                    {
                         ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
                         thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
                     }
