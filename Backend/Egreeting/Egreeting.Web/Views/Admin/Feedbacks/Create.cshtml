@@ -1,4 +1,4 @@
-﻿@model Egreeting.Models.Models.FeedBack
+﻿@model Egreeting.Models.Models.Feedback
 @using Egreeting.Domain
 @using Egreeting.Models.Models
 
@@ -10,13 +10,13 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        FeedBack Management
+        Feedback Management
         <small>Create</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
         <li>Admin</li>
-        <li><a href="@Url.Action("Index")">Categories</a></li>
+        <li><a href="@Url.Action("Index")">Feedbacks</a></li>
         <li class="active">Create</li>
     </ol>
 </section>
@@ -26,53 +26,27 @@
 
     <div class="box box-primary">
         <div class="box-header">
-            <h3 class="box-title">Create new FeedBack</h3>
+            <h3 class="box-title">Create new Feedback</h3>
         </div><!-- /.box-header -->
-        <form action="@Url.Action("Create")" method="POST" role="form" enctype="multipart/form-data">
+        <form action="@Url.Action("Create")" method="POST" role="form">
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="ListCategoryString" id="ListCategoryString" value="" />
                 <div class="form-group">
-                    <label for="select-role">Category</label>
-                    <select id="select-role" class="form-control" onchange="SelectMultiple(this)">
-                        <option value=""></option>
-                        @foreach (var role in ViewBag.Categories as List<Category>)
-                        {
-                            <option value="@role.CategoryID">@role.CategoryName</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group" id="ListCategoryBadge">
+                    <label for="EcardId">Ecard</label>
+                    @Html.DropDownList("EcardID", new SelectList((Dictionary<int, string>)ViewBag.Ecards, "Key", "Value"), new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.FeedBackName)
-                    @Html.EditorFor(m => m.FeedBackName, new { htmlAttributes = new { @class = "form-control", @placeholder = "FeedBackName", @id = "FeedBackName", @onblur = "CreateSlug()" } })
-                    @Html.ValidationMessageFor(model => model.FeedBackName, "", new { @class = "text-danger" })
+                    @Html.LabelFor(m => m.Subject)
+                    @Html.EditorFor(m => m.Subject, new { htmlAttributes = new { @class = "form-control", @placeholder = "Subject", @id = "Subject", @onblur = "CreateSlug()" } })
+                    @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.FeedBackSlug)
-                    @Html.EditorFor(m => m.FeedBackSlug, new { htmlAttributes = new { @class = "form-control", @placeholder = "FeedBackSlug", @id = "FeedBackSlug" } })
-                    @Html.ValidationMessageFor(model => model.FeedBackSlug, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.FeedBackType)
-                    @Html.DropDownList("FeedBackType",
-                       EnumHelper.GetSelectList(typeof(FeedBackType)),
-                       "Select card type",
-                       new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.FeedBackSlug, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group">
-                    <label for="Thumbnail"></label>
-                    <input type="file" name="Thumbnail" id="Thumbnail" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="FeedBackFile"></label>
-                    <input type="file" name="FeedBackFile" id="FeedBackFile" class="form-control">
+                    @Html.LabelFor(m => m.Message)
+                    @Html.EditorFor(m => m.Message, new { htmlAttributes = new { @class = "form-control", @placeholder = "Message", @id = "Message" } })
+                    @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <button class="btn btn-primary" type="button" onclick="BackToIndex()">Cancel</button>
@@ -88,65 +62,6 @@
 
 @section scripts{
     <script>
-        function CreateSlug(){
-            var title, slug;
-
-            //Lấy text từ thẻ input title
-            title = document.getElementById("FeedBackName").value;
-
-           //Đổi chữ hoa thành chữ thường
-            slug = title.toLowerCase();
-
-            //Đổi ký tự có dấu thành không dấu
-            slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
-            slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
-            slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
-            slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
-            slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
-            slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
-            slug = slug.replace(/đ/gi, 'd');
-            //Xóa các ký tự đặt biệt
-            slug = slug.replace(/\`|\~|\!|\@@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
-            //Đổi khoảng trắng thành ký tự gạch ngang
-            slug = slug.replace(/ /gi, " - ");
-            //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
-            //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
-            slug = slug.replace(/\-\-\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-\-/gi, '-');
-            slug = slug.replace(/\-\-/gi, '-');
-            //Xóa các ký tự gạch ngang ở đầu và cuối
-            slug = '@@' + slug + '@@';
-            slug = slug.replace(/\@@\-|\-\@@|\@@/gi, '');
-            slug = slug.replace(/\s/g, '');
-            //In slug ra textbox có id “slug”
-            document.getElementById('FeedBackSlug').value = slug;
-        }
-
-        function SelectMultiple(e)
-        {
-            var ListRoleArray = $('#ListCategoryString').val().split('-').filter(x => x.length > 0);
-            if (!ListRoleArray.includes(e.value)) {
-                ListRoleArray.push(e.value);
-                var htmlresult = $('#select-role').find(":selected").text();
-                var html = `<span class="badge badge-primary" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
-                $('#ListCategoryBadge').append(html);
-            };
-            var ListRole = ListRoleArray.join('-');
-            $('#ListCategoryString').val(ListRole);
-        }
-
-        function RemoveBadge(e) {
-            var roleRemove = $(e).attr('value');
-            var ListRoleArray = $('#ListCategoryString').val().split('-').filter(x => x.length > 0);
-            if (ListRoleArray.includes(roleRemove)) {
-                ListRoleArray = ListRoleArray.filter(x => x !== roleRemove);
-            };
-            var ListRole = ListRoleArray.join('-');
-            $('#ListCategoryString').val(ListRole);
-            e.remove();
-        }
-
         function BackToIndex()
         {
             window.location.replace('@Url.Action("Index")');

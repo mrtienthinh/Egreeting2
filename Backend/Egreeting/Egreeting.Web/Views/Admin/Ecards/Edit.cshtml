@@ -1,5 +1,6 @@
 ﻿@model Egreeting.Models.Models.Ecard
-
+@using Egreeting.Domain
+@using Egreeting.Models.Models
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewBag.Title = "Create";
@@ -26,20 +27,75 @@
         <div class="box-header">
             <h3 class="box-title">Edit Ecard</h3>
         </div><!-- /.box-header -->
-        <form action="@Url.Action("Edit")" method="POST" role="form">
+        <form action="@Url.Action("Edit")" method="POST" role="form" enctype="multipart/form-data">
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="EcardID" value="@Model.EcardID">
+                @Html.HiddenFor(m => m.EcardID)
+                @{
+                    string ListCategoryString = "";
+                    if (Model.Categories != null && Model.Categories.Count > 0)
+                    {
+                        ListCategoryString = String.Join("-", Model.Categories.Select(x => x.CategoryID.ToString()).ToArray());
+                    }
+                }
+                <input type="hidden" name="ListCategoryString" id="ListCategoryString" value="@ListCategoryString" />
                 <div class="form-group">
-                    <label for="">Ecard Name</label>
-                    <input type="text" class="form-control" id="EcardName" placeholder="Ecard name" name="EcardName" onblur="CreateSlug()" value="@Model.EcardName">
+                    <label for="select-role">Category</label>
+                    <select id="select-role" class="form-control" onchange="SelectMultiple(this)">
+                        <option value=""></option>
+                        @foreach (var role in ViewBag.Categories as List<Category>)
+                        {
+                            <option value="@role.CategoryID">@role.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group" id="ListCategoryBadge">
+                    @if (Model.Categories != null && Model.Categories.Count > 0)
+                    {
+                        foreach (var category in Model.Categories)
+                        {
+                            <span class="badge badge-primary" onclick="RemoveBadge(this)" value="@category.CategoryID">@category.CategoryName</span>
+                        }
+                    }
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EcardName)
+                    @Html.EditorFor(m => m.EcardName, new { htmlAttributes = new { @class = "form-control", @placeholder = "EcardName", @id = "EcardName", @onblur = "CreateSlug()" } })
                     @Html.ValidationMessageFor(model => model.EcardName, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
-                    <label for="">Ecard Slug</label>
-                    <input type="text" class="form-control" id="EcardSlug" placeholder="Ecard slug" name="EcardSlug" value="@Model.EcardSlug">
+                    @Html.LabelFor(m => m.EcardSlug)
+                    @Html.EditorFor(m => m.EcardSlug, new { htmlAttributes = new { @class = "form-control", @placeholder = "EcardSlug", @id = "EcardSlug" } })
                     @Html.ValidationMessageFor(model => model.EcardSlug, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.EcardType)
+                    @Html.DropDownList("EcardType",
+                       EnumHelper.GetSelectList(typeof(EcardType)),
+                       "Select card type",
+                       new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EcardSlug, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    <label for="Thumbnail">Thumbnail</label>
+                    <img src="~/Uploads/Thumbnails/@Model.ThumbnailUrl" alt="Alternate Text" />>
+                    <input type="file" name="Thumbnail" id="Thumbnail" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="EcardFile">EcardFile</label>
+                    @if (Model.EcardType != (int)EcardType.Video)
+                    {
+                        <img src="~/Uploads/EcardFiles//@Model.EcardUrl" alt="Alternate Text" />
+                    }
+                    else
+                    {
+                        <video width="320" height="240" controls>
+                            <source src="~/Uploads/EcardFiles//@Model.EcardUrl" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    }
+                    <input type="file" name="EcardFile" id="EcardFile" class="form-control">
                 </div>
             </div>
 

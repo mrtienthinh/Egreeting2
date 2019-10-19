@@ -11,6 +11,7 @@ using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
 using System.Web.Security;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -66,6 +67,7 @@ namespace Egreeting.Web.Controllers.Admin
         // GET: Feedbacks/Create
         public ActionResult Create()
         {
+            ViewBag.Ecards = EcardBusiness.All.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
             return View(ViewNamesConstant.AdminFeedbacksCreate);
         }
 
@@ -74,85 +76,41 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Subject,Message")] Feedback feedback, int EcardId)
+        public ActionResult Create([Bind(Include = "Subject,Message")] Feedback feedback, int? EcardID)
         {
             if (ModelState.IsValid)
             {
-                var user = new EgreetingUser();
-                var currentContext = System.Web.HttpContext.Current;
-                if (currentContext.User != null)
+                using (var context = new EgreetingContext())
                 {
-                    string email = Membership.GetUser().Email;
-                    user = EgreetingUserBusiness.All.Where(x => x.Email.Equals(email)).FirstOrDefault();
+                    var user = new EgreetingUser();
+                    var currentContext = System.Web.HttpContext.Current;
+                    if (currentContext.User != null)
+                    {
+                        string email = Membership.GetUser().Email;
+                        user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();
+                    }
+                    if (user != null)
+                        feedback.EgreetingUser = user;
+
+                    var ecard = context.Set<Ecard>().Find(EcardID);
+                    if (ecard != null)
+                        feedback.Ecard = ecard;
+
+                    feedback.CreatedDate = DateTime.Now;
+                    context.Set<Feedback>().Add(feedback);
+                    context.SaveChanges();
                 }
-                if (user != null)
-                    feedback.EgreetingUser = user;
-
-                var ecard = EcardBusiness.Find(EcardId);
-                if (ecard != null)
-                    feedback.Ecard = ecard;
-
-                FeedbackBusiness.Insert(feedback);
-                FeedbackBusiness.Save();
+                    
                 return RedirectToAction("Index");
             }
 
             return View(ViewNamesConstant.AdminFeedbacksCreate,feedback);
         }
 
-        // GET: Feedbacks/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Feedback feedback = FeedbackBusiness.Find(id);
-            if (feedback == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminFeedbacksEdit,feedback);
-        }
-
-        // POST: Feedbacks/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Feedbacks/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "FeedbackID,Subject,Message")] Feedback feedback, int EcardId)
-        {
-            if (ModelState.IsValid)
-            {
-                var feedbackUpdate = FeedbackBusiness.Find(feedback.FeedbackID);
-                feedbackUpdate.Subject = feedback.Subject;
-                feedbackUpdate.Message = feedback.Message;
-                FeedbackBusiness.Update(feedbackUpdate);
-                FeedbackBusiness.Save();
-                return RedirectToAction("Index");
-            }
-            return View(ViewNamesConstant.AdminFeedbacksEdit,feedback);
-        }
-
-        // GET: Feedbacks/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Feedback feedback = FeedbackBusiness.Find(id);
-            if (feedback == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminFeedbacksDelete,feedback);
-        }
-
-        // POST: Feedbacks/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int ItemID)
+        public ActionResult Delete(int ItemID)
         {
             Feedback feedback = FeedbackBusiness.Find(ItemID);
             feedback.Status = true;

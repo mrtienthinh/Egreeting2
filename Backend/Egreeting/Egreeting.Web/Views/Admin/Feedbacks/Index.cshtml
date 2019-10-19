@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Egreeting.Models.Models.FeedBack>
+﻿@model IEnumerable<Egreeting.Models.Models.Feedback>
 @using Egreeting.Domain
 @{
     ViewBag.Title = "Index";
@@ -12,202 +12,185 @@
 
 }
 <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            FeedBack Management
-            <small>Index</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">FeedBacks</li>
-        </ol>
-    </section>
+<section class="content-header">
+    <h1>
+        Feedback Management
+        <small>Index</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Feedbacks</li>
+    </ol>
+</section>
 
 <!-- Main content -->
 <section class="content">
 
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new FeedBack</button>
-                    </div><!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div id="example1_length" class="dataTables_length">
-                                    <label>
-                                        <select size="1" name="example1_length"
-                                                aria-controls="example1" id="pageSizeId" onchange="LoadData()">
-                                            @for (int i = 5; i <= 20; i = i + 5)
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new Feedback</button>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div id="example1_length" class="dataTables_length">
+                                <label>
+                                    <select size="1" name="example1_length"
+                                            aria-controls="example1" id="pageSizeId" onchange="LoadData()">
+                                        @for (int i = 5; i <= 20; i = i + 5)
+                                        {
+                                            if (pageSize == i)
                                             {
-                                                if (pageSize == i)
-                                                {
-                                                    <option value="@i" selected="selected">@i</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@i">@i</option>
-                                                }
+                                                <option value="@i" selected="selected">@i</option>
                                             }
-                                        </select> records per page
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="dataTables_filter" id="example1_filter">
-                                    <label>
-                                        Search: <input type="text" id="searchId"
-                                                       aria-controls="example1" value="@ViewBag.search">
-                                        <input type="hidden" value="@ViewBag.currentPage" id="page">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" onclick="LoadData()"><i class="fa fa-search"></i></button>
-                                    </label>
-                                </div>
+                                            else
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        }
+                                    </select> records per page
+                                </label>
                             </div>
                         </div>
-                        @if (Model.Count() != 0)
-                        {
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
+                        <div class="col-xs-6">
+                            <div class="dataTables_filter" id="example1_filter">
+                                <label>
+                                    Search: <input type="text" id="searchId"
+                                                   aria-controls="example1" value="@ViewBag.search">
+                                    <input type="hidden" value="@ViewBag.currentPage" id="page">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" onclick="LoadData()"><i class="fa fa-search"></i></button>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.Count() != 0)
+                    {
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="70px">ID<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
+                                    <th>Subject<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
+                                    <th>Message<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
+                                    <th width="250px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyId">
+
+                                @{int sttFeedback = (currentPage - 1) * pageSize + 1; }
+                                @foreach (var Feedback in Model)
+                                {
                                     <tr>
-                                        <th width="70px">ID<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-                                        <th>Name<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-                                        <th>slug<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-                                        <th>Type<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-                                        <th>Price<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-
-                                        <th width="250px">Action</th>
+                                        <td>@sttFeedback</td>
+                                        <td>@Feedback.Subject</td>
+                                        <td>@Feedback.Message</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="ShowItem(@Feedback.FeedbackID)"><i class="fa fa-info-circle"></i> Show</button>
+                                            <button type="button" class="btn btn-danger" onclick="DeleteItem(@Feedback.FeedbackID)"><i class="fa fa-trash"></i> Delete</button>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody id="tbodyId">
-
-                                    @{int sttFeedBack = (currentPage-1)*pageSize + 1; }
-                                    @foreach (var FeedBack in Model)
-                                    {
-                                        <tr>
-                                            <td>@sttFeedBack</td>
-                                            <td>@FeedBack.FeedBackName</td>
-                                            <td>@FeedBack.FeedBackSlug</td>
-                                            @{ 
-                                                var FeedBackTypeString = (FeedBackType)FeedBack.FeedBackType
-                                            }
-                                            <td>@FeedBackTypeString</td>
-                                            <td>@FeedBack.Price $</td>
-                                            @{ 
-                                                string thumbnail = "thumbnail.png";
-                                                if (!string.IsNullOrEmpty(FeedBack.ThumbnailUrl))
-                                                {
-                                                    thumbnail = FeedBack.ThumbnailUrl;
-                                                }
-                                            }
-                                            <td><img src="~/Upload/@thumbnail" alt="Thumbnail" /></td>
-                                            <td>
-                                                <button type="button" class="btn btn-success" onclick="ShowItem(@FeedBack.FeedBackID)"><i class="fa fa-info-circle"></i> Show</button>
-                                                <button type="button" class="btn btn-primary" onclick="EditItem(@FeedBack.FeedBackID)"><i class="fa fa-pencil"></i> Edit</button>
-                                                <button type="button" class="btn btn-danger" onclick="DeleteItem(@FeedBack.FeedBackID)"><i class="fa fa-trash"></i> Delete</button>
-                                            </td>
-                                        </tr>
-                                        sttFeedBack = sttFeedBack + 1;
-                                    }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <h2>There is no FeedBack!</h2>
-                        }
-
-                        <div class="row">
-                            <div class="col-xs-6">
-                                @{
-
+                                    sttFeedback = sttFeedback + 1;
                                 }
-                                <div class="dataTables_info" id="example1_info">Showing @fromItem to @toItem of @totalItem entries</div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="dataTables_paginate paging_bootstrap">
-                                    <ul class="pagination">
-                                        @if (totalPage <= 10)
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <h2>There is no Feedback!</h2>
+                    }
+
+                    <div class="row">
+                        <div class="col-xs-6">
+                            @{
+
+                            }
+                            <div class="dataTables_info" id="example1_info">Showing @fromItem to @toItem of @totalItem entries</div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="dataTables_paginate paging_bootstrap">
+                                <ul class="pagination">
+                                    @if (totalPage <= 10)
+                                    {
+                                        if (currentPage == 1)
                                         {
-                                            if (currentPage == 1)
+                                            <li class="prev disabled"><a>← Previous</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="prev" onclick="LoadPage(@currentPage -1)"><a>← Previous</a></li>
+                                        }
+                                        for (int i = 1; i <= totalPage; i++)
+                                        {
+                                            if (currentPage == i)
                                             {
-                                                <li class="prev disabled"><a>← Previous</a></li>
+                                                <li class="active" onclick="LoadPage(@i)" style="cursor: pointer;"><a>@i</a></li>
                                             }
                                             else
                                             {
-                                                <li class="prev" onclick="LoadPage(@currentPage -1)"><a>← Previous</a></li>
-                                            }
-                                            for (int i = 1; i <= totalPage; i++)
-                                            {
-                                                if (currentPage == i)
-                                                {
-                                                    <li class="active" onclick="LoadPage(@i)" style="cursor: pointer;"><a>@i</a></li>
-                                                }
-                                                else
-                                                {
-                                                    <li onclick="LoadPage(@i)" style="cursor: pointer;"><a>@i</a></li>
-                                                }
-                                            }
-                                            if (currentPage == totalPage)
-                                            {
-                                                <li class="next disabled" style="cursor: pointer;"><a>Next → </a></li>
-                                            }
-                                            else
-                                            {
-                                                <li class="next" onclick="LoadPage(@currentPage +1)" style="cursor: pointer;"><a>Next → </a></li>
+                                                <li onclick="LoadPage(@i)" style="cursor: pointer;"><a>@i</a></li>
                                             }
                                         }
-                                        @if (totalPage > 10)
+                                        if (currentPage == totalPage)
                                         {
-                                            if (currentPage < 3)
-                                            {
-                                                <li class="prev disabled" style="cursor: pointer;"><a>← First</a></li>
-                                            }
-                                            else
-                                            {
-                                                <li style="cursor: pointer;" class="prev" onclick="LoadPage(1)"><a>← First</a></li>
-                                            }
-                                            if (currentPage >= 4)
-                                            {
-                                                <li><a>...</a></li>
-                                            }
-
-                                            for (int i = currentPage - 2 <= 0 ? 1 : currentPage - 2; i > 0 && i <= currentPage + 2 && i <= totalPage; i++)
-                                            {
-                                                if (currentPage == i)
-                                                {
-                                                    <li style="cursor: pointer;" class="active" onclick="LoadPage(@i)"><a>@i</a></li>
-                                                }
-                                                else
-                                                {
-                                                    <li style="cursor: pointer;" onclick="LoadPage(@i)"><a>@i</a></li>
-                                                }
-                                            }
-                                            if (currentPage <= totalPage - 3)
-                                            {
-                                                <li><a>...</a></li>
-                                            }
-                                            if (currentPage + 2 <= totalPage)
-                                            {
-                                                <li style="cursor: pointer;" class="next" onclick="LoadPage(@totalPage)"><a>Last → </a></li>
-                                            }
-                                            else
-                                            {
-                                                <li style="cursor: pointer;" class="next disabled"><a>Last → </a></li>
-                                            }
-
+                                            <li class="next disabled" style="cursor: pointer;"><a>Next → </a></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="next" onclick="LoadPage(@currentPage +1)" style="cursor: pointer;"><a>Next → </a></li>
+                                        }
+                                    }
+                                    @if (totalPage > 10)
+                                    {
+                                        if (currentPage < 3)
+                                        {
+                                            <li class="prev disabled" style="cursor: pointer;"><a>← First</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li style="cursor: pointer;" class="prev" onclick="LoadPage(1)"><a>← First</a></li>
+                                        }
+                                        if (currentPage >= 4)
+                                        {
+                                            <li><a>...</a></li>
                                         }
 
-                                    </ul>
-                                </div>
+                                        for (int i = currentPage - 2 <= 0 ? 1 : currentPage - 2; i > 0 && i <= currentPage + 2 && i <= totalPage; i++)
+                                        {
+                                            if (currentPage == i)
+                                            {
+                                                <li style="cursor: pointer;" class="active" onclick="LoadPage(@i)"><a>@i</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li style="cursor: pointer;" onclick="LoadPage(@i)"><a>@i</a></li>
+                                            }
+                                        }
+                                        if (currentPage <= totalPage - 3)
+                                        {
+                                            <li><a>...</a></li>
+                                        }
+                                        if (currentPage + 2 <= totalPage)
+                                        {
+                                            <li style="cursor: pointer;" class="next" onclick="LoadPage(@totalPage)"><a>Last → </a></li>
+                                        }
+                                        else
+                                        {
+                                            <li style="cursor: pointer;" class="next disabled"><a>Last → </a></li>
+                                        }
+
+                                    }
+
+                                </ul>
                             </div>
                         </div>
-                    </div><!-- /.box-body -->
-                </div><!-- /.box -->
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </section><!-- /.content -->
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</section><!-- /.content -->
 </div><!-- /.content-wrapper -->
 <!-- Main content -->
 
@@ -263,8 +246,6 @@
                 console.log(search + '_' + pageSize + '_' + page);
                 window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
             }
-  
+
     </script>
 }
-
-

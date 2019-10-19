@@ -12,6 +12,7 @@ using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
 using System.IO;
 using System.Web.Security;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -79,8 +80,6 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EcardName,EcardSlug,EcardType,Price")] Ecard ecard, string ListCategoryString)
         {
-
-
             if (ModelState.IsValid)
             {
                 var thumbnailFile = Request.Files["Thumbnail"];
@@ -120,19 +119,26 @@ namespace Egreeting.Web.Controllers.Admin
                     return View(ViewNamesConstant.AdminEcardsCreate, ecard);
                 }
 
-                var lstCategoryID = ListCategoryString.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
-                var lstCategory = CategoryBusiness.All.Where(x => lstCategoryID.Contains(x.CategoryID)).ToList();
-                ecard.Categories = lstCategory;
-                //string email = "";
-                //var currentContext = System.Web.HttpContext.Current;
-                //if (currentContext.User != null)
-                //{
-                //    email = Membership.GetUser().Email;
-                //}
-                //var user = EgreetingUserBusiness.All.Where(x => x.Email.Equals(email)).FirstOrDefault();
-                //ecard.EgreetingUser = user;
-                EcardBusiness.Insert(ecard);
-                EcardBusiness.Save();
+                using (var context = new EgreetingContext())
+                {
+                    var lstCategoryID = ListCategoryString.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                    var lstCategory = context.Set<Category>().Where(x => lstCategoryID.Contains(x.CategoryID)).ToList();
+                    ecard.Categories = lstCategory;
+                    if(context.Set<Ecard>().Any(x => ecard.EcardSlug.Equals(x.EcardSlug)))
+                    {
+                        ecard.EcardSlug = ecard.EcardSlug + DateTime.Now.ToFileTime();
+                    }
+                    var currentContext = System.Web.HttpContext.Current;
+                    if (currentContext.User != null)
+                    {
+                        string email = Membership.GetUser().Email;
+                        var user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();
+                        ecard.EgreetingUser = user;
+                    }
+                    ecard.CreatedDate = DateTime.Now;
+                    context.Set<Ecard>().Add(ecard);
+                    context.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
             ViewBag.Categories = CategoryBusiness.All.ToList();
@@ -166,33 +172,60 @@ namespace Egreeting.Web.Controllers.Admin
 
             if (ModelState.IsValid)
             {
-                var ecardUpdate = EcardBusiness.Find(ecard.EcardID);
-
-                var thumbnailFile = Request.Files["Thumbnail"];
-                var ecardFile = Request.Files["EcardFile"];
-                string pathThumbnail = Server.MapPath("~/Uploads/Thumbnails/");
-                string pathEcardFiles = Server.MapPath("~/Uploads/EcardFiles/");
-                if (!Directory.Exists(pathEcardFiles) && ecardFile != null)
+                using (var context = new EgreetingContext())
                 {
-                    Directory.CreateDirectory(pathEcardFiles);
-                    ecardUpdate.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
-                    ecardFile.SaveAs(pathEcardFiles + ecard.ThumbnailUrl);
+                    var ecardUpdate = context.Set<Ecard>().Find(ecard.EcardID);
 
-                    if (!Directory.Exists(pathThumbnail) && thumbnailFile != null)
+                    var thumbnailFile = Request.Files["Thumbnail"];
+                    var ecardFile = Request.Files["EcardFile"];
+                    string pathThumbnail = Server.MapPath("~/Uploads/Thumbnails/");
+                    string pathEcardFiles = Server.MapPath("~/Uploads/EcardFiles/");
+                    if (!Directory.Exists(pathEcardFiles))
                     {
-                        Directory.CreateDirectory(pathThumbnail);
-                        ecardUpdate.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
-                        thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
+                        Directory.CreateDirectory(pathEcardFiles);
+                        if (!Directory.Exists(pathThumbnail))
+                        {
+                            Directory.CreateDirectory(pathThumbnail);
+                        }
                     }
+
+
+                    if (ecardFile != null)
+                    {
+                        ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
+                        ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
+
+                        if (thumbnailFile != null)
+                        {
+                            ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
+                            thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
+                        }
+                        else
+                        {
+                            ecard.ThumbnailUrl = "thumbnail.png";
+                        }
+                    }
+
+                    ecardUpdate.EcardName = ecard.EcardName;
+                    if (!string.IsNullOrEmpty(ecard.EcardSlug))
+                    {
+                        if (!context.Set<Ecard>().Any(x => ecard.EcardSlug.Equals(x.EcardSlug)))
+                        {
+                            ecardUpdate.EcardSlug = ecard.EcardSlug;
+                        }
+                        else
+                        {
+                            ecardUpdate.EcardSlug = ecard.EcardSlug + DateTime.Now.ToFileTime();
+                        }
+                    }
+                    ecardUpdate.EcardType = ecard.EcardType;
+                    ecardUpdate.Price = ecard.Price;
+                    ecardUpdate.ModifiedDate = DateTime.Now;
+
+                    context.Set<Ecard>().Attach(ecardUpdate);
+                    context.SaveChanges();
                 }
-
-                ecardUpdate.EcardName = ecard.EcardName;
-                ecardUpdate.EcardSlug = ecard.EcardSlug;
-                ecardUpdate.EcardType = ecard.EcardType;
-                ecardUpdate.Price = ecard.Price;
-
-                EcardBusiness.Update(ecardUpdate);
-                EcardBusiness.Save();
+                
                 return RedirectToAction("Index");
             }
             ViewBag.Categories = CategoryBusiness.All.ToList();
@@ -202,7 +235,7 @@ namespace Egreeting.Web.Controllers.Admin
         // POST: Ecards/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int ItemID)
+        public ActionResult Delete(int ItemID)
         {
             Ecard ecard = EcardBusiness.Find(ItemID);
             ecard.Status = true;
