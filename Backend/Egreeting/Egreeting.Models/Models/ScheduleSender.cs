@@ -43,6 +43,6 @@ namespace Egreeting.Models.Models
 
         public virtual Ecard Ecard { get; set; }
 
-        public virtual EgreetingUser User { get; set; }
+        public virtual EgreetingUser EgreetingUser { get; set; }
     }
 }

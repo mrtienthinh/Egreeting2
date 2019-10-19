@@ -10,6 +10,7 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -17,15 +18,31 @@ namespace Egreeting.Web.Controllers.Admin
     public class ScheduleSendersController : BaseAdminController
     {
         private IScheduleSenderBusiness ScheduleSenderBusiness;
-        public ScheduleSendersController(IScheduleSenderBusiness ScheduleSenderBusiness)
+        private IEgreetingUserBusiness EgreetingUserBusiness;
+        private IEcardBusiness EcardBusiness;
+        public ScheduleSendersController(IScheduleSenderBusiness ScheduleSenderBusiness, IEgreetingUserBusiness EgreetingUserBusiness, IEcardBusiness EcardBusiness)
         {
             this.ScheduleSenderBusiness = ScheduleSenderBusiness;
         }
 
         // GET: ScheduleSenders
-        public ActionResult Index()
+        public ActionResult Index(string search, int page = 1, int pageSize = 10)
         {
-            return View(ViewNamesConstant.AdminScheduleSendersIndex,ScheduleSenderBusiness.All.ToList());
+            var listModel = new List<ScheduleSender>();
+            if (!string.IsNullOrEmpty(search))
+            {
+                listModel = ScheduleSenderBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && !x.Status).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && !x.Status);
+            }
+            else
+            {
+                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => !x.Status);
+                listModel = ScheduleSenderBusiness.All.Where(x => !x.Status).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            ViewBag.search = search;
+            return View(ViewNamesConstant.AdminScheduleSendersIndex, listModel);
         }
 
         // GET: ScheduleSenders/Details/5
@@ -40,12 +57,16 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersDetails, ScheduleSender);
         }
 
         // GET: ScheduleSenders/Create
         public ActionResult Create()
         {
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersCreate);
         }
 
@@ -54,15 +75,66 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ScheduleSenderID,ScheduleSenderEmail,CreatedDate,ModifiedDate")] ScheduleSender ScheduleSender)
+        public ActionResult Create([Bind(Include = "ScheduleTime,ScheduleType,SenderName,RecipientEmail,SendSubject,SendMessage")] ScheduleSender ScheduleSender, int? EcardID, int? EgreetingUserID)
         {
             if (ModelState.IsValid)
             {
-                ScheduleSenderBusiness.Insert(ScheduleSender);
-                ScheduleSenderBusiness.Save();
+                using (var context = new EgreetingContext())
+                {
+                    // thinh: check user exist
+                    var egreetingUser = new EgreetingUser();
+                    if(EcardID != null)
+                    {
+                        egreetingUser = context.Set<EgreetingUser>().Find(EgreetingUserID);
+                        if(egreetingUser == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "User not found!");
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Need at least one user!");
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                    }
+
+                    // thinh: check ecard exist
+                    var ecard = new Ecard();
+                    if (EcardID != null)
+                    {
+                        ecard = context.Set<Ecard>().Find(EcardID);
+                        if (ecard == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Ecard not found!");
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Need at least one ecard!");
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                    }
+
+                    // thinh: create schedule sender
+                    ScheduleSender.Ecard = ecard;
+                    ScheduleSender.EgreetingUser = egreetingUser;
+                    ScheduleSender.CreatedDate = DateTime.Now;
+
+                    context.Set<ScheduleSender>().Add(ScheduleSender);
+                    context.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersCreate,ScheduleSender);
         }
 
@@ -78,6 +150,8 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersEdit,ScheduleSender);
         }
 
@@ -86,39 +160,69 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ScheduleSenderID,ScheduleSenderEmail,CreatedDate,ModifiedDate")] ScheduleSender ScheduleSender)
+        public ActionResult Edit([Bind(Include = "ScheduleSenderID,ScheduleTime,ScheduleType,SenderName,RecipientEmail,SendSubject,SendMessage")] ScheduleSender ScheduleSender, int? EcardID, int? EgreetingUserID)
         {
             if (ModelState.IsValid)
             {
-                ScheduleSenderBusiness.Update(ScheduleSender);
-                ScheduleSenderBusiness.Save();
+                using (var context = new EgreetingContext())
+                {
+                    var scheduleSenderUpdate = context.Set<ScheduleSender>().Find(ScheduleSender.ScheduleSenderID);
+                    // thinh: check user exist
+                    if (EcardID != null)
+                    {
+                        var egreetingUser = context.Set<EgreetingUser>().Find(EgreetingUserID);
+                        if (egreetingUser == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "User not found!");
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                        }
+                        scheduleSenderUpdate.EgreetingUser = egreetingUser;
+                    }
+
+                    // thinh: check ecard exist
+                    if (EcardID != null)
+                    {
+                        var ecard = context.Set<Ecard>().Find(EcardID);
+                        if (ecard == null)
+                        {
+                            ModelState.AddModelError(string.Empty, "Ecard not found!");
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
+                        }
+                        scheduleSenderUpdate.Ecard = ecard;
+                    }
+
+                    // thinh: create schedule sender
+                    scheduleSenderUpdate.ScheduleTime = ScheduleSender.ScheduleTime;
+                    scheduleSenderUpdate.ScheduleType = ScheduleSender.ScheduleType;
+                    scheduleSenderUpdate.SenderName = ScheduleSender.SenderName;
+                    scheduleSenderUpdate.RecipientEmail = ScheduleSender.RecipientEmail;
+                    scheduleSenderUpdate.SendSubject = ScheduleSender.SendSubject;
+                    scheduleSenderUpdate.SendMessage = ScheduleSender.SendMessage;
+                    scheduleSenderUpdate.ModifiedDate = DateTime.Now;
+
+                    context.Set<ScheduleSender>().Attach(scheduleSenderUpdate);
+                    context.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersEdit,ScheduleSender);
         }
 
-        // GET: ScheduleSenders/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ScheduleSender ScheduleSender = ScheduleSenderBusiness.Find(id);
-            if (ScheduleSender == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminScheduleSendersDelete,ScheduleSender);
-        }
-
         // POST: ScheduleSenders/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int ItemID)
         {
-            ScheduleSender ScheduleSender = ScheduleSenderBusiness.Find(id);
-            ScheduleSenderBusiness.Delete(ScheduleSender);
+            ScheduleSender ScheduleSender = ScheduleSenderBusiness.Find(ItemID);
+            ScheduleSender.ModifiedDate = DateTime.Now;
+            ScheduleSender.Status = true;
+            ScheduleSenderBusiness.Update(ScheduleSender);
             ScheduleSenderBusiness.Save();
             return RedirectToAction("Index");
         }
