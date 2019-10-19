@@ -64,11 +64,11 @@
                     @Html.ValidationMessageFor(model => model.EcardSlug, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
-                    <label for="Thumbnail"></label>
+                    <label for="Thumbnail">Thumbnail</label>
                     <input type="file" name="Thumbnail" id="Thumbnail" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="EcardFile"></label>
+                    <label for="EcardFile">EcardFile</label>
                     <input type="file" name="EcardFile" id="EcardFile" class="form-control">
                 </div>
             </div>
@@ -90,13 +90,10 @@
     <script>
         function CreateSlug(){
             var title, slug;
-
             //Lấy text từ thẻ input title
             title = document.getElementById("EcardName").value;
-
            //Đổi chữ hoa thành chữ thường
             slug = title.toLowerCase();
-
             //Đổi ký tự có dấu thành không dấu
             slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
             slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
@@ -122,7 +119,6 @@
             //In slug ra textbox có id “slug”
             document.getElementById('EcardSlug').value = slug;
         }
-
         function SelectMultiple(e)
         {
             var ListRoleArray = $('#ListCategoryString').val().split('-').filter(x => x.length > 0);
@@ -135,7 +131,6 @@
             var ListRole = ListRoleArray.join('-');
             $('#ListCategoryString').val(ListRole);
         }
-
         function RemoveBadge(e) {
             var roleRemove = $(e).attr('value');
             var ListRoleArray = $('#ListCategoryString').val().split('-').filter(x => x.length > 0);
@@ -146,7 +141,6 @@
             $('#ListCategoryString').val(ListRole);
             e.remove();
         }
-
         function BackToIndex()
         {
             window.location.replace('@Url.Action("Index")');

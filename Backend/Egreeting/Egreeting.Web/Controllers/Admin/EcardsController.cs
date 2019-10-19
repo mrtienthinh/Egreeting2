@@ -33,7 +33,7 @@ namespace Egreeting.Web.Controllers.Admin
         // GET: Ecards
         public ActionResult Index(string search, int page = 1, int pageSize = 10)
         {
-             var listModel = new List<Ecard>();
+            var listModel = new List<Ecard>();
             if (!string.IsNullOrEmpty(search))
             {
                 listModel = EcardBusiness.All.Where(x => x.EcardName.Contains(search) && !x.Status).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -62,7 +62,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            return View(ViewNamesConstant.AdminEcardsDetails,ecard);
+            return View(ViewNamesConstant.AdminEcardsDetails, ecard);
         }
 
         // GET: Ecards/Create
@@ -79,7 +79,7 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "EcardName,EcardSlug,EcardType,Price")] Ecard ecard, string ListCategoryString)
         {
-            
+
 
             if (ModelState.IsValid)
             {
@@ -88,16 +88,23 @@ namespace Egreeting.Web.Controllers.Admin
                 string pathThumbnail = Server.MapPath("~/Uploads/Thumbnails/");
                 string pathEcardFiles = Server.MapPath("~/Uploads/EcardFiles/");
 
-
-                if (!Directory.Exists(pathEcardFiles) && ecardFile != null)
+                if (!Directory.Exists(pathEcardFiles))
                 {
                     Directory.CreateDirectory(pathEcardFiles);
-                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
-                    ecardFile.SaveAs(pathEcardFiles + ecard.ThumbnailUrl);
-
-                    if (!Directory.Exists(pathThumbnail) && thumbnailFile != null)
+                    if (!Directory.Exists(pathThumbnail))
                     {
                         Directory.CreateDirectory(pathThumbnail);
+                    }
+                }
+
+
+                if (ecardFile != null)
+                {
+                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
+                    ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
+
+                    if (thumbnailFile != null)
+                    {
                         ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
                         thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
                     }
@@ -155,7 +162,7 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "EcardID,EcardName,EcardSlug,EcardType,Price")] Ecard ecard)
         {
-            
+
 
             if (ModelState.IsValid)
             {
