@@ -20,5 +20,7 @@ namespace Egreeting.Models.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        
     }
 }

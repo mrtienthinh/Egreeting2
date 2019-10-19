@@ -23,7 +23,6 @@ namespace Egreeting.Models.Models
         public int EgreetingUserID { get; set; }
 
         [DisplayName("Tên đường link tùy biến")]
-        [Index(IsUnique = true)]
         [StringLength(100, ErrorMessage = "Tên đường link tùy biến không được quá {1} ký tự!")]
         public string EgreetingUserSlug { get; set; }
 

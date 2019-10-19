@@ -24,7 +24,6 @@ namespace Egreeting.Models.Models
         [DisplayName("Đường link category")]
         public string CategorySlug { get; set; }
 
-        [Index(IsUnique = true)]
         [StringLength(100, ErrorMessage = "Tên phân loại không được vượt quá {1} ký tự!")]
         [DisplayName("Tên phân loại")]
         public string CategoryName { get; set; }
