@@ -10,22 +10,54 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
     public class SubcribersController : BaseAdminController
     {
+        private ApplicationUserManager _userManager;
         private ISubcriberBusiness SubcriberBusiness;
-        public SubcribersController(ISubcriberBusiness SubcriberBusiness)
+        private IEgreetingUserBusiness EgreetingUserBusiness;
+        private IEgreetingRoleBusiness EgreetingRoleBusiness;
+        public SubcribersController(ISubcriberBusiness SubcriberBusiness, IEgreetingUserBusiness EgreetingUserBusiness, IEgreetingRoleBusiness EgreetingRoleBusiness)
         {
             this.SubcriberBusiness = SubcriberBusiness;
+            this.EgreetingUserBusiness = EgreetingUserBusiness;
+            this.EgreetingRoleBusiness = EgreetingRoleBusiness;
+        }
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
         }
 
         // GET: Subcribers
-        public ActionResult Index()
+        public ActionResult Index(string search, int page = 1, int pageSize = 10, bool draft = false)
         {
-            return View(ViewNamesConstant.AdminSubcribersIndex,SubcriberBusiness.All.ToList());
+            var listModel = new List<Subcriber>();
+            if (!string.IsNullOrEmpty(search))
+            {
+                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+            }
+            else
+            {
+                ViewBag.totalItem = UserManager.Users.Count(x => !x.EgreetingUser.Status);
+                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+            }
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            ViewBag.search = search;
+            return View(ViewNamesConstant.AdminSubcribersIndex, listModel);
         }
 
         // GET: Subcribers/Details/5
@@ -54,71 +86,47 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SubcriberID,SubcriberEmail,CreatedDate,ModifiedDate")] Subcriber subcriber)
+        public ActionResult Create([Bind(Include = "Email")] Subcriber subcriber)
         {
             if (ModelState.IsValid)
             {
-                SubcriberBusiness.Insert(subcriber);
-                SubcriberBusiness.Save();
-                return RedirectToAction("Index");
-            }
+                var egreetingUser = new EgreetingUser
+                {
+                    CreatedDate = DateTime.Now,
+                    Avatar = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/Admin/dist/img/avatar.png")),
+                    Email = subcriber.Email,
 
-            return View(ViewNamesConstant.AdminSubcribersCreate,subcriber);
-        }
-
-        // GET: Subcribers/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                };
+                var applicationUser = new ApplicationUser { Email = egreetingUser.Email, UserName = egreetingUser.Email, EgreetingUser = egreetingUser };
+                var result = UserManager.Create(applicationUser, "delete123456Aa");
+                if (result.Succeeded)
+                {
+                    using (var context = new EgreetingContext())
+                    {
+                        var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
+                        eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => x.EgreetingRoleName.Equals("Subcriber")).ToList();
+                        subcriber.EgreetingUser = eUser;
+                        context.Set<Subcriber>().Attach(subcriber);
+                        context.SaveChanges();
+                    }
+                    return RedirectToAction("Index");
+                }
+                AddErrors(result);
             }
-            Subcriber subcriber = SubcriberBusiness.Find(id);
-            if (subcriber == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminSubcribersEdit,subcriber);
-        }
-
-        // POST: Subcribers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SubcriberID,SubcriberEmail,CreatedDate,ModifiedDate")] Subcriber subcriber)
-        {
-            if (ModelState.IsValid)
-            {
-                SubcriberBusiness.Update(subcriber);
-                SubcriberBusiness.Save();
-                return RedirectToAction("Index");
-            }
-            return View(ViewNamesConstant.AdminSubcribersEdit,subcriber);
-        }
-
-        // GET: Subcribers/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Subcriber subcriber = SubcriberBusiness.Find(id);
-            if (subcriber == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminSubcribersDelete,subcriber);
+            return View(ViewNamesConstant.AdminSubcribersCreate, subcriber);
         }
 
         // POST: Subcribers/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int ItemID)
         {
-            Subcriber subcriber = SubcriberBusiness.Find(id);
-            SubcriberBusiness.Delete(subcriber);
+            Subcriber subcriber = SubcriberBusiness.Find(ItemID);
+            subcriber.EgreetingUser.ModifiedDate = DateTime.Now;
+            subcriber.EgreetingUser.Status = true;
+            subcriber.ModifiedDate = DateTime.Now;
+            subcriber.Status = true;
+            SubcriberBusiness.Update(subcriber);
             SubcriberBusiness.Save();
             return RedirectToAction("Index");
         }

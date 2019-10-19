@@ -1,42 +1,57 @@
 ﻿@model Egreeting.Models.Models.Subcriber
-
+@using Egreeting.Domain
+@using Egreeting.Models.Models
 @{
-    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Detail";
 }
 
-<h2>Details</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Subcriber Management
+        <small>Detail</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li>Admin</li>
+        <li><a href="@Url.Action("Index")">Subcribers</a></li>
+        <li class="active">Detail</li>
+    </ol>
+</section>
 
-<div>
-    <h4>Subcriber</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.SubcriberEmail)
-        </dt>
+<!-- Main content -->
+<section class="content">
 
-        <dd>
-            @Html.DisplayFor(model => model.SubcriberEmail)
-        </dd>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Detail Subcriber</h3>
+        </div><!-- /.box-header -->
+        <form>
+            <div class="box-body">
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email)
+                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email", @id = "Email", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
+            <div class="box-footer">
+                <button class="btn btn-primary" type="button" onclick="BackToIndex()">Back to index</button>
+            </div>
+        </form>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
+</section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+<!-- Main content -->
 
-        <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.SubcriberID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@section scripts{
+    <script>
+        function BackToIndex()
+        {
+            window.location.replace('@Url.Action("Index")');
+        }
+    </script>
+}
