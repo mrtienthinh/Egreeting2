@@ -10,6 +10,7 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using System.Web.Security;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -17,15 +18,34 @@ namespace Egreeting.Web.Controllers.Admin
     public class FeedbacksController : BaseAdminController
     {
         private IFeedbackBusiness FeedbackBusiness;
-        public FeedbacksController(IFeedbackBusiness FeedbackBusiness)
+        private IEgreetingUserBusiness EgreetingUserBusiness;
+        private IEcardBusiness EcardBusiness;
+
+        public FeedbacksController(IFeedbackBusiness FeedbackBusiness, IEgreetingUserBusiness EgreetingUserBusiness, IEcardBusiness EcardBusiness)
         {
             this.FeedbackBusiness = FeedbackBusiness;
+            this.EgreetingUserBusiness = EgreetingUserBusiness;
+            this.EcardBusiness = EcardBusiness;
         }
 
         // GET: Feedbacks
-        public ActionResult Index()
+        public ActionResult Index(string search, int page = 1, int pageSize = 10)
         {
-            return View(ViewNamesConstant.AdminFeedbacksIndex,FeedbackBusiness.All.ToList());
+            var listModel = new List<Feedback>();
+            if (!string.IsNullOrEmpty(search))
+            {
+                listModel = FeedbackBusiness.All.Where(x => x.Subject.Contains(search) && !x.Status).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = FeedbackBusiness.All.Count(x => x.Subject.Contains(search) && !x.Status);
+            }
+            else
+            {
+                ViewBag.totalItem = FeedbackBusiness.All.Count(x => !x.Status);
+                listModel = FeedbackBusiness.All.Where(x => !x.Status).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            ViewBag.search = search;
+            return View(ViewNamesConstant.AdminFeedbacksIndex, listModel);
         }
 
         // GET: Feedbacks/Details/5
@@ -54,10 +74,24 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "FeedbackID,Subject,Content,CreatedDate,ModifiedDate")] Feedback feedback)
+        public ActionResult Create([Bind(Include = "Subject,Message")] Feedback feedback, int EcardId)
         {
             if (ModelState.IsValid)
             {
+                var user = new EgreetingUser();
+                var currentContext = System.Web.HttpContext.Current;
+                if (currentContext.User != null)
+                {
+                    string email = Membership.GetUser().Email;
+                    user = EgreetingUserBusiness.All.Where(x => x.Email.Equals(email)).FirstOrDefault();
+                }
+                if (user != null)
+                    feedback.EgreetingUser = user;
+
+                var ecard = EcardBusiness.Find(EcardId);
+                if (ecard != null)
+                    feedback.Ecard = ecard;
+
                 FeedbackBusiness.Insert(feedback);
                 FeedbackBusiness.Save();
                 return RedirectToAction("Index");
@@ -86,11 +120,14 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "FeedbackID,Subject,Content,CreatedDate,ModifiedDate")] Feedback feedback)
+        public ActionResult Edit([Bind(Include = "FeedbackID,Subject,Message")] Feedback feedback, int EcardId)
         {
             if (ModelState.IsValid)
             {
-                FeedbackBusiness.Update(feedback);
+                var feedbackUpdate = FeedbackBusiness.Find(feedback.FeedbackID);
+                feedbackUpdate.Subject = feedback.Subject;
+                feedbackUpdate.Message = feedback.Message;
+                FeedbackBusiness.Update(feedbackUpdate);
                 FeedbackBusiness.Save();
                 return RedirectToAction("Index");
             }
@@ -115,10 +152,11 @@ namespace Egreeting.Web.Controllers.Admin
         // POST: Feedbacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int ItemID)
         {
-            Feedback feedback = FeedbackBusiness.Find(id);
-            FeedbackBusiness.Delete(feedback);
+            Feedback feedback = FeedbackBusiness.Find(ItemID);
+            feedback.Status = true;
+            FeedbackBusiness.Update(feedback);
             FeedbackBusiness.Save();
             return RedirectToAction("Index");
         }
