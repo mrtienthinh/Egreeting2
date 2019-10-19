@@ -10,6 +10,7 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -17,15 +18,31 @@ namespace Egreeting.Web.Controllers.Admin
     public class PaymentsController : BaseAdminController
     {
         private IPaymentBusiness PaymentBusiness;
-        public PaymentsController(IPaymentBusiness PaymentBusiness)
+        private IEgreetingUserBusiness EgreetingUserBusiness;
+        public PaymentsController(IPaymentBusiness PaymentBusiness, IEgreetingUserBusiness EgreetingUserBusiness)
         {
             this.PaymentBusiness = PaymentBusiness;
+            this.EgreetingUserBusiness = EgreetingUserBusiness;
         }
 
         // GET: Payments
-        public ActionResult Index()
+        public ActionResult Index(string search, int page = 1, int pageSize = 10)
         {
-            return View(ViewNamesConstant.AdminPaymentsIndex,PaymentBusiness.All.ToList());
+            var listModel = new List<Payment>();
+            if (!string.IsNullOrEmpty(search))
+            {
+                listModel = PaymentBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && !x.Status).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = PaymentBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && !x.Status);
+            }
+            else
+            {
+                ViewBag.totalItem = PaymentBusiness.All.Count(x => !x.Status);
+                listModel = PaymentBusiness.All.Where(x => !x.Status).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            ViewBag.search = search;
+            return View(ViewNamesConstant.AdminPaymentsIndex, listModel);
         }
 
         // GET: Payments/Details/5
@@ -40,12 +57,14 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            return View(ViewNamesConstant.AdminPaymentsDetails,Payment);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            return View(ViewNamesConstant.AdminPaymentsDetails, Payment);
         }
 
         // GET: Payments/Create
         public ActionResult Create()
         {
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsCreate);
         }
 
@@ -54,16 +73,29 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PaymentID,ReceiveMoney,IsReceived,CreatedDate,ModifiedDate")] Payment Payment)
+        public ActionResult Create([Bind(Include = "Month,Year,PaymentStatus")] Payment Payment, int? EgreetingUserID)
         {
             if (ModelState.IsValid)
             {
-                PaymentBusiness.Insert(Payment);
-                PaymentBusiness.Save();
+                using (var context = new EgreetingContext())
+                {
+                    var egreetingUser = context.Set<EgreetingUser>().Find(EgreetingUserID);
+                    if(egreetingUser == null)
+                    {
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        ModelState.AddModelError(string.Empty, "Need at least one email of user");
+                        return View(ViewNamesConstant.AdminPaymentsCreate, Payment);
+                    }
+                    Payment.EgreetingUser = egreetingUser;
+                    Payment.CreatedDate = DateTime.Now;
+                    context.Set<Payment>().Add(Payment);
+                    context.SaveChanges();
+                }
+
                 return RedirectToAction("Index");
             }
-
-            return View(ViewNamesConstant.AdminPaymentsCreate,Payment);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            return View(ViewNamesConstant.AdminPaymentsCreate, Payment);
         }
 
         // GET: Payments/Edit/5
@@ -78,7 +110,8 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            return View(ViewNamesConstant.AdminPaymentsEdit,Payment);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            return View(ViewNamesConstant.AdminPaymentsEdit, Payment);
         }
 
         // POST: Payments/Edit/5
@@ -86,39 +119,43 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PaymentID,ReceiveMoney,IsReceived,CreatedDate,ModifiedDate")] Payment Payment)
+        public ActionResult Edit([Bind(Include = "PaymentID,Month,Year,PaymentStatus")] Payment Payment, int? EgreetingUserID)
         {
             if (ModelState.IsValid)
             {
-                PaymentBusiness.Update(Payment);
-                PaymentBusiness.Save();
+                using (var context = new EgreetingContext())
+                {
+                    var paymentUpdate = context.Set<Payment>().Find(Payment.PaymentID);
+                    if (EgreetingUserID != null && paymentUpdate.EgreetingUser.EgreetingUserID != EgreetingUserID)
+                    {
+                        var egreetingUser = context.Set<EgreetingUser>().Find(EgreetingUserID);
+
+                        if (egreetingUser != null)
+                        {
+                            paymentUpdate.EgreetingUser = egreetingUser;
+                        }
+                    }
+                    paymentUpdate.Month = Payment.Month;
+                    paymentUpdate.Year = Payment.Year;
+                    paymentUpdate.PaymentStatus = Payment.PaymentStatus;
+                    paymentUpdate.ModifiedDate = DateTime.Now;
+                    context.Set<Payment>().Attach(paymentUpdate);
+                }
                 return RedirectToAction("Index");
             }
-            return View(ViewNamesConstant.AdminPaymentsEdit,Payment);
-        }
-
-        // GET: Payments/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment Payment = PaymentBusiness.Find(id);
-            if (Payment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminPaymentsDelete,Payment);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            return View(ViewNamesConstant.AdminPaymentsEdit, Payment);
         }
 
         // POST: Payments/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int ItemID)
         {
-            Payment Payment = PaymentBusiness.Find(id);
-            PaymentBusiness.Delete(Payment);
+            Payment Payment = PaymentBusiness.Find(ItemID);
+            Payment.Status = true;
+            Payment.ModifiedDate = DateTime.Now;
+            PaymentBusiness.Update(Payment);
             PaymentBusiness.Save();
             return RedirectToAction("Index");
         }

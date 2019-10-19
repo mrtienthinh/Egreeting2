@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace Egreeting.Models.Models
 {
-    public class Payment
+    public class Payment : BaseModel
     {
         [Key]
         public int PaymentID { get; set; }
 
         [Range(1,12)]
-        [DisplayName("Tháng tính phí")]
+        [DisplayName("Month")]
         public int Month { get; set; }
 
-        [DisplayName("Năm tính phí")]
+        [DisplayName("Year")]
         public int Year { get; set; }
 
-        [DisplayName("Trạng thái tính phí")]
+        [DisplayName("Payment Status")]
         public bool PaymentStatus { get; set; }
 
         public virtual EgreetingUser EgreetingUser { get; set; }

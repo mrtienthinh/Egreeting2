@@ -1,50 +1,71 @@
 ﻿@model Egreeting.Models.Models.Payment
-
+@using Egreeting.Domain
+@using Egreeting.Models.Models
 @{
-    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Detail";
 }
 
-<h2>Details</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Payment Management
+        <small>Detail</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li>Admin</li>
+        <li><a href="@Url.Action("Index")">Payments</a></li>
+        <li class="active">Detail</li>
+    </ol>
+</section>
 
-<div>
-    <h4>PaymentRequest</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ReceiveMoney)
-        </dt>
+<!-- Main content -->
+<section class="content">
 
-        <dd>
-            @Html.DisplayFor(model => model.ReceiveMoney)
-        </dd>
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Detail payment</h3>
+        </div><!-- /.box-header -->
+        <form>
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="EgreetingUserID">User</label>
+                    @Html.DropDownList("EgreetingUserID", new SelectList((Dictionary<int, string>)ViewBag.EgreetingUsers, "Key", "Value", Model.EgreetingUser.EgreetingUserID), new { @class = "form-control", @disabled = "disabled" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Month)
+                    @Html.EditorFor(m => m.Month, new { htmlAttributes = new { @class = "form-control", @placeholder = "Month", @id = "Month", @disabled = "disabled"  } })
+                    @Html.ValidationMessageFor(model => model.Month, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Year)
+                    @Html.EditorFor(m => m.Year, new { htmlAttributes = new { @class = "form-control", @placeholder = "Year", @id = "Year", @disabled = "disabled"  } })
+                    @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PaymentStatus)
+                    @Html.CheckBoxFor(m => m.PaymentStatus, new { htmlAttributes = new { @class = "form-control", @placeholder = "PaymentStatus", @id = "PaymentStatus", @disabled = "disabled"  } })
+                    @Html.ValidationMessageFor(model => model.PaymentStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsReceived)
-        </dt>
+            <div class="box-footer">
+                <button class="btn btn-primary" type="button" onclick="BackToIndex()">Back to index</button>
+            </div>
+        </form>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsReceived)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
+</section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+<!-- Main content -->
 
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.PaymentRequestID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@section scripts{
+    <script>
+        function BackToIndex()
+        {
+            window.location.replace('@Url.Action("Index")');
+        }
+    </script>
+}
