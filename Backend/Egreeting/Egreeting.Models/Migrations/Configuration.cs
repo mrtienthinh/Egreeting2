@@ -69,7 +69,7 @@ namespace Egreeting.Models.Migrations
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
-                var user = new ApplicationUser { UserName = "mrtienthinh@gmail.com", Email = "mrtienthinh@gmail.com", EgreetingUser = new EgreetingUser { Email = "mrtienthinh@gmail.com" } };
+                var user = new ApplicationUser { UserName = "mrtienthinh@gmail.com", Email = "mrtienthinh@gmail.com", EgreetingUser = new EgreetingUser { Email = "mrtienthinh@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
 
                 manager.Create(user, "123456aA@");
                 manager.AddToRole(user.Id, "Admin");
@@ -78,7 +78,7 @@ namespace Egreeting.Models.Migrations
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
-                var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EgreetingUser = new EgreetingUser { Email = "admin@gmail.com" } };
+                var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EgreetingUser = new EgreetingUser { Email = "admin@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
 
                 manager.Create(user, "123456aA@");
                 manager.AddToRole(user.Id, "Admin");
@@ -87,7 +87,7 @@ namespace Egreeting.Models.Migrations
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
-                var user = new ApplicationUser { UserName = "user@gmail.com", Email = "user@gmail.com", EgreetingUser = new EgreetingUser { Email = "user@gmail.com" } };
+                var user = new ApplicationUser { UserName = "user@gmail.com", Email = "user@gmail.com", EgreetingUser = new EgreetingUser { Email = "user@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
 
                 manager.Create(user, "123456aA@");
                 manager.AddToRole(user.Id, "User");
@@ -96,7 +96,7 @@ namespace Egreeting.Models.Migrations
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
-                var user = new ApplicationUser { UserName = "subcriber@gmail.com", Email = "subcriber@gmail.com", EgreetingUser = new EgreetingUser { Email = "subcriber@gmail.com" } };
+                var user = new ApplicationUser { UserName = "subcriber@gmail.com", Email = "subcriber@gmail.com", EgreetingUser = new EgreetingUser { Email = "subcriber@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
 
                 manager.Create(user, "123456aA@");
                 manager.AddToRole(user.Id, "Subcriber");
