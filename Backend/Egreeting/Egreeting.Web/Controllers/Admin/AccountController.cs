@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using Egreeting.Models.Models;
 using Egreeting.Web;
 using Egreeting.Web.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -161,6 +163,14 @@ namespace Egreeting.Web.Controllers.Admin
                 egreetingUser.FirstName = model.FirstName;
                 user.EgreetingUser = egreetingUser;
                 var result = await UserManager.CreateAsync(user, model.Password);
+                using (var context = new EgreetingContext())
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    var userStore = new UserStore<ApplicationUser>(context);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+                    userManager.AddToRole(user.Id, "User");
+                }
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);

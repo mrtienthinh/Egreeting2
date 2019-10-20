@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using Egreeting.Models.AppContext;
 using Egreeting.Web.Filters;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -101,6 +102,14 @@ namespace Egreeting.Web.Controllers.Admin
                 };
                 var applicationUser = new ApplicationUser { Email = egreetingUser.Email, UserName = egreetingUser.Email, EgreetingUser = egreetingUser };
                 var result = UserManager.Create(applicationUser, "delete123456Aa");
+                using (var context = new EgreetingContext())
+                {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    var userStore = new UserStore<ApplicationUser>(context);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+                    userManager.AddToRole(applicationUser.Id, "Subcriber");
+                }
                 if (result.Succeeded)
                 {
                     using (var context = new EgreetingContext())
