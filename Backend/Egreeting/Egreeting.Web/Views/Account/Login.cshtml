@@ -1,6 +1,10 @@
-﻿@{ 
+﻿@using Egreeting.Web.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,7 +51,7 @@
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
                             <label>
-                                <input type="checkbox" name="RememberMe"> Remember Me
+                                @Html.CheckBoxFor(m => m.RememberMe) Remember me
                             </label>
                         </div>
                     </div><!-- /.col -->

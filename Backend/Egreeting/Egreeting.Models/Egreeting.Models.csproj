@@ -59,6 +59,10 @@
     <Compile Include="Migrations\201910200207330_init-db.Designer.cs">
       <DependentUpon>201910200207330_init-db.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910200801546_second-db.cs" />
+    <Compile Include="Migrations\201910200801546_second-db.Designer.cs">
+      <DependentUpon>201910200801546_second-db.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationRole.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -82,6 +86,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910200207330_init-db.resx">
       <DependentUpon>201910200207330_init-db.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910200801546_second-db.resx">
+      <DependentUpon>201910200801546_second-db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

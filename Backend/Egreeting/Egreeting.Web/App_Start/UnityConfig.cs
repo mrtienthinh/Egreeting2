@@ -4,6 +4,7 @@ using Egreeting.Models.AppContext;
 using Egreeting.Models.Models;
 using Egreeting.Repository.IRepository;
 using Egreeting.Repository.Repository;
+using Egreeting.Web.Controllers.Admin;
 using log4net;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -26,11 +27,12 @@ namespace Egreeting.Web.App_Start
         public static void RegisterComponents()
         {
             var container = new UnityContainer();
-            container.RegisterType<DbContext, EgreetingContext>(new PerRequestLifetimeManager());
-            container.RegisterType<IUserStore<ApplicationUser>,UserStore<ApplicationUser>>(new PerRequestLifetimeManager());
-            container.RegisterType<ApplicationUserManager>(new PerRequestLifetimeManager());
-            container.RegisterType<IAuthenticationManager>(new InjectionFactory(c => HttpContext.Current.GetOwinContext().Authentication));
-            container.RegisterType<ApplicationSignInManager>(new PerRequestLifetimeManager());
+            //container.RegisterType<DbContext, EgreetingContext>(new PerRequestLifetimeManager());
+            //container.RegisterType<IUserStore<ApplicationUser>,UserStore<ApplicationUser>>(new PerRequestLifetimeManager());
+            //container.RegisterType<ApplicationUserManager>(new PerRequestLifetimeManager());
+            //container.RegisterType<IAuthenticationManager>(new InjectionFactory(c => HttpContext.Current.GetOwinContext().Authentication));
+            //container.RegisterType<ApplicationSignInManager>(new PerRequestLifetimeManager());
+            container.RegisterType<AccountController>(new InjectionConstructor());
 
 
             // register all your components with the container here 
