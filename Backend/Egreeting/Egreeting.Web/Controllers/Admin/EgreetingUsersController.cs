@@ -15,10 +15,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Egreeting.Business.Business;
 using Egreeting.Models.AppContext;
+using Egreeting.Web.Filters;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
+    [RoleAuthorize(Roles = "Admin")]
     public class EgreetingUsersController : BaseAdminController
     {
         private ApplicationUserManager _userManager;

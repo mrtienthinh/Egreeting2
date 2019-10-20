@@ -10,10 +10,12 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Egreeting.Web.Filters;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
+    [RoleAuthorize(Roles = "Admin")]
     public class OrderDetailsController : BaseAdminController
     {
         private IOrderDetailBusiness OrderDetailBusiness;

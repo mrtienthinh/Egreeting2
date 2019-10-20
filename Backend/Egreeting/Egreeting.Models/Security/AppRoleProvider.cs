@@ -1,17 +1,15 @@
 ﻿using Egreeting.Models.AppContext;
-using Egreeting.Models.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web.Security;
 
-namespace Egreeting.Web.Security
+namespace Egreeting.Models.Security
 {
-    public class CustomRoleProvider : RoleProvider
+    public class AppRoleProvider : RoleProvider
     {
-        EgreetingContext db = new EgreetingContext(); //khai bao context
-
         public override string ApplicationName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
@@ -36,19 +34,24 @@ namespace Egreeting.Web.Security
 
         public override string[] GetAllRoles()
         {
-            throw new NotImplementedException();
+            using (var userContext = new EgreetingContext())
+            {
+                return userContext.Roles.Select(r => r.Name).ToArray();
+            }
         }
 
-        public override string[] GetRolesForUser(string name)
+        public override string[] GetRolesForUser(string username)
         {
-            // tạo biến getrole, so sánh xem UserID đang đăng nhập có giống với tên trong db ko
-            EgreetingUser account = db.Users.Single(x => x.UserName.Equals(name)).EgreetingUser;
-            if (account != null) // Nếu giống
+            using (var userContext = new EgreetingContext())
             {
-                return account.EgreetingRoles.Select(x => x.EgreetingRoleName).ToArray<string>();
+                var user = userContext.Users.SingleOrDefault(u => u.UserName == username);
+                var userRoles = userContext.Roles.Select(r => r.Name);
+
+                if (user == null)
+                    return new string[] { };
+                return user.Roles == null ? new string[] { } :
+                    userRoles.ToArray();
             }
-            else
-                return new String[] { };
         }
 
         public override string[] GetUsersInRole(string roleName)
@@ -58,7 +61,16 @@ namespace Egreeting.Web.Security
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            throw new NotImplementedException();
+            using (var userContext = new EgreetingContext())
+            {
+                var user = userContext.Users.SingleOrDefault(u => u.UserName == username);
+                var userRoles = userContext.Roles.Select(r => r.Name);
+
+                if (user == null)
+                    return false;
+                return user.Roles != null &&
+                    userRoles.Any(r => r == roleName);
+            }
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)

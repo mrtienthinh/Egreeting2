@@ -12,10 +12,12 @@ using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
 using System.Web.Security;
 using Egreeting.Models.AppContext;
+using Egreeting.Web.Filters;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
+    [RoleAuthorize(Roles = "Admin")]
     public class FeedbacksController : BaseAdminController
     {
         private IFeedbackBusiness FeedbackBusiness;

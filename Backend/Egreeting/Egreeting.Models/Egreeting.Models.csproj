@@ -45,7 +45,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,6 +65,10 @@
     <Compile Include="Migrations\201910200801546_second-db.Designer.cs">
       <DependentUpon>201910200801546_second-db.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910200955545_third-db.cs" />
+    <Compile Include="Migrations\201910200955545_third-db.Designer.cs">
+      <DependentUpon>201910200955545_third-db.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationRole.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -78,6 +84,7 @@
     <Compile Include="Models\ScheduleSender.cs" />
     <Compile Include="Models\Subcriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AppRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -89,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910200801546_second-db.resx">
       <DependentUpon>201910200801546_second-db.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910200955545_third-db.resx">
+      <DependentUpon>201910200955545_third-db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

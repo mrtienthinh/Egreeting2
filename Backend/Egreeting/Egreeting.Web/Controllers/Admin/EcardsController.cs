@@ -14,10 +14,12 @@ using System.IO;
 using System.Web.Security;
 using Egreeting.Models.AppContext;
 using Egreeting.Web.Utils;
+using Egreeting.Web.Filters;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
+    [RoleAuthorize(Roles = "Admin")]
     public class EcardsController : BaseAdminController
     {
         private IEcardBusiness EcardBusiness;
@@ -179,8 +181,6 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "EcardID,EcardName,EcardSlug,EcardType,Price")] Ecard ecard)
         {
-
-
             if (ModelState.IsValid)
             {
                 using (var context = new EgreetingContext())
@@ -199,7 +199,6 @@ namespace Egreeting.Web.Controllers.Admin
                             Directory.CreateDirectory(pathThumbnail);
                         }
                     }
-
 
                     if (ecardFile != null)
                     {

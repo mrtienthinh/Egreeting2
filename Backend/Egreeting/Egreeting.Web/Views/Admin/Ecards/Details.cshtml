@@ -29,8 +29,6 @@
         </div><!-- /.box-header -->
         <form>
             <div class="box-body">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.AntiForgeryToken()
                 <div class="form-group" id="ListCategoryBadge">
                     @if (Model.Categories != null && Model.Categories.Count > 0)
                     {
@@ -60,8 +58,8 @@
                     @Html.DropDownList("EcardType",
                        EnumHelper.GetSelectList(typeof(EcardType)),
                        "Select card type",
-                       new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EcardType, "", new { @class = "text-danger", @disabled = "disabled" })
+                       new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.EcardType, "", new { @class = "text-danger"})
                 </div>
                 <div class="form-group">
                     <label for="Thumbnail">Thumbnail</label>

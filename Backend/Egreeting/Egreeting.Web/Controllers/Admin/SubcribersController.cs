@@ -13,10 +13,12 @@ using Egreeting.Models.Models;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using Egreeting.Models.AppContext;
+using Egreeting.Web.Filters;
 
 namespace Egreeting.Web.Controllers.Admin
 {
     [LogAction]
+    [RoleAuthorize(Roles = "Admin")]
     public class SubcribersController : BaseAdminController
     {
         private ApplicationUserManager _userManager;

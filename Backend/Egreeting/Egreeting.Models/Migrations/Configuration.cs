@@ -8,11 +8,12 @@ namespace Egreeting.Models.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Egreeting.Models.AppContext.EgreetingContext>
+    public sealed class Configuration : DbMigrationsConfiguration<Egreeting.Models.AppContext.EgreetingContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            ContextKey = "Egreeting.Models.AppContext";
         }
 
         protected override void Seed(Egreeting.Models.AppContext.EgreetingContext context)
