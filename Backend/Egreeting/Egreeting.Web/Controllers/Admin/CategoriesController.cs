@@ -73,11 +73,20 @@ namespace Egreeting.Web.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrEmpty(Category.CategorySlug) || string.IsNullOrEmpty(Category.CategoryName))
+                {
+                    ModelState.AddModelError(string.Empty, "This name or slug must not be null, try with other name or slug please!");
+                    return View(ViewNamesConstant.AdminCategoriesCreate, Category);
+                }
+                if (CategoryBusiness.AllNoTracking.Any(x => x.CategorySlug.Equals(Category.CategorySlug)))
+                {
+                    ModelState.AddModelError(string.Empty, "This slug had been created, try with other slug please!");
+                    return View(ViewNamesConstant.AdminCategoriesCreate, Category);
+                }
                 CategoryBusiness.Insert(Category);
                 CategoryBusiness.Save();
                 return RedirectToAction("Index");
             }
-
             return View(ViewNamesConstant.AdminCategoriesCreate, Category);
         }
 

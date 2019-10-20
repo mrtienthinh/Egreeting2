@@ -16,7 +16,7 @@ namespace Egreeting.Models.Migrations
                         CategoryName = c.String(maxLength: 100),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                     })
                 .PrimaryKey(t => t.CategoryID)
                 .Index(t => t.CategorySlug, unique: true);
@@ -34,7 +34,7 @@ namespace Egreeting.Models.Migrations
                         Price = c.Double(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         EgreetingUser_EgreetingUserID = c.Int(),
                     })
                 .PrimaryKey(t => t.EcardID)
@@ -58,7 +58,7 @@ namespace Egreeting.Models.Migrations
                         PaymentDueDate = c.DateTime(),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                     })
                 .PrimaryKey(t => t.EgreetingUserID);
             
@@ -70,7 +70,7 @@ namespace Egreeting.Models.Migrations
                         EgreetingRoleName = c.String(maxLength: 50),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                     })
                 .PrimaryKey(t => t.EgreetingRoleID)
                 .Index(t => t.EgreetingRoleName, unique: true);
@@ -84,7 +84,7 @@ namespace Egreeting.Models.Migrations
                         Message = c.String(maxLength: 500),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         Ecard_EcardID = c.Int(),
                         EgreetingUser_EgreetingUserID = c.Int(),
                     })
@@ -107,7 +107,7 @@ namespace Egreeting.Models.Migrations
                         SendMessage = c.String(maxLength: 500),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         Ecard_EcardID = c.Int(),
                         EgreetingUser_EgreetingUserID = c.Int(),
                     })
@@ -126,7 +126,7 @@ namespace Egreeting.Models.Migrations
                         EgreetingUserID = c.Int(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                     })
                 .PrimaryKey(t => t.SubcriberID)
                 .ForeignKey("dbo.EgreetingUsers", t => t.SubcriberID)
@@ -141,7 +141,7 @@ namespace Egreeting.Models.Migrations
                         SendTime = c.DateTime(),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         Ecard_EcardID = c.Int(),
                         Order_OrderID = c.Int(),
                     })
@@ -165,7 +165,7 @@ namespace Egreeting.Models.Migrations
                         TotalPrice = c.Double(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         User_EgreetingUserID = c.Int(),
                     })
                 .PrimaryKey(t => t.OrderID)
@@ -182,7 +182,7 @@ namespace Egreeting.Models.Migrations
                         PaymentStatus = c.Boolean(nullable: false),
                         CreatedDate = c.DateTime(),
                         ModifiedDate = c.DateTime(),
-                        Draft = c.Boolean(nullable: false),
+                        Draft = c.Boolean(),
                         EgreetingUser_EgreetingUserID = c.Int(),
                     })
                 .PrimaryKey(t => t.PaymentID)

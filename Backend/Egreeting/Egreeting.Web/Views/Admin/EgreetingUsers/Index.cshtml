@@ -13,12 +13,12 @@
 <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Application User Management
+            User management
             <small>Index</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Categories</li>
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Users</li>
         </ol>
     </section>
 
@@ -29,7 +29,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new Application User</button>
+                        <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new user</button>
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <div class="row">
@@ -254,8 +254,6 @@
                 console.log(search + '_' + pageSize + '_' + page);
                 window.location.replace('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
             }
-
-
 
             function LoadPage(e) {
                 console.log(e);
