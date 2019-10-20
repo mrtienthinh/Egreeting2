@@ -305,6 +305,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\SessionObject.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Admin\bootstrap\css\bootstrap.css" />

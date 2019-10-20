@@ -13,6 +13,7 @@ using Egreeting.Models.Models;
 using System.IO;
 using System.Web.Security;
 using Egreeting.Models.AppContext;
+using Egreeting.Web.Utils;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -99,12 +100,18 @@ namespace Egreeting.Web.Controllers.Admin
 
                 if (ecardFile != null)
                 {
-                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
+                    if (!Path.GetExtension(ecardFile.FileName).CheckExtentionFile(ecard.EcardType))
+                    {
+                        ModelState.AddModelError(string.Empty, "File upload not support!");
+                        ViewBag.Categories = CategoryBusiness.All.ToList();
+                        return View(ViewNamesConstant.AdminEcardsCreate, ecard);
+                    }
+                    ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime() + Path.GetExtension(ecardFile.FileName);
                     ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
 
-                    if (thumbnailFile != null)
+                    if (thumbnailFile != null && Path.GetExtension(thumbnailFile.FileName).CheckExtentionFile())
                     {
-                        ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
+                        ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime() + Path.GetExtension(thumbnailFile.FileName);
                         thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
                     }
                     else
@@ -129,9 +136,13 @@ namespace Egreeting.Web.Controllers.Admin
                         ecard.EcardSlug = ecard.EcardSlug + DateTime.Now.ToFileTime();
                     }
                     var currentContext = System.Web.HttpContext.Current;
-                    if (currentContext.User != null)
+                    if (currentContext.User != null && Request.IsAuthenticated)
                     {
-                        string email = Membership.GetUser().Email;
+                        string email = "";
+                        if (Membership.GetUser()!= null)
+                        {
+                            email = Membership.GetUser().Email;
+                        }
                         var user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();
                         ecard.EgreetingUser = user;
                     }
@@ -192,12 +203,18 @@ namespace Egreeting.Web.Controllers.Admin
 
                     if (ecardFile != null)
                     {
-                        ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime();
+                        if (!Path.GetExtension(ecardFile.FileName).CheckExtentionFile(ecard.EcardType))
+                        {
+                            ModelState.AddModelError(string.Empty, "File upload not support!");
+                            ViewBag.Categories = CategoryBusiness.All.ToList();
+                            return View(ViewNamesConstant.AdminEcardsCreate, ecard);
+                        }
+                        ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime()+ Path.GetExtension(ecardFile.FileName);
                         ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
 
-                        if (thumbnailFile != null)
+                        if (thumbnailFile != null && Path.GetExtension(thumbnailFile.FileName).CheckExtentionFile())
                         {
-                            ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime();
+                            ecard.ThumbnailUrl = "Thumbnail_" + DateTime.Now.ToFileTime() + Path.GetExtension(thumbnailFile.FileName);
                             thumbnailFile.SaveAs(pathThumbnail + ecard.ThumbnailUrl);
                         }
                         else

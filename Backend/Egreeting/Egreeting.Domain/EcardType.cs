@@ -8,8 +8,9 @@ namespace Egreeting.Domain
 {
     public enum EcardType
     {
-        Text = 1,
-        Picture = 2,
-        Video = 3,
+        Picture = 1,
+        GIF = 2,
+        Text = 3,
+        Video = 4,
     }
 }

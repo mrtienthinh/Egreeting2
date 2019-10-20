@@ -49,6 +49,7 @@ namespace Egreeting.Web.Controllers.Admin
             if (!string.IsNullOrEmpty(search))
             {
                 listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = UserManager.Users.Count(x => x.EgreetingUser.Draft != true && x.Email.Contains(search));
             }
             else
             {
@@ -73,6 +74,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersDetails,egreetingUser);
         }
 
@@ -138,6 +140,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersEdit,egreetingUser);
         }
 
@@ -186,6 +189,7 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 return RedirectToAction("Index");
             }
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersEdit,egreetingUser);
         }
 
@@ -213,6 +217,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return RedirectToAction("Index");
             }
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersDetails,user.EgreetingUser);
         }
 

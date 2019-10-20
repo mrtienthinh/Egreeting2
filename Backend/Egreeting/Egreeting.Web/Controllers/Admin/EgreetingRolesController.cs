@@ -72,6 +72,11 @@ namespace Egreeting.Web.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
+                if (EgreetingRoleBusiness.AllNoTracking.Any(x => x.EgreetingRoleName.Equals(egreetingRole.EgreetingRoleName)))
+                {
+                    ModelState.AddModelError("EgreetingRoleName", "Role name had been exist, try with other name!");
+                    return View(ViewNamesConstant.AdminEgreetingRolesCreate, egreetingRole);
+                }
                 EgreetingRoleBusiness.Insert(egreetingRole);
                 EgreetingRoleBusiness.Save();
                 return RedirectToAction("Index");
