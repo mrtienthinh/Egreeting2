@@ -32,13 +32,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Order>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = OrderBusiness.All.Where(x => x.SendSubject.Contains(search) && !x.Status).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = OrderBusiness.All.Count(x => x.SendSubject.Contains(search) && !x.Status);
+                listModel = OrderBusiness.All.Where(x => x.SendSubject.Contains(search) && x.Draft != true).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = OrderBusiness.All.Count(x => x.SendSubject.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = OrderBusiness.All.Count(x => !x.Status);
-                listModel = OrderBusiness.All.Where(x => !x.Status).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = OrderBusiness.All.Count(x => x.Draft != true);
+                listModel = OrderBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -58,14 +58,14 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).ToList();
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminOrdersDetails, Order);
         }
 
         // GET: Orders/Create
         public ActionResult Create()
         {
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).ToList();
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminOrdersCreate);
         }
 
@@ -103,7 +103,7 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).ToList();
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminOrdersCreate, Order);
         }
 
@@ -119,7 +119,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).ToList();
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminOrdersEdit, Order);
         }
 
@@ -153,7 +153,7 @@ namespace Egreeting.Web.Controllers.Admin
                     // thinh: remove order detail
                     foreach (var orderDetailRemove in orderUpdate.OrderDetails)
                     {
-                        orderDetailRemove.Status = true;
+                        orderDetailRemove.Draft = true;
                     }
 
                     // thinh: update order detail
@@ -193,12 +193,12 @@ namespace Egreeting.Web.Controllers.Admin
         public ActionResult Delete(int ItemID)
         {
             Order Order = OrderBusiness.Find(ItemID);
-            Order.Status = true;
+            Order.Draft = true;
             Order.ModifiedDate = DateTime.Now;
 
             foreach (var orderDetail in Order.OrderDetails)
             {
-                orderDetail.Status = true;
+                orderDetail.Draft = true;
                 orderDetail.ModifiedDate = DateTime.Now;
             }
             OrderBusiness.Update(Order);

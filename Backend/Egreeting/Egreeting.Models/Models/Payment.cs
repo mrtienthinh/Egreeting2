@@ -13,7 +13,7 @@ namespace Egreeting.Models.Models
         [Key]
         public int PaymentID { get; set; }
 
-        [Range(1,12)]
+        [Range(1,12, ErrorMessage = "Month must be number from 1 to 12!")]
         [DisplayName("Month")]
         public int Month { get; set; }
 

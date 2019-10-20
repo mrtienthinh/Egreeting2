@@ -48,12 +48,12 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<ApplicationUser>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             else
             {
-                ViewBag.totalItem = UserManager.Users.Count(x => !x.EgreetingUser.Status);
-                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = UserManager.Users.Count(x => x.EgreetingUser.Draft != true);
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -79,7 +79,7 @@ namespace Egreeting.Web.Controllers.Admin
         // GET: EgreetingUsers/Create
         public ActionResult Create()
         {
-            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersCreate);
         }
 
@@ -120,7 +120,7 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 AddErrors(result);
             }
-            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminEgreetingUsersCreate,egreetingUser);
         }
 
@@ -133,7 +133,7 @@ namespace Egreeting.Web.Controllers.Admin
             }
             EgreetingUser egreetingUser = UserManager.FindById(id).EgreetingUser;
             ViewBag.UserId = id;
-            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => !x.Status).ToList();
+            ViewBag.ListRole = EgreetingRoleBusiness.All.Where(x => x.Draft != true).ToList();
             if (egreetingUser == null)
             {
                 return HttpNotFound();
@@ -203,7 +203,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            user.EgreetingUser.Status = true;
+            user.EgreetingUser.Draft = true;
             UserManager.RemovePassword(user.Id);
             string password = UserManager.PasswordHasher.HashPassword("delete123456Aa@");
             UserManager.AddPassword(user.Id, password);

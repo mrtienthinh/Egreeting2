@@ -28,13 +28,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<EgreetingRole>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = EgreetingRoleBusiness.All.Where(x => x.EgreetingRoleName.Contains(search) && !x.Status).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => x.EgreetingRoleName.Contains(search) && !x.Status);
+                listModel = EgreetingRoleBusiness.All.Where(x => x.EgreetingRoleName.Contains(search) && x.Draft != true).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => x.EgreetingRoleName.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => !x.Status);
-                listModel = EgreetingRoleBusiness.All.Where(x => !x.Status).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EgreetingRoleBusiness.All.Count(x => x.Draft != true);
+                listModel = EgreetingRoleBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.EgreetingRoleID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;

@@ -474,3 +474,12 @@ INFO  2019-10-18 21:46:52,870 333408ms EGreetingLog           OnActionExecuting 
 INFO  2019-10-18 21:47:03,140 343678ms EGreetingLog           OnActionExecuting  - Controller:EgreetingUsers action:Index
 INFO  2019-10-18 21:47:13,606 354145ms EGreetingLog           OnActionExecuting  - Controller:EgreetingUsers action:Edit
 INFO  2019-10-18 21:47:20,430 360968ms EGreetingLog           OnActionExecuting  - Controller:EgreetingUsers action:Edit
+INFO  2019-10-20 08:04:56,759 16980ms EGreetingLog           OnActionExecuting  - Controller:egreetingusers action:Index
+INFO  2019-10-20 08:07:00,817 141037ms EGreetingLog           OnActionExecuting  - Controller:EgreetingRoles action:Index
+INFO  2019-10-20 08:07:26,493 166714ms EGreetingLog           OnActionExecuting  - Controller:EgreetingUsers action:Index
+INFO  2019-10-20 08:07:37,984 178204ms EGreetingLog           OnActionExecuting  - Controller:EgreetingRoles action:Index
+INFO  2019-10-20 08:07:44,759 184980ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Index
+INFO  2019-10-20 08:08:05,039 205260ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Index
+INFO  2019-10-20 08:08:07,117 207338ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Index
+INFO  2019-10-20 08:08:14,680 214900ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Index
+INFO  2019-10-20 08:11:21,038 401259ms EGreetingLog           OnActionExecuting  - Controller:EgreetingUsers action:Index

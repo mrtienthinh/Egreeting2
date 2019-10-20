@@ -17,6 +17,6 @@ namespace Egreeting.Models.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? ModifiedDate { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Draft { get; set; }
     }
 }

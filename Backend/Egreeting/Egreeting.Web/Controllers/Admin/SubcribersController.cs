@@ -47,12 +47,12 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Subcriber>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
             }
             else
             {
-                ViewBag.totalItem = UserManager.Users.Count(x => !x.EgreetingUser.Status);
-                listModel = UserManager.Users.Where(x => !x.EgreetingUser.Status).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+                ViewBag.totalItem = UserManager.Users.Count(x => x.EgreetingUser.Draft != true);
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -123,9 +123,9 @@ namespace Egreeting.Web.Controllers.Admin
         {
             Subcriber subcriber = SubcriberBusiness.Find(ItemID);
             subcriber.EgreetingUser.ModifiedDate = DateTime.Now;
-            subcriber.EgreetingUser.Status = true;
+            subcriber.EgreetingUser.Draft = true;
             subcriber.ModifiedDate = DateTime.Now;
-            subcriber.Status = true;
+            subcriber.Draft = true;
             SubcriberBusiness.Update(subcriber);
             SubcriberBusiness.Save();
             return RedirectToAction("Index");

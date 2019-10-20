@@ -20,8 +20,8 @@ namespace Egreeting.Models.Models
         public int EgreetingRoleID { get; set; }
 
         [Index(IsUnique = true)]
-        [StringLength(50)]
-        [DisplayName("Vai trò")]
+        [StringLength(50, ErrorMessage = "The {0} must not more than {1} characters long!")]
+        [DisplayName("Role")]
         public string EgreetingRoleName { get; set; }
 
         public virtual ICollection<EgreetingUser> EgreetingUsers { get; set; }

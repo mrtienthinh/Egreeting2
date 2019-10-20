@@ -22,16 +22,16 @@ namespace Egreeting.Models.Models
         [Key]
         public int EgreetingUserID { get; set; }
 
-        [DisplayName("Tên đường link tùy biến")]
-        [StringLength(100, ErrorMessage = "Tên đường link tùy biến không được quá {1} ký tự!")]
+        [DisplayName("Slug")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string EgreetingUserSlug { get; set; }
 
-        [DisplayName("Tên")]
-        [StringLength(50, ErrorMessage = "Tên không được quá {1} ký tự!")]
+        [DisplayName("First name")]
+        [StringLength(50, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string FirstName { get; set; }
 
         [DisplayName("Email")]
-        [StringLength(100, ErrorMessage = "Email không được quá {1} ký tự!")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string Email { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
@@ -46,28 +46,32 @@ namespace Egreeting.Models.Models
         [NotMapped]
         public string ConfirmPassword { get; set; }
 
-        [DisplayName("Họ")]
-        [StringLength(100, ErrorMessage = "Họ không được quá {1} ký tự!")]
+        [DisplayName("Last name")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string LastName { get; set; }
 
-        [DisplayName("Ảnh đại diện")]
+        [DisplayName("Avatar")]
         public byte[] Avatar { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Birthday")]
         public DateTime? BirthDay { get; set; }
 
-        [StringLength(12, ErrorMessage = "Tên không được quá {1} ký tự!")]
-        [MinLength(12)]
+        [StringLength(12, ErrorMessage = "The {0} must not more than {1} characters long!")]
+        [MinLength(12, ErrorMessage = "The {0} must be at least {1} characters long!")]
+        [DisplayName("Credit number")]
         public string CreditCardNumber { get; set; }
 
-        [StringLength(3, ErrorMessage = "CVG chỉ bao gồm {1} ký tự!")]
+        [StringLength(3, ErrorMessage = "The {0} must be {1} characters long!")]
         [MinLength(3)]
         [MaxLength(3)]
+        [DisplayName("Credit CVG")]
         public string CreditCardCVG { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayName("Payment Due Date")]
         public DateTime? PaymentDueDate { get; set; }
 
         public virtual ICollection<EgreetingRole> EgreetingRoles { get; set; }

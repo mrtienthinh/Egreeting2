@@ -13,12 +13,12 @@ namespace Egreeting.Models.Models
         [Key]
         public int FeedbackID { get; set; }
 
-        [DisplayName("Chủ đề phản hồi")]
-        [StringLength(200, ErrorMessage = "Chủ đề không được quá {1} ký tự!")]
+        [DisplayName("Subject")]
+        [StringLength(200, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string Subject { get; set; }
 
-        [DisplayName("Nội dung phản hồi")]
-        [StringLength(500, ErrorMessage = "Nội dung không được quá {1} ký tự!")]
+        [DisplayName("Message")]
+        [StringLength(500, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string Message { get; set; }
 
         public virtual Ecard Ecard { get; set; }

@@ -31,13 +31,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Payment>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = PaymentBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && !x.Status).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = PaymentBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && !x.Status);
+                listModel = PaymentBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = PaymentBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = PaymentBusiness.All.Count(x => !x.Status);
-                listModel = PaymentBusiness.All.Where(x => !x.Status).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = PaymentBusiness.All.Count(x => x.Draft != true);
+                listModel = PaymentBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -57,14 +57,14 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsDetails, Payment);
         }
 
         // GET: Payments/Create
         public ActionResult Create()
         {
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsCreate);
         }
 
@@ -82,7 +82,7 @@ namespace Egreeting.Web.Controllers.Admin
                     var egreetingUser = context.Set<EgreetingUser>().Find(EgreetingUserID);
                     if(egreetingUser == null)
                     {
-                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                         ModelState.AddModelError(string.Empty, "Need at least one email of user");
                         return View(ViewNamesConstant.AdminPaymentsCreate, Payment);
                     }
@@ -94,7 +94,7 @@ namespace Egreeting.Web.Controllers.Admin
 
                 return RedirectToAction("Index");
             }
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsCreate, Payment);
         }
 
@@ -110,7 +110,7 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsEdit, Payment);
         }
 
@@ -143,7 +143,7 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminPaymentsEdit, Payment);
         }
 
@@ -153,7 +153,7 @@ namespace Egreeting.Web.Controllers.Admin
         public ActionResult Delete(int ItemID)
         {
             Payment Payment = PaymentBusiness.Find(ItemID);
-            Payment.Status = true;
+            Payment.Draft = true;
             Payment.ModifiedDate = DateTime.Now;
             PaymentBusiness.Update(Payment);
             PaymentBusiness.Save();

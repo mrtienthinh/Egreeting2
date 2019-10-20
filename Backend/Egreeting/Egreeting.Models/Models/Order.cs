@@ -18,22 +18,22 @@ namespace Egreeting.Models.Models
         [Key]
         public int OrderID { get; set; }
 
-        [StringLength(100, ErrorMessage = "Tên người gửi không được vượt quá {1} ký tự!")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Sender's Name")]
         public string SenderName { get; set; }
 
         [EmailAddress]
         [DisplayName("Recipient's Email")]
-        [StringLength(100, ErrorMessage = "Email người nhận không được vượt quá {1} ký tự!")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
 
         public string RecipientEmail { get; set; }
 
-        [StringLength(100, ErrorMessage = "Chủ đề thiệp không được vượt quá {1} ký tự!")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Subject")]
         public string SendSubject { get; set; }
 
         [DisplayName("Message")]
-        [StringLength(500, ErrorMessage = "Nội dung lời chúc không được vượt quá {1} ký tự!")]
+        [StringLength(500, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string SendMessage { get; set; }
 
         [DisplayName("Schedule Time")]

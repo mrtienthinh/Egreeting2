@@ -37,13 +37,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Ecard>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = EcardBusiness.All.Where(x => x.EcardName.Contains(search) && !x.Status).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = EcardBusiness.All.Count(x => x.EcardName.Contains(search) && !x.Status);
+                listModel = EcardBusiness.All.Where(x => x.EcardName.Contains(search) && x.Draft != true).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EcardBusiness.All.Count(x => x.EcardName.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = EcardBusiness.All.Count(x => !x.Status);
-                listModel = EcardBusiness.All.Where(x => !x.Status).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EcardBusiness.All.Count(x => x.Draft != true);
+                listModel = EcardBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -238,7 +238,7 @@ namespace Egreeting.Web.Controllers.Admin
         public ActionResult Delete(int ItemID)
         {
             Ecard ecard = EcardBusiness.Find(ItemID);
-            ecard.Status = true;
+            ecard.Draft = true;
             EcardBusiness.Update(ecard);
             EcardBusiness.Save();
             return RedirectToAction("Index");

@@ -31,13 +31,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<ScheduleSender>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = ScheduleSenderBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && !x.Status).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && !x.Status);
+                listModel = ScheduleSenderBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => !x.Status);
-                listModel = ScheduleSenderBusiness.All.Where(x => !x.Status).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = ScheduleSenderBusiness.All.Count(x => x.Draft != true);
+                listModel = ScheduleSenderBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.ScheduleSenderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -57,16 +57,16 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersDetails, ScheduleSender);
         }
 
         // GET: ScheduleSenders/Create
         public ActionResult Create()
         {
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersCreate);
         }
 
@@ -89,16 +89,16 @@ namespace Egreeting.Web.Controllers.Admin
                         if(egreetingUser == null)
                         {
                             ModelState.AddModelError(string.Empty, "User not found!");
-                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                             return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                         }
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Need at least one user!");
-                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                         return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                     }
 
@@ -110,16 +110,16 @@ namespace Egreeting.Web.Controllers.Admin
                         if (ecard == null)
                         {
                             ModelState.AddModelError(string.Empty, "Ecard not found!");
-                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                             return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                         }
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Need at least one ecard!");
-                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                        ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                         return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                     }
 
@@ -133,8 +133,8 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersCreate,ScheduleSender);
         }
 
@@ -150,8 +150,8 @@ namespace Egreeting.Web.Controllers.Admin
             {
                 return HttpNotFound();
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersEdit,ScheduleSender);
         }
 
@@ -174,8 +174,8 @@ namespace Egreeting.Web.Controllers.Admin
                         if (egreetingUser == null)
                         {
                             ModelState.AddModelError(string.Empty, "User not found!");
-                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                             return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                         }
                         scheduleSenderUpdate.EgreetingUser = egreetingUser;
@@ -188,8 +188,8 @@ namespace Egreeting.Web.Controllers.Admin
                         if (ecard == null)
                         {
                             ModelState.AddModelError(string.Empty, "Ecard not found!");
-                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+                            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+                            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
                             return View(ViewNamesConstant.AdminScheduleSendersCreate, ScheduleSender);
                         }
                         scheduleSenderUpdate.Ecard = ecard;
@@ -209,8 +209,8 @@ namespace Egreeting.Web.Controllers.Admin
                 }
                 return RedirectToAction("Index");
             }
-            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
-            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => !x.Status).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.EgreetingUsers = EgreetingUserBusiness.AllNoTracking.Where(x => x.Draft != true).Select(x => new { x.EgreetingUserID, x.Email }).ToDictionary(k => k.EgreetingUserID, v => v.Email);
             return View(ViewNamesConstant.AdminScheduleSendersEdit,ScheduleSender);
         }
 
@@ -221,7 +221,7 @@ namespace Egreeting.Web.Controllers.Admin
         {
             ScheduleSender ScheduleSender = ScheduleSenderBusiness.Find(ItemID);
             ScheduleSender.ModifiedDate = DateTime.Now;
-            ScheduleSender.Status = true;
+            ScheduleSender.Draft = true;
             ScheduleSenderBusiness.Update(ScheduleSender);
             ScheduleSenderBusiness.Save();
             return RedirectToAction("Index");

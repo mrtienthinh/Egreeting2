@@ -15,29 +15,28 @@ namespace Egreeting.Models.Models
         [Key]
         public int EcardID { get; set; }
 
-        [StringLength(150, ErrorMessage = "Tên thiệp không được quá {1} ký tự!")]
+        [StringLength(150, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Ecard's name")]
         public string EcardName { get; set; }
 
         [Index(IsUnique = true)]
-        [StringLength(200, ErrorMessage = "Đường link của thiệp không được quá {1} ký tự!")]
+        [StringLength(200, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Đường link của thiệp")]
         public string EcardSlug { get; set; }
 
         //Enum EcardType
-        [Range(1, 3, ErrorMessage = "Loại thiệp không chính xác!")]
-
-        [DisplayName("Loại thiệp")]
+        [Range(1, 3, ErrorMessage = "Ecard type not exist!")]
+        [DisplayName("Ecard type")]
         public int EcardType { get; set; }
 
-        [StringLength(150, ErrorMessage = "Đường dẫn lưu thiệp không được quá {1} ký tự!")]
+        [StringLength(150, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Ecard's link")]
         public string EcardUrl { get; set; }
 
-        [StringLength(150, ErrorMessage = "Thumbnail thiệp không được quá {1} ký tự!")]
+        [StringLength(150, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [DisplayName("Thumbnail")]
         public string ThumbnailUrl { get; set; }
-
+        
         [DisplayName("Ecard's price")]
         public double Price { get; set; }
 

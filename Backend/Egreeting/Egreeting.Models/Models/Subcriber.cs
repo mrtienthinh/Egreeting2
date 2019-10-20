@@ -15,7 +15,7 @@ namespace Egreeting.Models.Models
 
         [EmailAddress]
         [Display(Name ="Subcriber's email")]
-        [StringLength(100, ErrorMessage = "Email không được vượt quá {1} ký tự!")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string Email { get; set; }
 
         public int EgreetingUserID { get; set; }

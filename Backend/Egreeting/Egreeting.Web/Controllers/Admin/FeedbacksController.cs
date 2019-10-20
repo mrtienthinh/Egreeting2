@@ -35,13 +35,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Feedback>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = FeedbackBusiness.All.Where(x => x.Subject.Contains(search) && !x.Status).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = FeedbackBusiness.All.Count(x => x.Subject.Contains(search) && !x.Status);
+                listModel = FeedbackBusiness.All.Where(x => x.Subject.Contains(search) && x.Draft != true).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = FeedbackBusiness.All.Count(x => x.Subject.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = FeedbackBusiness.All.Count(x => !x.Status);
-                listModel = FeedbackBusiness.All.Where(x => !x.Status).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = FeedbackBusiness.All.Count(x => x.Draft != true);
+                listModel = FeedbackBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.FeedbackID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -67,7 +67,7 @@ namespace Egreeting.Web.Controllers.Admin
         // GET: Feedbacks/Create
         public ActionResult Create()
         {
-            ViewBag.Ecards = EcardBusiness.All.Where(x => !x.Status).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
+            ViewBag.Ecards = EcardBusiness.All.Where(x => x.Draft != true).Select(x => new { x.EcardID, x.EcardName }).ToDictionary(k => k.EcardID, v => v.EcardName);
             return View(ViewNamesConstant.AdminFeedbacksCreate);
         }
 
@@ -113,7 +113,7 @@ namespace Egreeting.Web.Controllers.Admin
         public ActionResult Delete(int ItemID)
         {
             Feedback feedback = FeedbackBusiness.Find(ItemID);
-            feedback.Status = true;
+            feedback.Draft = true;
             FeedbackBusiness.Update(feedback);
             FeedbackBusiness.Save();
             return RedirectToAction("Index");

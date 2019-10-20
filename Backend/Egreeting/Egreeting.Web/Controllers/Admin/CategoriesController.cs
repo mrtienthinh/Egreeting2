@@ -29,13 +29,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Category>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = CategoryBusiness.All.Where(x => x.CategoryName.Contains(search) && !x.Status).OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                ViewBag.totalItem = CategoryBusiness.All.Count(x => x.CategoryName.Contains(search) && !x.Status);
+                listModel = CategoryBusiness.All.Where(x => x.CategoryName.Contains(search) && x.Draft != true).OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = CategoryBusiness.All.Count(x => x.CategoryName.Contains(search) && x.Draft != true);
             }
             else
             {
-                ViewBag.totalItem = CategoryBusiness.All.Count(x => !x.Status);
-                listModel = CategoryBusiness.All.Where(x => !x.Status).OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = CategoryBusiness.All.Count(x => x.Draft != true);
+                listModel = CategoryBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.CategoryID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -117,7 +117,7 @@ namespace Egreeting.Web.Controllers.Admin
         public ActionResult Delete(int ItemID)
         {
             var category = CategoryBusiness.Find(ItemID);
-            category.Status = true;
+            category.Draft = true;
             CategoryBusiness.Update(category);
             CategoryBusiness.Save();
             return RedirectToAction("Index");

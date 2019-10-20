@@ -14,31 +14,31 @@ namespace Egreeting.Models.Models
         [Key]
         public int ScheduleSenderID { get; set; }
 
-        [DisplayName("Hẹn giờ gửi")]
+        [DisplayName("Schedule time")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
         public DateTime? ScheduleTime { get; set; }
 
         // Enum ScheduleType 0: Once, 1: Daily, 2: Monthly, 3: Annual
-        [DisplayName("Loại lịch trình")]
-        [Range(0,3, ErrorMessage = "Loại lịch trình không chính xác!")]
+        [DisplayName("Schedule type")]
+        [Range(0,3, ErrorMessage = "The {0} not exist!")]
         public int ScheduleType { get; set; }
 
-        [StringLength(100, ErrorMessage = "Tên người gửi không được quá {1} ký tự!")]
-        [DisplayName("Tên người gửi")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
+        [DisplayName("Sender name")]
         public string SenderName { get; set; }
 
         [EmailAddress]
-        [DisplayName("Địa chỉ email người nhận")]
-        [StringLength(100, ErrorMessage = "Email người nhận không được vượt quá {1} ký tự!")]
+        [DisplayName("Recipient's email")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string RecipientEmail { get; set; }
 
-        [StringLength(100, ErrorMessage = "Chủ đề thiệp không được quá {1} ký tự!")]
-        [DisplayName("Chủ đề lời chúc")]
+        [StringLength(100, ErrorMessage = "The {0} must not more than {1} characters long!")]
+        [DisplayName("Subject")]
         public string SendSubject { get; set; }
 
-        [DisplayName("Lời chúc")]
-        [StringLength(500, ErrorMessage = "Nội dung lời chúc không được quá {1} ký tự!")]
+        [DisplayName("Message")]
+        [StringLength(500, ErrorMessage = "The {0} must not more than {1} characters long!")]
         public string SendMessage { get; set; }
 
         public virtual Ecard Ecard { get; set; }
