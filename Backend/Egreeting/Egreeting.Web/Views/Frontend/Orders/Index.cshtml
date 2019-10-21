@@ -1,69 +1,175 @@
 ﻿@model IEnumerable<Egreeting.Models.Models.Order>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Order - Egreeting";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SenderEmail)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RecipientEmail)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SendSubject)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SendMessage)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TimeSuccess)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SenderEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RecipientEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SendSubject)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SendMessage)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TimeSuccess)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ModifiedDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TransactionSendID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TransactionSendID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TransactionSendID })
-        </td>
-    </tr>
-}
-
-</table>
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Shopping Cart</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+<!--================Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="~/Content/User/img/cart/cart1.png" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <p>Minimalistic shop for multipurpose use</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>$360.00</h5>
+                            </td>
+                            <td>
+                                <h5>Delete</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="~/Content/User/img/cart/cart2.png" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <p>Minimalistic shop for multipurpose use</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>$360.00</h5>
+                            </td>
+                            <td>
+                                <h5>Delete</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="~/Content/User/img/cart/cart3.png" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <p>Minimalistic shop for multipurpose use</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <h5>$360.00</h5>
+                            </td>
+                            <td>
+                                <h5>Delete</h5>
+                            </td>
+                        </tr>
+                        <tr class="bottom_button">
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <a class="button" href="#">Update Cart</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <h5>Subtotal</h5>
+                            </td>
+                            <td>
+                                <h5>$2160.00</h5>
+                            </td>
+                        </tr>
+                        <tr class="shipping_area">
+                            <td>
+                                <h5>Sender's name</h5>
+                            </td>
+                            <td colspan="3">
+                                <input type="text" placeholder="Sender's name">
+                            </td>
+                        </tr>
+                        <tr class="shipping_area">
+                            <td>
+                                <h5>Recipient's email</h5>
+                            </td>
+                            <td colspan="3">
+                                <input type="email" placeholder="Recipient's email">
+                            </td>
+                        </tr>
+                        <tr class="shipping_area">
+                            <td>
+                                <h5>Subject</h5>
+                            </td>
+                            <td colspan="3">
+                                <input type="text" placeholder="Subject">
+                            </td>
+                        </tr>
+                        <tr class="shipping_area">
+                            <td>
+                                <h5>Subject</h5>
+                            </td>
+                            <td colspan="3">
+                                <input type="text" placeholder="Subject">
+                            </td>
+                        </tr>
+                        <tr class="shipping_area">
+                            <td>
+                                <h5>Schedule time</h5>
+                            </td>
+                            <td colspan="3">
+                                @Html.EditorFor(m => Model.FirstOrDefault().ScheduleTime)
+                            </td>
+                        </tr>
+                        <tr class="out_button_area">
+                            <td class="d-none-l">
+                            </td>
+                            <td class="">
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <div class="checkout_btn_inner d-flex align-items-center">
+                                    <a class="gray_btn" href="#">Continue Shopping</a>
+                                    <a class="primary-btn ml-2" href="#">Proceed to checkout</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<!--================End Cart Area =================-->
