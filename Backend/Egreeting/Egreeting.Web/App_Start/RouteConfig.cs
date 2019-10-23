@@ -15,6 +15,7 @@ namespace Egreeting.Web
             string[] nameSpaceAdmin = { "EGreeting.Web.Controllers.Admin" };
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
                 name: "Admin",
@@ -30,7 +31,7 @@ namespace Egreeting.Web
                 null,
                 nameSpaceFrontend
             );
-            routes.MapMvcAttributeRoutes();
+
 
         }
     }

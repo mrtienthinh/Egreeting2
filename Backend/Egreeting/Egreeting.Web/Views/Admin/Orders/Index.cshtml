@@ -91,16 +91,15 @@
                                         <td>@sttOrder</td>
                                         <td>@Order.SenderName</td>
                                         <td>@Order.RecipientEmail</td>
-                                        <td>@Order.RecipientEmail</td>
                                         <td>@Order.SendSubject</td>
                                         <td>@Html.DisplayFor(x => Order.ScheduleTime)</td>
                                         @if (Order.SendStatus)
                                         {
-                                            <td><span class="badge badge-secondary">Not yet</span></td>
+                                            <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
                                         }
                                         else
                                         {
-                                            <td><span class="badge badge-success">Sended</span></td>
+                                            <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
 
                                         }
                                         <td>$ @Order.TotalPrice</td>

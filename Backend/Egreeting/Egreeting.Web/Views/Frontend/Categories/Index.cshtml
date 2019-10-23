@@ -1,7 +1,16 @@
-﻿@model IEnumerable<Egreeting.Models.Models.Category>
+﻿@model IEnumerable<Egreeting.Models.Models.Ecard>
+@using Egreeting.Web.Models
 
 @{
+    Layout = "~/Views/Shared/_FrontendLayout.cshtml";
     ViewBag.Title = "Categories - Egreeting";
+    var categories = ViewBag.categories as List<CategoryViewModel>;
+    int currentPage = (int)ViewBag.currentPage;
+    int pageSize = (int)ViewBag.pageSize;
+    int totalItem = (int)ViewBag.totalItem;
+    int fromItem = (currentPage - 1) * pageSize + 1;
+    int toItem = (currentPage * pageSize) >= totalItem ? totalItem : (currentPage * pageSize);
+    int totalPage = (int)Math.Ceiling((decimal)totalItem / pageSize);
 }
 
 <!--================ End Header Menu Area =================-->
@@ -10,11 +19,12 @@
     <div class="container h-100">
         <div class="blog-banner">
             <div class="text-center">
-                <h1>Shop Category</h1>
+                <h1>Ecard category</h1>
                 <nav aria-label="breadcrumb" class="banner-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Shop Category</li>
+                        <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="/Categories">Category</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@ViewBag.categoryName</li>
                     </ol>
                 </nav>
             </div>
@@ -33,13 +43,10 @@
                         <li class="common-filter">
                             <form action="#">
                                 <ul>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="men" name="brand"><label for="men">Men<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="women" name="brand"><label for="women">Women<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="accessories" name="brand"><label for="accessories">Accessories<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="footwear" name="brand"><label for="footwear">Footwear<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="bayItem" name="brand"><label for="bayItem">Bay item<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="electronics" name="brand"><label for="electronics">Electronics<span> (3600)</span></label></li>
-                                    <li class="filter-list"><input class="pixel-radio" type="radio" id="food" name="brand"><label for="food">Food<span> (3600)</span></label></li>
+                                    @foreach (var category in categories)
+                                    {
+                                        <li class="filter-list"><a href="/Categories/@category.CategorySlug"><label for="men">@category.CategoryName<span> (@category.EcardsCount)</span></label></a></li>
+                                    }
                                 </ul>
                             </form>
                         </li>
@@ -50,24 +57,55 @@
                 <!-- Start Filter Bar -->
                 <div class="filter-bar d-flex flex-wrap align-items-center">
                     <div class="sorting">
-                        <select>
-                            <option value="1">Default sorting</option>
-                            <option value="1">Default sorting</option>
-                            <option value="1">Default sorting</option>
+                        <select name="sort" id="sortSelect" onchange="LoadData()">
+                            @if (ViewBag.sorting == "price")
+                            {
+                                <option value="price" selected>By price</option>
+                            }
+                            else
+                            {
+                                <option value="price">By price</option>
+                            }
+                            @if (ViewBag.sorting == "date")
+                            {
+                                <option value="date" selected>By date</option>
+                            }
+                            else
+                            {
+                                <option value="date">By date</option>
+                            }
+                            @if (ViewBag.sorting == "name")
+                            {
+                                 <option value="name" selected>By name</option>
+                            }
+                            else
+                            {
+                                <option value="name">By name</option>
+                            }
                         </select>
                     </div>
                     <div class="sorting mr-auto">
-                        <select>
-                            <option value="1">Show 12</option>
-                            <option value="1">Show 12</option>
-                            <option value="1">Show 12</option>
+                        <select name="size" id="sizeSelect" onchange="LoadData()">
+                            @for (int i = 6; i <= 12; i += 3)
+                            {
+                                if (i == ViewBag.pageSize)
+                                {
+                                    <option value="@i" selected>Show @i</option>
+                                }
+                                else
+                                {
+                                    <option value="@i">Show @i</option>
+                                }
+
+                            }
                         </select>
                     </div>
                     <div>
                         <div class="input-group filter-bar-search">
-                            <input type="text" placeholder="Search">
+                            <input type="hidden" name="page" value="@currentPage"/>
+                            <input type="text" placeholder="Search" id="searchId" value="@ViewBag.search">
                             <div class="input-group-append">
-                                <button type="button"><i class="ti-search"></i></button>
+                                <button type="button" onclick="LoadData()"><i class="ti-search"></i></button>
                             </div>
                         </div>
                     </div>
@@ -241,12 +279,13 @@
 <section class="related-product-area">
     <div class="container">
         <div class="section-intro pb-60px">
-            <p>Popular Item in the market</p>
-            <h2>Top <span class="section-intro__style">Product</span></h2>
+            <p>Popular ecard in the market</p>
+            <h2>Top <span class="section-intro__style">ecard</span></h2>
         </div>
         <div class="row mt-30">
             <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
                 <div class="single-search-product-wrapper">
+
                     <div class="single-search-product d-flex">
                         <a href="#"><img src="~/Content/User/img/product/product-sm-1.png" alt=""></a>
                         <div class="desc">
@@ -254,101 +293,23 @@
                             <div class="price">$170.00</div>
                         </div>
                     </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-2.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-3.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-4.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-5.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-6.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-7.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-8.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-9.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-1.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-2.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
-                    <div class="single-search-product d-flex">
-                        <a href="#"><img src="~/Content/User/img/product/product-sm-3.png" alt=""></a>
-                        <div class="desc">
-                            <a href="#" class="title">Gray Coffee Cup</a>
-                            <div class="price">$170.00</div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- ================ top product area end ================= -->
+
+@section scripts{
+    <script>
+        function LoadData() {
+            var search = $('#searchId').val();
+            var pageSize = $('#sizeSelect').val();
+            var page = $('#sizeSelect').val();
+            var sorting = $('#sortSelect').val();
+            window.location.replace('/categories'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
+        }
+
+    </script>
+}

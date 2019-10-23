@@ -1,50 +1,315 @@
-﻿@model Egreeting.Models.Models.Category
+﻿@model IEnumerable<Egreeting.Models.Models.Ecard>
+@using Egreeting.Web.Models
 
 @{
-    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_FrontendLayout.cshtml";
+    ViewBag.Title = "Categories - Egreeting";
+    var categories = ViewBag.categories as List<CategoryViewModel>;
+    int currentPage = (int)ViewBag.currentPage;
+    int pageSize = (int)ViewBag.pageSize;
+    int totalItem = (int)ViewBag.totalItem;
+    int fromItem = (currentPage - 1) * pageSize + 1;
+    int toItem = (currentPage * pageSize) >= totalItem ? totalItem : (currentPage * pageSize);
+    int totalPage = (int)Math.Ceiling((decimal)totalItem / pageSize);
 }
 
-<h2>Details</h2>
+<!--================ End Header Menu Area =================-->
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category">
+    <div class="container h-100">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Ecard category</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="/Categories">Category</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@ViewBag.categoryName</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+<!-- ================ category section start ================= -->
+<section class="section-margin--small mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-5">
+                <div class="sidebar-categories">
+                    <div class="head">Browse Categories</div>
+                    <ul class="main-categories">
+                        <li class="common-filter">
+                            <form action="#">
+                                <ul>
+                                    @foreach (var category in categories)
+                                    {
+                                        <li class="filter-list"><a href="/Categories/@category.CategorySlug"><label for="men">@category.CategoryName<span> (@category.EcardsCount)</span></label></a></li>
+                                    }
+                                </ul>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-8 col-md-7">
+                <!-- Start Filter Bar -->
+                <div class="filter-bar d-flex flex-wrap align-items-center">
+                    <div class="sorting">
+                        <select name="sort" id="sortSelect" onchange="LoadData()">
+                            @if (ViewBag.sorting == "price")
+                            {
+                                <option value="price" selected>By price</option>
+                            }
+                            else
+                            {
+                                <option value="price">By price</option>
+                            }
+                            @if (ViewBag.sorting == "date")
+                            {
+                                <option value="date" selected>By date</option>
+                            }
+                            else
+                            {
+                                <option value="date">By date</option>
+                            }
+                            @if (ViewBag.sorting == "name")
+                            {
+                                 <option value="name" selected>By name</option>
+                            }
+                            else
+                            {
+                                <option value="name">By name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="sorting mr-auto">
+                        <select name="size" id="sizeSelect" onchange="LoadData()">
+                            @for (int i = 6; i <= 12; i += 3)
+                            {
+                                if (i == ViewBag.pageSize)
+                                {
+                                    <option value="@i" selected>Show @i</option>
+                                }
+                                else
+                                {
+                                    <option value="@i">Show @i</option>
+                                }
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CategorySlug)
-        </dt>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <div class="input-group filter-bar-search">
+                            <input type="hidden" name="page" value="@currentPage"/>
+                            <input type="text" placeholder="Search" id="searchId" value="@ViewBag.search">
+                            <div class="input-group-append">
+                                <button type="button" onclick="LoadData()"><i class="ti-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Filter Bar -->
+                <!-- Start Best Seller -->
+                <section class="lattest-product-area pb-40 category-list">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product1.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Accessories</p>
+                                    <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product2.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Beauty</p>
+                                    <h4 class="card-product__title"><a href="#">Women Freshwash</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product3.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Decor</p>
+                                    <h4 class="card-product__title"><a href="#">Room Flash Light</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product4.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Decor</p>
+                                    <h4 class="card-product__title"><a href="#">Room Flash Light</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product5.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Accessories</p>
+                                    <h4 class="card-product__title"><a href="#">Man Office Bag</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product6.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Kids Toy</p>
+                                    <h4 class="card-product__title"><a href="#">Charging Car</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product7.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Accessories</p>
+                                    <h4 class="card-product__title"><a href="#">Blutooth Speaker</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product8.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Kids Toy</p>
+                                    <h4 class="card-product__title"><a href="#">Charging Car</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img" src="~/Content/User/img/product/product1.png" alt="">
+                                    <ul class="card-product__imgOverlay">
+                                        <li><button><i class="ti-search"></i></button></li>
+                                        <li><button><i class="ti-shopping-cart"></i></button></li>
+                                        <li><button><i class="ti-heart"></i></button></li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>Accessories</p>
+                                    <h4 class="card-product__title"><a href="#">Quartz Belt Watch</a></h4>
+                                    <p class="card-product__price">$150.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End Best Seller -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ category section end ================= -->
+<!-- ================ top product area start ================= -->
+<section class="related-product-area">
+    <div class="container">
+        <div class="section-intro pb-60px">
+            <p>Popular ecard in the market</p>
+            <h2>Top <span class="section-intro__style">ecard</span></h2>
+        </div>
+        <div class="row mt-30">
+            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
+                <div class="single-search-product-wrapper">
 
-        <dd>
-            @Html.DisplayFor(model => model.CategorySlug)
-        </dd>
+                    <div class="single-search-product d-flex">
+                        <a href="#"><img src="~/Content/User/img/product/product-sm-1.png" alt=""></a>
+                        <div class="desc">
+                            <a href="#" class="title">Gray Coffee Cup</a>
+                            <div class="price">$170.00</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ top product area end ================= -->
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
+@section scripts{
+    <script>
+        function LoadData() {
+            var search = $('#searchId').val();
+            var pageSize = $('#sizeSelect').val();
+            var page = $('#sizeSelect').val();
+            var sorting = $('#sortSelect').val();
+            window.location.replace('/categories/@ViewBag.categorySlug'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
+        }
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CategoryID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    </script>
+}

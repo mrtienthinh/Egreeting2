@@ -50,12 +50,12 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Subcriber>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true && x.EgreetingUser.Subcriber != null).Where(x => x.Email.Contains(search)).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
             }
             else
             {
-                ViewBag.totalItem = UserManager.Users.Count(x => x.EgreetingUser.Draft != true);
-                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
+                ViewBag.totalItem = UserManager.Users.Count(x => x.EgreetingUser.Draft != true && x.EgreetingUser.Subcriber != null);
+                listModel = UserManager.Users.Where(x => x.EgreetingUser.Draft != true && x.EgreetingUser.Subcriber != null).OrderBy(x => x.Id).Skip((page - 1) * pageSize).Take(pageSize).Select(x => x.EgreetingUser.Subcriber).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;

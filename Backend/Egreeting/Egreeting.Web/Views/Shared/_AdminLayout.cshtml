@@ -263,7 +263,7 @@
                                 @{
                                     var base64 = user.EgreetingUser.Avatar != null ? Convert.ToBase64String(user.EgreetingUser.Avatar) : "";
                                     var imgSrc = !String.IsNullOrEmpty(base64) ? String.Format("data:image/gif;base64,{0}", base64) : "~/Content/Admin/dist/img/user2-160x160.jpg";
-                                    var userName = @User.Identity.GetUserName();
+                                    var userName = User.Identity.GetUserName();
                                     if(!string.IsNullOrEmpty(user.EgreetingUser.LastName) || !string.IsNullOrEmpty(user.EgreetingUser.FirstName))
                                     {
                                         userName = user.EgreetingUser.LastName + " " + user.EgreetingUser.FirstName;
@@ -480,6 +480,5 @@
         <!-- AdminLTE for demo purposes -->
         <script src="~/Content/Admin/dist/js/demo.js" type="text/javascript"></script>
         @RenderSection("scripts", required: false)
-        @{ context.Dispose()}
 </body>
 </html>

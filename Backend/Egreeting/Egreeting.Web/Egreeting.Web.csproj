@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bogus, Version=28.4.1.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogus.28.4.1\lib\net40\Bogus.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -275,6 +278,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Frontend\CategoriesController.cs" />
+    <Compile Include="Controllers\Frontend\DummyDataController.cs" />
     <Compile Include="Controllers\Frontend\EcardsController.cs" />
     <Compile Include="Controllers\Frontend\EgreetingRolesController.cs" />
     <Compile Include="Controllers\Frontend\EgreetingUsersController.cs" />
@@ -286,6 +290,7 @@
     <Compile Include="Controllers\Frontend\OrdersController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\RoleAuthorizeAttribute.cs" />
+    <Compile Include="Models\CategoryViewModel.cs" />
     <Compile Include="Security\AppRoleProvider.cs" />
     <Compile Include="Utils\GlobalInfo.cs" />
     <Compile Include="Controllers\OdataAPI\CategoriesController.cs" />
@@ -1558,10 +1563,6 @@
     <Content Include="Views\Admin\Orders\Details.cshtml" />
     <Content Include="Views\Admin\Orders\Edit.cshtml" />
     <Content Include="Views\Admin\Orders\Index.cshtml" />
-    <Content Include="Views\Frontend\Categories\Create.cshtml" />
-    <Content Include="Views\Frontend\Categories\Delete.cshtml" />
-    <Content Include="Views\Frontend\Categories\Details.cshtml" />
-    <Content Include="Views\Frontend\Categories\Edit.cshtml" />
     <Content Include="Views\Frontend\Categories\Index.cshtml" />
     <Content Include="Views\Frontend\Ecards\Index.cshtml" />
     <Content Include="Views\Frontend\Feedbacks\Index.cshtml" />
@@ -1580,6 +1581,8 @@
     <Content Include="Views\Admin\ScheduleSenders\Edit.cshtml" />
     <Content Include="Views\Admin\ScheduleSenders\Index.cshtml" />
     <Content Include="Views\Frontend\ScheduleSenders\Index.cshtml" />
+    <Content Include="Views\Frontend\Categories\Details.cshtml" />
+    <Content Include="Views\DummyData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

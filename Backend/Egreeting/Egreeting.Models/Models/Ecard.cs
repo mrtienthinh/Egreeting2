@@ -24,7 +24,7 @@ namespace Egreeting.Models.Models
         [Index(IsUnique = true)]
         [StringLength(200, ErrorMessage = "The {0} must not more than {1} characters long!")]
         [MinLength(5, ErrorMessage = "The {0} must be at least {1} characters long!")]
-        [DisplayName("Đường link của thiệp")]
+        [DisplayName("Slug")]
         public string EcardSlug { get; set; }
 
         //Enum EcardType
