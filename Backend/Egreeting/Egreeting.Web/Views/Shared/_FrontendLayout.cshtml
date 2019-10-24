@@ -8,7 +8,7 @@
     {
         user = context.Set<ApplicationUser>().Find(User.Identity.GetUserId());
     }
-    var categories = context.Set<Category>().Where(x => x.Draft != true).Select(x => new { x.CategoryName, x.CategorySlug, x.Ecards.Count }).ToList();
+    var categories = context.Set<Category>().Where(x => x.Draft != true).Select(x => new { x.CategoryName, x.CategorySlug, x.Ecards.Count }).Take(5).ToList();
 }
 
 <!DOCTYPE html>
@@ -47,7 +47,7 @@
                     </button>
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
-                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item active submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                    aria-expanded="false">Category</a>
@@ -62,21 +62,35 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                                    aria-expanded="false">Pages</a>
                                 <ul class="dropdown-menu">
-                                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="tracking-order.html">Tracking</a></li>
+                                    @if (!Request.IsAuthenticated)
+                                    {
+                                        <li class="nav-item"><a class="nav-link" href="/account/login">Login</a></li>
+                                    }
+                                    else if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                                    {
+                                        <li class="nav-item"><a class="nav-link" href="/admin/egreetingusers">Admin</a></li>
+                                    }
+                                    <li class="nav-item"><a class="nav-link" href="/account/register">Register</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/orderdetails/">Tracking</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item"><a class="nav-link" href="/Subcribers">Subcribers</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/Feedback">Feedback</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Feedbacks">Feedback</a></li>
                             <li class="nav-item"><a class="nav-link" href="/Home/Contact">Contact</a></li>
                         </ul>
 
                         <ul class="nav-shop">
                             <li class="nav-item"><button><i class="ti-search"></i></button></li>
                             <li class="nav-item"><button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button> </li>
-                            <li class="nav-item"><button><a href="/Home/Account/Login"><i class="ti-user"></i></a> </button> </li>
-                            <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li>
+                            @if (!Request.IsAuthenticated && User.IsInRole("Amin"))
+                            {
+                                <li class="nav-item"><button><a href="/Account/Login"><i class="ti-user"></i></a> </button> </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item"><button><a href="/admin/ecards"><i class="ti-user" style="color: blue"></i></a> </button> </li>
+                            }
+                            <li class="nav-item"><a class="button button-header" href="/categories/">Buy Now</a></li>
                         </ul>
                     </div>
                 </div>
@@ -121,12 +135,12 @@
                         <div class="single-footer-widget instafeed">
                             <h4 class="footer_title">Gallery</h4>
                             <ul class="list instafeed d-flex flex-wrap">
-                                <li><img src="~/Content/User/img/gallery/r1.jpg" alt=""></li>
-                                <li><img src="~/Content/User/img/gallery/r2.jpg" alt=""></li>
-                                <li><img src="~/Content/User/img/gallery/r3.jpg" alt=""></li>
-                                <li><img src="~/Content/User/img/gallery/r5.jpg" alt=""></li>
-                                <li><img src="~/Content/User/img/gallery/r7.jpg" alt=""></li>
-                                <li><img src="~/Content/User/img/gallery/r8.jpg" alt=""></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_24.png" alt="" width="70px"></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_25.png" alt="" width="70px"></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_26.png" alt="" width="70px"></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_27.png" alt="" width="70px"></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_28.png" alt="" width="70px"></li>
+                                <li><img src="~/Uploads/Thumbnails/Thumbnail_29.png" alt="" width="70px"></li>
                             </ul>
                         </div>
                     </div>

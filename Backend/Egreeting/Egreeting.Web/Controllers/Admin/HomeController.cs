@@ -10,7 +10,7 @@ namespace Egreeting.Web.Controllers.Admin
     {
         public ActionResult Index()
         {
-            return View();
+            return Redirect("/categories/");
         }
 
         public ActionResult About()

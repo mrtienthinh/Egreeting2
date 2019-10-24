@@ -1528,7 +1528,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Admin\Categories\Create.cshtml" />
-    <Content Include="Views\Admin\Categories\Delete.cshtml" />
     <Content Include="Views\Admin\Categories\Details.cshtml" />
     <Content Include="Views\Admin\Categories\Edit.cshtml" />
     <Content Include="Views\Admin\Categories\Index.cshtml" />
@@ -1537,12 +1536,10 @@
     <Content Include="Views\Admin\Ecards\Edit.cshtml" />
     <Content Include="Views\Admin\Ecards\Index.cshtml" />
     <Content Include="Views\Admin\EgreetingRoles\Create.cshtml" />
-    <Content Include="Views\Admin\EgreetingRoles\Delete.cshtml" />
     <Content Include="Views\Admin\EgreetingRoles\Details.cshtml" />
     <Content Include="Views\Admin\EgreetingRoles\Edit.cshtml" />
     <Content Include="Views\Admin\EgreetingRoles\Index.cshtml" />
     <Content Include="Views\Admin\EgreetingUsers\Create.cshtml" />
-    <Content Include="Views\Admin\EgreetingUsers\Delete.cshtml" />
     <Content Include="Views\Admin\EgreetingUsers\Details.cshtml" />
     <Content Include="Views\Admin\EgreetingUsers\Edit.cshtml" />
     <Content Include="Views\Admin\EgreetingUsers\Index.cshtml" />
@@ -1550,21 +1547,17 @@
     <Content Include="Views\Admin\Feedbacks\Details.cshtml" />
     <Content Include="Views\Admin\Feedbacks\Index.cshtml" />
     <Content Include="Views\Admin\Payments\Create.cshtml" />
-    <Content Include="Views\Admin\Payments\Delete.cshtml" />
     <Content Include="Views\Admin\Payments\Details.cshtml" />
     <Content Include="Views\Admin\Payments\Edit.cshtml" />
     <Content Include="Views\Admin\Payments\Index.cshtml" />
     <Content Include="Views\Admin\Subcribers\Create.cshtml" />
-    <Content Include="Views\Admin\Subcribers\Delete.cshtml" />
     <Content Include="Views\Admin\Subcribers\Details.cshtml" />
     <Content Include="Views\Admin\Subcribers\Index.cshtml" />
     <Content Include="Views\Admin\Orders\Create.cshtml" />
-    <Content Include="Views\Admin\Orders\Delete.cshtml" />
     <Content Include="Views\Admin\Orders\Details.cshtml" />
     <Content Include="Views\Admin\Orders\Edit.cshtml" />
     <Content Include="Views\Admin\Orders\Index.cshtml" />
     <Content Include="Views\Frontend\Categories\Index.cshtml" />
-    <Content Include="Views\Frontend\Ecards\Index.cshtml" />
     <Content Include="Views\Frontend\Feedbacks\Index.cshtml" />
     <Content Include="Views\Frontend\Payments\Index.cshtml" />
     <Content Include="Views\Frontend\Subcribers\Index.cshtml" />
@@ -1583,6 +1576,7 @@
     <Content Include="Views\Frontend\ScheduleSenders\Index.cshtml" />
     <Content Include="Views\Frontend\Categories\Details.cshtml" />
     <Content Include="Views\DummyData\Index.cshtml" />
+    <Content Include="Views\Frontend\Ecards\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

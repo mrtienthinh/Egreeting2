@@ -43,16 +43,17 @@ namespace Egreeting.Web.Controllers.Frontend
 
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
-            ViewBag.search = listModel.Count == 0 ? search : "";
+            ViewBag.search = listModel.Count > 0 ? search : "";
             ViewBag.sorting = sorting;
             ViewBag.categorySlug = slug;
             ViewBag.categoryName = CategoryBusiness.All.Where(x => x.CategorySlug.Equals(slug)).Select(x => x.CategoryName).FirstOrDefault();
-            ViewBag.categories = CategoryBusiness.All.Where(x => x.Draft != true).Select(x => new CategoryViewModel { CategoryName = x.CategoryName, EcardsCount = x.Ecards.Count, CategorySlug = x.CategorySlug }).ToList();
+            ViewBag.categories = CategoryBusiness.All.Where(x => x.Draft != true).Select(x => new CategoryViewModel { CategoryName = x.CategoryName, EcardsCount = x.Ecards.Count, CategorySlug = x.CategorySlug }).Take(5).ToList();
+            ViewBag.topEcards = EcardBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.Price).Take(12).ToList();
             return View(ViewNamesConstant.FrontendCategoriesDetails, listModel);
         }
 
         [Route("Categories")]
-        public ActionResult IndexDefault(string slug, string search, int page = 1, int pageSize = 6, string sorting = "date")
+        public ActionResult IndexDefault(string search, int page = 1, int pageSize = 6, string sorting = "date")
         {
             var listModel = new List<Ecard>();
             if (!string.IsNullOrEmpty(search))
@@ -62,17 +63,17 @@ namespace Egreeting.Web.Controllers.Frontend
             }
             else
             {
-                ViewBag.totalItem = EcardBusiness.All.Count(x => x.Categories.Select(y => y.CategorySlug).Contains(slug) && x.Draft != true);
-                listModel = EcardBusiness.All.Where(x => x.Categories.Select(y => y.CategorySlug).Contains(slug) && x.Draft != true).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = EcardBusiness.All.Count(x => x.Draft != true);
+                listModel = EcardBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.EcardID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
 
 
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
-            ViewBag.search = listModel.Count == 0 ? search : "";
+            ViewBag.search = listModel.Count > 0 ? search : "";
             ViewBag.sorting = sorting;
-            ViewBag.categoryName = CategoryBusiness.All.Where(x => x.CategorySlug.Equals(slug)).Select(x => x.CategoryName).FirstOrDefault();
-            ViewBag.categories = CategoryBusiness.All.Where(x => x.Draft != true).Select(x => new CategoryViewModel { CategoryName = x.CategoryName, EcardsCount = x.Ecards.Count, CategorySlug = x.CategorySlug }).ToList();
+            ViewBag.categories = CategoryBusiness.All.Where(x => x.Draft != true).Select(x => new CategoryViewModel { CategoryName = x.CategoryName, EcardsCount = x.Ecards.Count, CategorySlug = x.CategorySlug }).Take(5).ToList();
+            ViewBag.topEcards = EcardBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.Price).Take(12).ToList();
             return View(ViewNamesConstant.FrontendCategoriesIndex, listModel);
         }
 
