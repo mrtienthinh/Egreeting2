@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Egreeting.Models.Models.Ecard>
 @using Egreeting.Domain
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index - Ecard";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     int currentPage = (int)ViewBag.currentPage;
     int pageSize = (int)ViewBag.pageSize;
@@ -88,13 +88,16 @@
                                 {
                                     <tr>
                                         <td>@sttEcard</td>
-                                        <td>@ecard.EcardName</td>
+                                        <td><a href="@ecard.EcardSlug">@ecard.EcardName</a></td>
                                         <td>@ecard.EcardSlug</td>
                                         @{
                                             var ecardTypeString = (EcardType)ecard.EcardType;
                                         }
                                         <td>@ecardTypeString</td>
-                                        <td>@ecard.Price $</td>
+                                        @{ 
+                                            var price = string.Format("${0:N2}", ecard.Price);
+                                        }
+                                        <td>@price</td>
                                         @{
                                             string thumbnail = "thumbnail.png";
                                             if (!string.IsNullOrEmpty(ecard.ThumbnailUrl))

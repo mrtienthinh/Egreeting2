@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Egreeting.Models.Models.Category>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index - Category";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     int currentPage = (int)ViewBag.currentPage;
     int pageSize = (int)ViewBag.pageSize;
@@ -82,7 +82,7 @@
                                     {
                                         <tr>
                                             <td>@sttCategory</td>
-                                            <td>@catgory.CategoryName</td>
+                                            <td><a href="/categories/@catgory.CategorySlug">@catgory.CategoryName</a></td>
                                             <td>
                                                 <button type="button" class="btn btn-success" onclick="ShowItem(@catgory.CategoryID)"><i class="fa fa-info-circle"></i> Show</button>
                                                 <button type="button" class="btn btn-primary" onclick="EditItem(@catgory.CategoryID)"><i class="fa fa-pencil"></i> Edit</button>
