@@ -86,7 +86,7 @@ namespace Egreeting.Web.Controllers.Admin
                 {
                     var user = new EgreetingUser();
                     var currentContext = System.Web.HttpContext.Current;
-                    if (currentContext.User != null)
+                    if (currentContext.User != null && Membership.GetUser() != null)
                     {
                         string email = Membership.GetUser().Email;
                         user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();

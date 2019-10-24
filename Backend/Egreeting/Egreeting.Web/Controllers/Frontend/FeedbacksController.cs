@@ -41,7 +41,7 @@ namespace Egreeting.Web.Controllers.Frontend
                     if (Request.IsAuthenticated)
                     {
                         var user = new EgreetingUser();
-                        if (currentContext.User != null)
+                        if (currentContext.User != null && Membership.GetUser() != null)
                         {
                             string email = Membership.GetUser().Email;
                             user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();
