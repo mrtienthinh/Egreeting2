@@ -133,7 +133,7 @@ namespace Egreeting.Web.Controllers.Admin
                     var lstCategoryID = ListCategoryString.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
                     var lstCategory = context.Set<Category>().Where(x => lstCategoryID.Contains(x.CategoryID)).ToList();
                     ecard.Categories = lstCategory;
-                    if(context.Set<Ecard>().Any(x => ecard.EcardSlug.Equals(x.EcardSlug)))
+                    if (context.Set<Ecard>().Any(x => ecard.EcardSlug.Equals(x.EcardSlug)))
                     {
                         ecard.EcardSlug = ecard.EcardSlug + DateTime.Now.ToFileTime();
                     }
@@ -141,10 +141,7 @@ namespace Egreeting.Web.Controllers.Admin
                     if (currentContext.User != null && Request.IsAuthenticated)
                     {
                         string email = "";
-                        if (Membership.GetUser()!= null)
-                        {
-                            email = Membership.GetUser().Email;
-                        }
+                        email = User.Identity.Name;
                         var user = context.Set<EgreetingUser>().Where(x => x.Email.Equals(email)).FirstOrDefault();
                         ecard.EgreetingUser = user;
                     }
@@ -208,7 +205,7 @@ namespace Egreeting.Web.Controllers.Admin
                             ViewBag.Categories = CategoryBusiness.All.ToList();
                             return View(ViewNamesConstant.AdminEcardsCreate, ecard);
                         }
-                        ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime()+ Path.GetExtension(ecardFile.FileName);
+                        ecard.EcardUrl = "EcardUrl_" + DateTime.Now.ToFileTime() + Path.GetExtension(ecardFile.FileName);
                         ecardFile.SaveAs(pathEcardFiles + ecard.EcardUrl);
 
                         if (thumbnailFile != null && Path.GetExtension(thumbnailFile.FileName).CheckExtentionFile())
@@ -241,7 +238,7 @@ namespace Egreeting.Web.Controllers.Admin
                     context.Set<Ecard>().Attach(ecardUpdate);
                     context.SaveChanges();
                 }
-                
+
                 return RedirectToAction("Index");
             }
             ViewBag.Categories = CategoryBusiness.All.ToList();

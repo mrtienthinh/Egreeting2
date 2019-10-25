@@ -25,9 +25,28 @@ namespace Egreeting.Web.Controllers.Admin
         }
 
         // GET: OrderDetails
-        public ActionResult Index()
+        public ActionResult Index(int? OrderID, string search, int page = 1, int pageSize = 10)
         {
-            return View(ViewNamesConstant.AdminOrderDetailsIndex,OrderDetailBusiness.All.ToList());
+            var listModel = new List<OrderDetail>();
+            if (OrderID == null || OrderID == 0)
+            {
+                return RedirectToAction("Index", "Orders");
+            }
+            else if(string.IsNullOrEmpty(search))
+            {
+                listModel = OrderDetailBusiness.All.Where(x => x.Order.OrderID == OrderID && x.Draft != true).OrderBy(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = OrderDetailBusiness.All.Count(x => x.Order.OrderID == OrderID && x.Draft != true);
+            }
+            else
+            {
+                listModel = OrderDetailBusiness.All.Where(x => x.OrderDetailID.ToString().Contains(search) && x.Order.OrderID == OrderID && x.Draft != true).OrderBy(x => x.CreatedDate).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                ViewBag.totalItem = OrderDetailBusiness.All.Count(x => x.Order.OrderID == OrderID && x.Draft != true);
+            }
+            ViewBag.orderID = OrderID;
+            ViewBag.currentPage = page;
+            ViewBag.pageSize = pageSize;
+            ViewBag.search = search;
+            return View(ViewNamesConstant.AdminOrderDetailsIndex, listModel);
         }
 
         // GET: OrderDetails/Details/5
@@ -51,23 +70,6 @@ namespace Egreeting.Web.Controllers.Admin
             return View(ViewNamesConstant.AdminOrderDetailsCreate);
         }
 
-        // POST: OrderDetails/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess,CreatedDate,ModifiedDate")] OrderDetail OrderDetail)
-        {
-            if (ModelState.IsValid)
-            {
-                OrderDetailBusiness.Insert(OrderDetail);
-                OrderDetailBusiness.Save();
-                return RedirectToAction("Index");
-            }
-
-            return View(ViewNamesConstant.AdminOrderDetailsCreate,OrderDetail);
-        }
-
         // GET: OrderDetails/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -88,7 +90,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess,CreatedDate,ModifiedDate")] OrderDetail OrderDetail)
+        public ActionResult Edit([Bind(Include = "SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess")] OrderDetail OrderDetail)
         {
             if (ModelState.IsValid)
             {
@@ -99,28 +101,15 @@ namespace Egreeting.Web.Controllers.Admin
             return View(ViewNamesConstant.AdminOrderDetailsEdit,OrderDetail);
         }
 
-        // GET: OrderDetails/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            OrderDetail OrderDetail = OrderDetailBusiness.Find(id);
-            if (OrderDetail == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminOrderDetailsDelete,OrderDetail);
-        }
-
         // POST: OrderDetails/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int ItemID)
         {
-            OrderDetail OrderDetail = OrderDetailBusiness.Find(id);
-            OrderDetailBusiness.Delete(OrderDetail);
+            OrderDetail OrderDetail = OrderDetailBusiness.Find(ItemID);
+            OrderDetail.Draft = true;
+            OrderDetail.ModifiedDate = DateTime.Now;
+            OrderDetailBusiness.Update(OrderDetail);
             OrderDetailBusiness.Save();
             return RedirectToAction("Index");
         }

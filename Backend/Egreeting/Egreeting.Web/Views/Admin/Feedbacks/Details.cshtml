@@ -8,7 +8,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Feedback Management
+        Feedback management
         <small>Edit</small>
     </h1>
     <ol class="breadcrumb">
@@ -29,16 +29,13 @@
         <form>
             <div class="box-body">
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <input type="hidden" name="FeedbackID" value="@Model.FeedbackID">
                 <div class="form-group">
-                    <label for="">Feedback Name</label>
-                    <input type="text" class="form-control" id="FeedbackName" placeholder="Feedback name" name="FeedbackName" onblur="CreateSlug()" value="@Model.FeedbackName" readonly>
-                    @Html.ValidationMessageFor(model => model.FeedbackName, "", new { @class = "text-danger" })
+                    <label for="">Feedback subject</label>
+                    <input type="text" class="form-control" id="Subject" placeholder="Subject" name="FeedbackName" value="@Model.Subject" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="">Feedback Slug</label>
-                    <input type="text" class="form-control" id="FeedbackSlug" placeholder="Feedback slug" name="FeedbackSlug" value="@Model.FeedbackSlug" readonly>
-                    @Html.ValidationMessageFor(model => model.FeedbackSlug, "", new { @class = "text-danger" })
+                    <label for="">Feedback message</label>
+                    <input type="text" class="form-control" id="Message" placeholder="Feedback message" name="Message" value="@Model.Message" readonly>
                 </div>
             </div>
 

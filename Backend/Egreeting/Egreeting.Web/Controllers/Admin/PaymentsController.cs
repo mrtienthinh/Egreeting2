@@ -33,13 +33,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Payment>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = PaymentBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                listModel = PaymentBusiness.All.Where(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true).OrderByDescending(x => x.Year).ThenByDescending(x => x.Month).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 ViewBag.totalItem = PaymentBusiness.All.Count(x => x.EgreetingUser.Email.Contains(search) && x.Draft != true);
             }
             else
             {
                 ViewBag.totalItem = PaymentBusiness.All.Count(x => x.Draft != true);
-                listModel = PaymentBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.PaymentID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                listModel = PaymentBusiness.All.Where(x => x.Draft != true).OrderByDescending(x => x.Year).ThenByDescending(x => x.Month).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;

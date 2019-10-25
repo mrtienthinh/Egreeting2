@@ -25,6 +25,9 @@ namespace Egreeting.Web.Controllers.Admin
         public ScheduleSendersController(IScheduleSenderBusiness ScheduleSenderBusiness, IEgreetingUserBusiness EgreetingUserBusiness, IEcardBusiness EcardBusiness)
         {
             this.ScheduleSenderBusiness = ScheduleSenderBusiness;
+            this.EcardBusiness = EcardBusiness;
+            this.EgreetingUserBusiness = EgreetingUserBusiness;
+
         }
 
         // GET: ScheduleSenders

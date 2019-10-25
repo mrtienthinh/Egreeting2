@@ -9,7 +9,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Order Management
+        Order management
         <small>Detail</small>
     </h1>
     <ol class="breadcrumb">
@@ -41,33 +41,29 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.SenderName)
-                    @Html.EditorFor(m => m.SenderName, new { htmlAttributes = new { @class = "form-control", @placeholder = "SenderName", @id = "SenderName", @onblur = "CreateSlug()" } })
-                    @Html.ValidationMessageFor(model => model.SenderName, "", new { @class = "text-danger" })
+                    @Html.EditorFor(m => m.SenderName, new { htmlAttributes = new { @class = "form-control", @placeholder = "SenderName", @id = "SenderName", @readonly="readonly" } })
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.RecipientEmail)
-                    @Html.EditorFor(m => m.RecipientEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "RecipientEmail", @id = "RecipientEmail" } })
-                    @Html.ValidationMessageFor(model => model.RecipientEmail, "", new { @class = "text-danger" })
+                    @Html.EditorFor(m => m.RecipientEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "RecipientEmail", @id = "RecipientEmail", @readonly="readonly" } })
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.SendSubject)
-                    @Html.EditorFor(m => m.SendSubject, new { htmlAttributes = new { @class = "form-control", @placeholder = "SendSubject", @id = "SendSubject" } })
-                    @Html.ValidationMessageFor(model => model.SendSubject, "", new { @class = "text-danger" })
+                    @Html.EditorFor(m => m.SendSubject, new { htmlAttributes = new { @class = "form-control", @placeholder = "SendSubject", @id = "SendSubject", @readonly="readonly" } })
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.SendMessage)
-                    @Html.EditorFor(m => m.SendMessage, new { htmlAttributes = new { @class = "form-control", @placeholder = "SendMessage", @id = "SendMessage" } })
-                    @Html.ValidationMessageFor(model => model.SendMessage, "", new { @class = "text-danger" })
+                    @Html.EditorFor(m => m.SendMessage, new { htmlAttributes = new { @class = "form-control", @placeholder = "SendMessage", @id = "SendMessage", @readonly="readonly"} })
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.ScheduleTime)
-                    @Html.EditorFor(m => m.ScheduleTime, new { htmlAttributes = new { @class = "form-control", @placeholder = "ScheduleTime", @id = "ScheduleTime" } })
-                    @Html.ValidationMessageFor(model => model.ScheduleTime, "", new { @class = "text-danger" })
+                    <input type="datetime" class="form-control" name="name" value="@Model.ScheduleTime" readonly/>
                 </div>
             </div>
 
             <div class="box-footer">
                 <button class="btn btn-primary" type="button" onclick="BackToIndex()">Back to index</button>
+                <button class="btn btn-primary" type="button" onclick="ToOrderDetail('@Model.OrderID')">To order detail</button>
             </div>
         </form>
     </div>
@@ -82,6 +78,9 @@
         function BackToIndex()
         {
             window.location.replace('@Url.Action("Index")');
+        }
+        function ToOrderDetail(e) {
+            window.location.replace('/admin/orderdetails?OrderID='+e);
         }
     </script>
 }

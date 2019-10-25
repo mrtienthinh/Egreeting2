@@ -82,7 +82,7 @@
                         <ul class="nav-shop">
                             <li class="nav-item"><button><i class="ti-search"></i></button></li>
                             <li class="nav-item"><button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button> </li>
-                            @if (!Request.IsAuthenticated && User.IsInRole("Amin"))
+                            @if (!Request.IsAuthenticated)
                             {
                                 <li class="nav-item"><button><a href="/Account/Login"><i class="ti-user"></i></a> </button> </li>
                             }

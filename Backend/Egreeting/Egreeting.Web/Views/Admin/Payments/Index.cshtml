@@ -75,7 +75,7 @@
                                     <th>Email<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
                                     <th>Month<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
                                     <th>Year<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
-                                    <th>Status<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
+                                    <th style="text-align: center">Status<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
 
                                     <th width="250px">Action</th>
                                 </tr>
@@ -92,11 +92,11 @@
                                         <td>@Payment.Year</td>
                                         @if (Payment.PaymentStatus)
                                         {
-                                            <td><span class="badge badge-success">Done</span></td>
+                                            <td style="text-align: center"><span class="badge badge-success" style="background-color: blue">Done</span></td>
                                         }
                                         else
                                         {
-                                            <td><span class="badge badge-danger">Not yet</span></td>
+                                            <td style="text-align: center"><span class="badge badge-danger" style="background-color: darkorange">Not yet</span></td>
                                         }
 
                                         <td>
