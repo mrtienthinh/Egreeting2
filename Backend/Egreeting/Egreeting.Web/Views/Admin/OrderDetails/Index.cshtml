@@ -91,7 +91,7 @@
                                         <td>@OrderDetail.Order.RecipientEmail</td>
                                         <td>@Html.DisplayFor(m => OrderDetail.SendTime)</td>
                                         <td><img src="~/Uploads/Thumbnails/@OrderDetail.Ecard.ThumbnailUrl" alt="Alternate Text" width="150px" /></td>
-                                       
+
                                         @if (OrderDetail.SendStatus)
                                         {
                                             <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
@@ -101,12 +101,14 @@
                                             <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
 
                                         }
-                                       
+
 
                                         <td>
                                             <button type="button" class="btn btn-success" onclick="ShowItem(@OrderDetail.OrderDetailID)"><i class="fa fa-info-circle"></i> Show</button>
                                             <button type="button" class="btn btn-primary" onclick="EditItem(@OrderDetail.OrderDetailID)"><i class="fa fa-pencil"></i> Edit</button>
                                             <button type="button" class="btn btn-danger" onclick="DeleteItem(@OrderDetail.OrderDetailID)"><i class="fa fa-trash"></i> Delete</button>
+                                            <button type="button" class="btn btn-default" onclick="SendNow(@OrderDetail.OrderDetailID)"><i class="fa fa-paper-plane"></i> Send</button>
+
                                         </td>
                                     </tr>
                                     sttOrderDetails = sttOrderDetails + 1;
@@ -215,55 +217,72 @@
 
 @section scripts{
     <script>
-            function DeleteItem(ItemID) {
-                var confirmDelete = confirm('Do you really want to delete this item!');
-                if (confirmDelete) {
-                    var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("Delete")',
-                        data: {ItemID, __RequestVerificationToken }, //use id here
-                        success: function () {
-                            LoadData();
-                        },
-                        error: function () {
-                            alert("Error while deleting data");
-                        }
-                    });
-                }
-
+        function DeleteItem(ItemID) {
+            var confirmDelete = confirm('Do you really want to delete this item!');
+            if (confirmDelete) {
+                var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete")',
+                    data: {ItemID, __RequestVerificationToken }, //use id here
+                    success: function () {
+                        LoadData();
+                    },
+                    error: function () {
+                        alert("Error while deleting data");
+                    }
+                });
             }
 
-            function ShowItem(id) {
-                window.location.replace('@Url.Action("Details")'+'/' + id);
+        }
+
+        function ShowItem(id) {
+            window.location.replace('@Url.Action("Details")'+'/' + id);
+        }
+
+        function AddItem(){
+            window.location.replace('@Url.Action("Create")');
+        }
+
+        function EditItem(id){
+            window.location.replace('@Url.Action("Edit")' + '/' + id);
+        }
+
+        function LoadData() {
+            console.log('acb');
+            var search = $('#searchId').val();
+            var pageSize = $('#pageSizeId').val();
+            var page = $('#page').val();
+            var orderID = $('#orderID');
+            window.location.replace('@Url.Action("Index")'+ '?OrderID='+ orderID +'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
+        }
+
+
+
+        function LoadPage(e) {
+            console.log(e);
+            var search = $('#searchId').val();
+            var pageSize = $('#pageSizeId').val();
+            var orderID = $('#orderID');
+            window.location.replace('@Url.Action("Index")'+ '?OrderID='+ orderID +'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
+        }
+        function SendNow(ItemID) {
+            var confirmOrder = confirm('Do you really want to send this order now!');
+            if (confirmOrder) {
+                var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/admin/sendmail/sendbyorderdetail',
+                    data: {ItemID, __RequestVerificationToken }, //use id here
+                    success: function () {
+                        LoadData();
+                    },
+                    error: function () {
+                        alert("Error while deleting data");
+                    }
+                });
             }
-
-            function AddItem(){
-                window.location.replace('@Url.Action("Create")');
-            }
-
-            function EditItem(id){
-                window.location.replace('@Url.Action("Edit")' + '/' + id);
-            }
-
-            function LoadData() {
-                console.log('acb');
-                var search = $('#searchId').val();
-                var pageSize = $('#pageSizeId').val();
-                var page = $('#page').val();
-                var orderID = $('#orderID');
-                window.location.replace('@Url.Action("Index")'+ '?OrderID='+ orderID +'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
-            }
-
-
-
-            function LoadPage(e) {
-                console.log(e);
-                var search = $('#searchId').val();
-                var pageSize = $('#pageSizeId').val();
-                var orderID = $('#orderID');
-                window.location.replace('@Url.Action("Index")'+ '?OrderID='+ orderID +'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
-            }
+        }
 
     </script>
 }

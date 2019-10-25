@@ -263,6 +263,7 @@
     <Compile Include="Controllers\Admin\OrderDetailsController.cs" />
     <Compile Include="Controllers\Admin\PaymentsController.cs" />
     <Compile Include="Controllers\Admin\ScheduleSendersController.cs" />
+    <Compile Include="Controllers\Admin\SendMailController.cs" />
     <Compile Include="Controllers\Admin\SubcribersController.cs" />
     <Compile Include="Controllers\Admin\OrdersController.cs" />
     <Compile Include="Controllers\API\ApiCategoriesController.cs" />
@@ -1580,6 +1581,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Uploads\EcardFiles\" />
+    <Folder Include="Views\SendMail\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
