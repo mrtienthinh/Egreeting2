@@ -119,6 +119,7 @@ namespace Egreeting.Web.Controllers.Admin
                         eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => x.EgreetingRoleName.Equals("Subcriber")).ToList();
                         subcriber.EgreetingUser = eUser;
                         context.Set<Subcriber>().Attach(subcriber);
+                        context.Entry(subcriber).State = EntityState.Modified;
                         context.SaveChanges();
                     }
                     return RedirectToAction("Index");

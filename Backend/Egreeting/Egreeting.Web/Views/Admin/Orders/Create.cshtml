@@ -93,7 +93,7 @@
             if (!ListRoleArray.includes(e.value)) {
                 ListRoleArray.push(e.value);
                 var htmlresult = $('#select-items').find(":selected").text();
-                var html = `<span class="badge badge-primary" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
+                var html = `<span class="badge badge-primary" style="background-color: blue" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
                 $('#ListEcardBadge').append(html);
             };
             var ListRole = ListRoleArray.join('-');

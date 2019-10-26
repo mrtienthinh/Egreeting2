@@ -210,6 +210,7 @@ namespace Egreeting.Web.Controllers.Admin
                     scheduleSenderUpdate.ModifiedDate = DateTime.Now;
 
                     context.Set<ScheduleSender>().Attach(scheduleSenderUpdate);
+                    context.Entry(scheduleSenderUpdate).State = EntityState.Modified;
                     context.SaveChanges();
                 }
                 return RedirectToAction("Index");

@@ -130,7 +130,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderID,SenderName,RecipientEmail,SendSubject,SendMessage,ScheduleTime")] Order Order, string ListEcardString)
+        public ActionResult Edit([Bind(Include = "OrderID,SenderName,RecipientEmail,SendSubject,SendStatus,SendMessage,ScheduleTime")] Order Order, string ListEcardString)
         {
             if (ModelState.IsValid)
             {
@@ -141,13 +141,15 @@ namespace Egreeting.Web.Controllers.Admin
                     
                     if(orderUpdate == null)
                     {
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
                         ModelState.AddModelError(string.Empty, "Order not found!");
                         return View(ViewNamesConstant.AdminOrdersEdit, Order);
                     }
 
                     // thinh: check sending status
-                    if ( orderUpdate.SendStatus == true || orderUpdate.OrderDetails.Any(x => x.SendStatus))
+                    if ( orderUpdate.SendStatus == true || orderUpdate.OrderDetails.Any(x => x.Draft != true && x.SendStatus))
                     {
+                        ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
                         ModelState.AddModelError(string.Empty, "Can't edit because ecard had been sended!");
                         return View(ViewNamesConstant.AdminOrdersEdit, Order);
                     }
@@ -166,7 +168,7 @@ namespace Egreeting.Web.Controllers.Admin
                         var ecard = context.Set<Ecard>().Find(ecardID);
                         var orderDetails = new OrderDetail
                         {
-                            SendStatus = false,
+                            SendStatus = Order.SendStatus,
                             Ecard = ecard,
                             CreatedDate = DateTime.Now,
                         };
@@ -175,6 +177,8 @@ namespace Egreeting.Web.Controllers.Admin
                     orderUpdate.OrderDetails = listOrderDetails;
 
                     // thinh: update order
+                    orderUpdate.SendSubject = Order.SendSubject;
+                    orderUpdate.SendStatus = Order.SendStatus;
                     orderUpdate.SenderName = Order.SenderName;
                     orderUpdate.RecipientEmail = Order.RecipientEmail;
                     orderUpdate.SendMessage = Order.SendMessage;
@@ -182,10 +186,12 @@ namespace Egreeting.Web.Controllers.Admin
                     orderUpdate.ModifiedDate = DateTime.Now;
 
                     context.Set<Order>().Attach(orderUpdate);
+                    context.Entry(orderUpdate).State = EntityState.Modified;
                     context.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
+            ViewBag.Ecards = EcardBusiness.AllNoTracking.Where(x => x.Draft != true).ToList();
             return View(ViewNamesConstant.AdminOrdersEdit, Order);
         }
 

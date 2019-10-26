@@ -871,6 +871,7 @@
     <Content Include="Content\Admin\plugins\timepicker\bootstrap-timepicker.min.css" />
     <Content Include="Content\Admin\plugins\timepicker\bootstrap-timepicker.min.js" />
     <Content Include="Content\Admin\raphael-min.js" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -1422,6 +1423,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\Admin\bootstrap\css\bootstrap.css.map" />

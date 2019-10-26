@@ -55,7 +55,7 @@
                     {
                         foreach (var orderDetail in Model.OrderDetails)
                         {
-                            <span class="badge badge-primary" onclick="RemoveBadge(this)" value="@orderDetail.Ecard.EcardID">@orderDetail.Ecard.EcardName</span>
+                            <span class="badge badge-primary" style="background-color: blue" onclick="RemoveBadge(this)" value="@orderDetail.Ecard.EcardID">@orderDetail.Ecard.EcardName</span>
                         }
                     }
                 </div>
@@ -80,8 +80,13 @@
                     @Html.ValidationMessageFor(model => model.SendMessage, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
+                    @Html.LabelFor(m => m.SendStatus)
+                    @Html.CheckBoxFor(m => m.SendStatus, new { htmlAttributes = new { @class = "form-control", @placeholder = "SendStatus", @id = "SendStatus" } })
+                    @Html.ValidationMessageFor(model => model.SendMessage, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
                     @Html.LabelFor(m => m.ScheduleTime)
-                    @Html.EditorFor(m => m.ScheduleTime, new { htmlAttributes = new { @class = "form-control", @placeholder = "ScheduleTime", @id = "ScheduleTime" } })
+                    <input type="datetime" name="ScheduleTime" class="form-control" value="@Model.ScheduleTime" id="ScheduleTime" />
                     @Html.ValidationMessageFor(model => model.ScheduleTime, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -107,7 +112,7 @@
             if (!ListRoleArray.includes(e.value)) {
                 ListRoleArray.push(e.value);
                 var htmlresult = $('#select-items').find(":selected").text();
-                var html = `<span class="badge badge-primary" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
+                var html = `<span class="badge badge-primary" style="background-color: blue" onclick="RemoveBadge(this)" value="`+e.value+`">` + htmlresult + `</span>`;
                 $('#ListEcardBadge').append(html);
             };
             var ListRole = ListRoleArray.join('-');
@@ -129,5 +134,11 @@
         {
             window.location.replace('@Url.Action("Index")');
         }
+
+        $(function () {
+            $("#ScheduleTime").datetimepicker({
+                locale: 'vn'
+            });
+         });
     </script>
 }

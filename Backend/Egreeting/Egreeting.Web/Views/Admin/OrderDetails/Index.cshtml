@@ -31,6 +31,8 @@
             <div class="box">
                 <div class="box-header">
                     <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new order details</button>
+                    <button class="btn btn-primary" onclick="BackToOrder()"><i class="fa fa-arrow-left"></i> Back to order</button>
+
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -78,7 +80,7 @@
                                     <th>Thumbnail<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
                                     <th>Status<i class="fa fa-fw fa-sort pull-right" style="line-height: 20px; cursor: pointer"></i></th>
 
-                                    <th width="250px">Action</th>
+                                    <th width="320px">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="tbodyId">
@@ -94,11 +96,11 @@
 
                                         @if (OrderDetail.SendStatus)
                                         {
-                                            <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
+                                            <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
                                         }
                                         else
                                         {
-                                            <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
+                                            <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
 
                                         }
 
@@ -246,6 +248,10 @@
 
         function EditItem(id){
             window.location.replace('@Url.Action("Edit")' + '/' + id);
+        }
+
+        function BackToOrder() {
+            window.location.replace('/admin/orders/');
         }
 
         function LoadData() {

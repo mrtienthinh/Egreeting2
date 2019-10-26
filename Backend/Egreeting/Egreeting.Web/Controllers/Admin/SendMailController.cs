@@ -18,7 +18,7 @@ namespace Egreeting.Web.Controllers.Admin
         public async Task<ActionResult> SendByOrder(int? ItemID)
         {
             Utils.Utils.SendMailByOrder(ItemID);
-            return RedirectToAction("Index","Orders");
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         [HttpPost]
@@ -30,7 +30,7 @@ namespace Egreeting.Web.Controllers.Admin
                 var ListItemID = context.Set<Order>().Where(x => x.ScheduleTime > DateTime.Now && x.Draft != null).Select(x => x.OrderID).ToList();
                 Utils.Utils.SendMailAll(ListItemID);
             }
-            return RedirectToAction("Index", "Orders");
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace Egreeting.Web.Controllers.Admin
         public async Task<ActionResult> SendByOrderDetail(int? ItemID)
         {
             Utils.Utils.SendMailByOrderDetail(ItemID);
-            return RedirectToAction("Index", "Orders");
+            return Redirect(Request.UrlReferrer.ToString());
         }
     }
 }

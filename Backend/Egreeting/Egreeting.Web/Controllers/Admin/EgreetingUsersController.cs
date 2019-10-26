@@ -118,6 +118,7 @@ namespace Egreeting.Web.Controllers.Admin
                         var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
                         eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => lstRoleId.Contains(x.EgreetingRoleID)).ToList();
                         context.Set<EgreetingUser>().Attach(eUser);
+                        context.Entry(eUser).State = EntityState.Modified;
                         context.SaveChanges();
                     }
                     return RedirectToAction("Index");
@@ -187,6 +188,7 @@ namespace Egreeting.Web.Controllers.Admin
                     var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
                     eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => lstRoleId.Contains(x.EgreetingRoleID)).ToList();
                     context.Set<EgreetingUser>().Attach(eUser);
+                    context.Entry(eUser).State = EntityState.Modified;
                     context.SaveChanges();
                 }
                 return RedirectToAction("Index");

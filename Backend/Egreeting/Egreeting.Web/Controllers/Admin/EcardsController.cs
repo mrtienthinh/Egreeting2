@@ -236,6 +236,7 @@ namespace Egreeting.Web.Controllers.Admin
                     ecardUpdate.ModifiedDate = DateTime.Now;
 
                     context.Set<Ecard>().Attach(ecardUpdate);
+                    context.Entry(ecardUpdate).State = EntityState.Modified;
                     context.SaveChanges();
                 }
 

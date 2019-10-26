@@ -142,6 +142,8 @@ namespace Egreeting.Web.Controllers.Admin
                     paymentUpdate.PaymentStatus = Payment.PaymentStatus;
                     paymentUpdate.ModifiedDate = DateTime.Now;
                     context.Set<Payment>().Attach(paymentUpdate);
+                    context.Entry(paymentUpdate).State = EntityState.Modified;
+                    context.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }

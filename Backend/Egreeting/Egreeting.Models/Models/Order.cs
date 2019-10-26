@@ -38,7 +38,7 @@ namespace Egreeting.Models.Models
 
         [DisplayName("Schedule Time")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime? ScheduleTime { get; set; }
 
         [DisplayName("Sending Status")]

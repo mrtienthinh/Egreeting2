@@ -31,7 +31,7 @@
             <div class="box">
                 <div class="box-header">
                     <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i>Add new Order</button>
-                    <button class="btn btn-primary" onclick="SendAllEcardNow()"><i class="fa fa-plus"></i>Send all now</button>
+                    <button class="btn btn-primary" onclick="SendAllEcardNow()"><i class="fa fa-paper-plane"></i>Send all now</button>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -89,18 +89,18 @@
                                 @foreach (var Order in Model)
                                 {
                                     <tr>
-                                        <td>@sttOrder</td>
+                                        <td><a href="/admin/orderdetails?OrderID=@Order.OrderID">@sttOrder</a></td>
                                         <td>@Order.SenderName</td>
                                         <td>@Order.RecipientEmail</td>
                                         <td>@Order.SendSubject</td>
                                         <td>@Html.DisplayFor(x => Order.ScheduleTime)</td>
                                         @if (Order.SendStatus)
                                         {
-                                            <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
+                                            <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
                                         }
                                         else
                                         {
-                                            <td><span class="badge badge-primary" style="background-color: blue">Sended</span></td>
+                                            <td><span class="badge badge-secondary" style="background-color: orange">Not yet</span></td>
 
                                         }
                                         @{ 
