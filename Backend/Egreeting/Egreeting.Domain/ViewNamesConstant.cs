@@ -100,10 +100,7 @@ namespace Egreeting.Domain
         public static readonly string FrontendFeedbacksEdit = "~/Views/Frontend/Feedbacks/Edit.cshtml";
 
         public static readonly string FrontendPaymentsIndex = "~/Views/Frontend/Payments/Index.cshtml";
-        public static readonly string FrontendPaymentsCreate = "~/Views/Frontend/Payments/Create.cshtml";
-        public static readonly string FrontendPaymentsDelete = "~/Views/Frontend/Payments/Delete.cshtml";
-        public static readonly string FrontendPaymentsDetails = "~/Views/Frontend/Payments/Details.cshtml";
-        public static readonly string FrontendPaymentsEdit = "~/Views/Frontend/Payments/Edit.cshtml";
+        public static readonly string FrontendPaymentsSubcriber = "~/Views/Frontend/Payments/Subcriber.cshtml";
 
         public static readonly string FrontendSubcribersIndex = "~/Views/Frontend/Subcribers/Index.cshtml";
         public static readonly string FrontendSubcribersCreate = "~/Views/Frontend/Subcribers/Create.cshtml";

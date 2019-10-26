@@ -10,6 +10,7 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Frontend
 {
@@ -25,102 +26,84 @@ namespace Egreeting.Web.Controllers.Frontend
         // GET: Payments
         public ActionResult Index()
         {
-            return View(ViewNamesConstant.FrontendPaymentsIndex, PaymentBusiness.All.ToList());
+            return View(ViewNamesConstant.FrontendPaymentsIndex);
         }
 
-        // GET: Payments/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Subcriber()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment Payment = PaymentBusiness.Find(id);
-            if (Payment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendPaymentsDetails, Payment);
+            return View(ViewNamesConstant.FrontendPaymentsSubcriber);
         }
 
-        // GET: Payments/Create
-        public ActionResult Create()
-        {
-            return View(ViewNamesConstant.FrontendPaymentsCreate);
-        }
-
-        // POST: Payments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PaymentID,ReceiveMoney,IsReceived,CreatedDate,ModifiedDate")] Payment Payment)
+        public ActionResult Subcriber(string cardNumber, string email,string expityMonth, string expityYear, string CV)
         {
-            if (ModelState.IsValid)
+            int n = 0;
+            long m = 0;
+            if (cardNumber.Length != 12 || !long.TryParse(cardNumber, out m))
             {
-                PaymentBusiness.Insert(Payment);
+                ModelState.AddModelError(string.Empty, "Card's not valid!");
+            }
+            if (expityMonth.Length > 2 || !int.TryParse(expityMonth, out n) || n > 12 || n < DateTime.Now.Month)
+            {
+                ModelState.AddModelError(string.Empty, "Month not valid!");
+            }
+            if (expityYear.Length != 4|| !int.TryParse(expityYear, out n) || n < DateTime.Now.Year)
+            {
+                ModelState.AddModelError(string.Empty, "Year not valid!");
+            }
+            if (CV.Length != 3 || !int.TryParse(CV, out n))
+            {
+                ModelState.AddModelError(string.Empty, "CVG not valid!");
+            }
+            using (var context = new EgreetingContext())
+            {
+                if(!context.Set<Subcriber>().Any(x => x.Email.Equals(email)))
+                {
+                    ModelState.AddModelError(string.Empty, "Subcriber not found!");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(ViewNamesConstant.FrontendPaymentsSubcriber);
+            }
+            var listPayment = new List<int>();
+            DateTime maxMonth = DateTime.Now;
+            using (var context = new EgreetingContext())
+            {
+                listPayment = context.Set<Payment>().Where(x => x.EgreetingUser.Email.Equals(email)
+                    && x.Draft != true
+                    && x.PaymentStatus == false
+                    && x.Month >= DateTime.Now.Month
+                    && x.Year == DateTime.Now.Year
+                    ).OrderBy(x => x.Year).ThenBy(x => x.Month).Select(x => x.PaymentID).ToList();
+                if (listPayment.Count > 0)
+                {
+                    var paymentMonthMax = context.Set<Payment>().Where(x => x.EgreetingUser.Email.Equals(email)
+                        && x.Draft != true
+                        && x.PaymentStatus == false
+                        && x.Month >= DateTime.Now.Month
+                        && x.Year == DateTime.Now.Year
+                        ).OrderByDescending(x => x.Year).ThenByDescending(x => x.Month).Take(1).FirstOrDefault();
+                    maxMonth = new DateTime(paymentMonthMax.Year, paymentMonthMax.Month, 1);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Subcriber has paid for this month!");
+                    return View(ViewNamesConstant.FrontendPaymentsSubcriber);
+                }
+            }
+            foreach (var id in listPayment)
+            {
+                var item = PaymentBusiness.Find(id);
+                item.PaymentStatus = true;
+                item.ModifiedDate = DateTime.Now;
+                item.EgreetingUser.PaymentDueDate = maxMonth.AddMonths(1);
+                PaymentBusiness.Update(item);
                 PaymentBusiness.Save();
-                return RedirectToAction("Index");
             }
-
-            return View(ViewNamesConstant.FrontendPaymentsCreate, Payment);
-        }
-
-        // GET: Payments/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment Payment = PaymentBusiness.Find(id);
-            if (Payment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendPaymentsEdit, Payment);
-        }
-
-        // POST: Payments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PaymentID,ReceiveMoney,IsReceived,CreatedDate,ModifiedDate")] Payment Payment)
-        {
-            if (ModelState.IsValid)
-            {
-                PaymentBusiness.Update(Payment);
-                PaymentBusiness.Save();
-                return RedirectToAction("Index");
-            }
-            return View(ViewNamesConstant.FrontendPaymentsEdit, Payment);
-        }
-
-        // GET: Payments/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Payment Payment = PaymentBusiness.Find(id);
-            if (Payment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendPaymentsDelete, Payment);
-        }
-
-        // POST: Payments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Payment Payment = PaymentBusiness.Find(id);
-            PaymentBusiness.Delete(Payment);
-            PaymentBusiness.Save();
-            return RedirectToAction("Index");
+            return Redirect("/");
         }
 
         protected override void Dispose(bool disposing)

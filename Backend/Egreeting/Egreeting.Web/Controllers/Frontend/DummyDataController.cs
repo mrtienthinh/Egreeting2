@@ -335,19 +335,24 @@ namespace Egreeting.Web.Controllers.Frontend
                 {
                     var ecardIDs = new List<int>() { faker.Random.Number(1, 100), faker.Random.Number(1, 100), faker.Random.Number(1, 100) };
                     var orderDetails = new List<OrderDetail>();
+                    var sendStatusOder = true;
                     foreach (var item in ecardIDs)
                     {
+                        bool sendStatus = faker.Random.Bool();
+                        DateTime? sendTime = sendStatus ? faker.Date.Soon() : default(DateTime);
+
                         var orderDetail = new OrderDetail
                         {
-                            SendStatus = faker.Random.Bool(),
-                            SendTime = faker.Date.Soon(),
+                            SendStatus = sendStatus,
+                            SendTime = sendTime,
                             Ecard = context.Set<Ecard>().Find(item),
                             CreatedDate = faker.Date.Past(),
                         };
                         orderDetails.Add(orderDetail);
-
+                        sendStatusOder = sendStatusOder && sendStatus;
                     }
                     var userID = faker.Random.Number(5, 20);
+
                     var order = new Order
                     {
                         OrderID = i,
@@ -356,7 +361,7 @@ namespace Egreeting.Web.Controllers.Frontend
                         SendSubject = faker.Lorem.Sentence(4),
                         SendMessage = faker.Lorem.Sentences(4),
                         ScheduleTime = faker.Date.Past(),
-                        SendStatus = faker.Random.Bool(),
+                        SendStatus = sendStatusOder,
                         TotalPrice = faker.Random.Double(),
                         User = context.Set<EgreetingUser>().Find(userID),
                         OrderDetails = orderDetails,

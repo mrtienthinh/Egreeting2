@@ -15,6 +15,7 @@ using Microsoft.AspNet.Identity;
 using Egreeting.Models.AppContext;
 using Egreeting.Web.Filters;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Threading.Tasks;
 
 namespace Egreeting.Web.Controllers.Admin
 {
@@ -89,7 +90,7 @@ namespace Egreeting.Web.Controllers.Admin
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Email")] Subcriber subcriber)
+        public async Task<ActionResult> Create([Bind(Include = "Email")] Subcriber subcriber)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +102,7 @@ namespace Egreeting.Web.Controllers.Admin
 
                 };
                 var applicationUser = new ApplicationUser { Email = egreetingUser.Email, UserName = egreetingUser.Email, EgreetingUser = egreetingUser };
-                var result = UserManager.Create(applicationUser, "delete123456Aa");
+                var result = await UserManager.CreateAsync(applicationUser, "delete123456Aa");
                 using (var context = new EgreetingContext())
                 {
                     var roleStore = new RoleStore<IdentityRole>(context);

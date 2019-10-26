@@ -31,6 +31,8 @@
             <div class="box">
                 <div class="box-header">
                     <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new payment</button>
+                    <button class="btn btn-primary" onclick="SyncPayment()"><i class="fa fa-plus"></i> Sync payment</button>
+
                 </div><!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -211,55 +213,74 @@
 
 @section scripts{
     <script>
-            function DeleteItem(ItemID) {
-                var confirmDelete = confirm('Do you really want to delete this item!');
-                if (confirmDelete) {
-                    var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("Delete")',
-                        data: {ItemID, __RequestVerificationToken }, //use id here
-                        success: function () {
-                            LoadData();
-                        },
-                        error: function () {
-                            alert("Error while deleting data");
-                        }
-                    });
-                }
-
+        function DeleteItem(ItemID) {
+            var confirmDelete = confirm('Do you really want to delete this item!');
+            if (confirmDelete) {
+                var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete")',
+                    data: {ItemID, __RequestVerificationToken }, //use id here
+                    success: function () {
+                        LoadData();
+                    },
+                    error: function () {
+                        alert("Error while deleting data");
+                    }
+                });
             }
 
-            function ShowItem(id) {
-                window.location.replace('@Url.Action("Details")'+'/' + id);
+        }
+
+        function ShowItem(id) {
+            window.location.replace('@Url.Action("Details")'+'/' + id);
+        }
+
+        function AddItem(){
+            window.location.replace('@Url.Action("Create")');
+        }
+
+        function EditItem(id){
+            window.location.replace('@Url.Action("Edit")' + '/' + id);
+        }
+
+        function LoadData() {
+            console.log('acb');
+            var search = $('#searchId').val();
+            var pageSize = $('#pageSizeId').val();
+            var page = $('#page').val();
+            console.log(search + '_' + pageSize + '_' + page);
+            window.location.replace('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
+        }
+
+
+
+        function LoadPage(e) {
+            console.log(e);
+            var search = $('#searchId').val();
+            var pageSize = $('#pageSizeId').val();
+            console.log(search + '_' + pageSize + '_' + page);
+            window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
+        }
+
+        function SyncPayment() {
+            var confirmDelete = confirm('Do you really want to sync payment!');
+            if (confirmDelete) {
+                var __RequestVerificationToken = $("input[name=__RequestVerificationToken]").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/admin/syncpayment',
+                    data: {__RequestVerificationToken }, //use id here
+                    success: function () {
+                        LoadData();
+                    },
+                    error: function () {
+                        alert("Error while deleting data");
+                    }
+                });
             }
+        }
 
-            function AddItem(){
-                window.location.replace('@Url.Action("Create")');
-            }
-
-            function EditItem(id){
-                window.location.replace('@Url.Action("Edit")' + '/' + id);
-            }
-
-            function LoadData() {
-                console.log('acb');
-                var search = $('#searchId').val();
-                var pageSize = $('#pageSizeId').val();
-                var page = $('#page').val();
-                console.log(search + '_' + pageSize + '_' + page);
-                window.location.replace('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
-            }
-
-
-
-            function LoadPage(e) {
-                console.log(e);
-                var search = $('#searchId').val();
-                var pageSize = $('#pageSizeId').val();
-                console.log(search + '_' + pageSize + '_' + page);
-                window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
-            }
 
     </script>
 }

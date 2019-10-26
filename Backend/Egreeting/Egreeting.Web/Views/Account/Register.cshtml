@@ -31,7 +31,7 @@
 
         <div class="register-box-body">
             <p class="login-box-msg">Register a new membership</p>
-            <form action="admin/account/register" method="post">
+            <form action="/admin/account/register" method="post">
                 <div>@Html.ValidationSummary("", new { @class = "text-danger" })</div>
                 @Html.AntiForgeryToken()
                 <div class="form-group has-feedback">

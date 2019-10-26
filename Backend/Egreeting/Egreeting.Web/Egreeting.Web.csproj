@@ -266,6 +266,7 @@
     <Compile Include="Controllers\Admin\SendMailController.cs" />
     <Compile Include="Controllers\Admin\SubcribersController.cs" />
     <Compile Include="Controllers\Admin\OrdersController.cs" />
+    <Compile Include="Controllers\Admin\SyncPaymentController.cs" />
     <Compile Include="Controllers\API\ApiCategoriesController.cs" />
     <Compile Include="Controllers\API\ApiEcardsController.cs" />
     <Compile Include="Controllers\API\ApiEgreetingRolesController.cs" />
@@ -289,10 +290,17 @@
     <Compile Include="Controllers\Frontend\ScheduleSendersController.cs" />
     <Compile Include="Controllers\Frontend\SubcribersController.cs" />
     <Compile Include="Controllers\Frontend\OrdersController.cs" />
+    <Compile Include="Controllers\Frontend\TrackingController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Filters\RoleAuthorizeAttribute.cs" />
     <Compile Include="Models\CategoryViewModel.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Security\AppRoleProvider.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils\GlobalInfo.cs" />
     <Compile Include="Controllers\OdataAPI\CategoriesController.cs" />
     <Compile Include="Controllers\OdataAPI\EcardsController.cs" />
@@ -1482,6 +1490,10 @@
     <Content Include="Content\User\vendors\themify-icons\fonts\themify.ttf" />
     <Content Include="Content\User\vendors\themify-icons\fonts\themify.woff" />
     <Content Include="Content\User\vendors\themify-icons\Themify IconFonts 5-23-2014.json" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -1577,11 +1589,16 @@
     <Content Include="Views\Frontend\Categories\Details.cshtml" />
     <Content Include="Views\DummyData\Index.cshtml" />
     <Content Include="Views\Frontend\Ecards\Details.cshtml" />
+    <Content Include="Views\Frontend\Payments\Subcriber.cshtml" />
+    <Content Include="Views\Frontend\Tracking\Index.cshtml" />
+    <Content Include="Views\Frontend\Tracking\_OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Uploads\EcardFiles\" />
     <Folder Include="Views\SendMail\" />
+    <Folder Include="Views\SyncPayment\" />
+    <Folder Include="Views\Tracking\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -1632,9 +1649,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>24799</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:44383/</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:44383/</IISAppRootUrl>
+          <IISUrl>http://localhost:8080/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

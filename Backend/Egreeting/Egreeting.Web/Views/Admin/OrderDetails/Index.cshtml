@@ -266,6 +266,7 @@
             var orderID = $('#orderID');
             window.location.replace('@Url.Action("Index")'+ '?OrderID='+ orderID +'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
         }
+
         function SendNow(ItemID) {
             var confirmOrder = confirm('Do you really want to send this order now!');
             if (confirmOrder) {
