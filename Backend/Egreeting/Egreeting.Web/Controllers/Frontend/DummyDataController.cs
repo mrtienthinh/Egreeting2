@@ -339,15 +339,16 @@ namespace Egreeting.Web.Controllers.Frontend
                     foreach (var item in ecardIDs)
                     {
                         bool sendStatus = faker.Random.Bool();
-                        DateTime? sendTime = sendStatus ? faker.Date.Soon() : default(DateTime);
-
                         var orderDetail = new OrderDetail
                         {
                             SendStatus = sendStatus,
-                            SendTime = sendTime,
                             Ecard = context.Set<Ecard>().Find(item),
                             CreatedDate = faker.Date.Past(),
                         };
+                        if (sendStatus)
+                        {
+                            orderDetail.SendTime = faker.Date.Soon();
+                        }
                         orderDetails.Add(orderDetail);
                         sendStatusOder = sendStatusOder && sendStatus;
                     }

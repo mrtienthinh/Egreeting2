@@ -43,7 +43,7 @@ namespace Egreeting.Web.Utils
 
                 MailMessage mail = new MailMessage();
                 SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
-                foreach (var item in order.OrderDetails)
+                foreach (var item in order.OrderDetails.Where(x => x.Draft != true && !x.SendStatus))
                 {
                     Attachment data = new Attachment(HostingEnvironment.ApplicationPhysicalPath + "Uploads/EcardFiles/" + item.Ecard.EcardUrl);
                     mail.Attachments.Add(data);
@@ -62,7 +62,7 @@ namespace Egreeting.Web.Utils
                 {
                     //SmtpServer.Send(mail);
                     order.SendStatus = true;
-                    foreach (var item in order.OrderDetails)
+                    foreach (var item in order.OrderDetails.Where(x => x.Draft != true && !x.SendStatus))
                     {
                         item.SendStatus = true;
                         item.SendTime = DateTime.Now;

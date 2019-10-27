@@ -175,7 +175,7 @@ namespace Egreeting.Web.Controllers.Admin
                 if (!string.IsNullOrEmpty(egreetingUser.Password))
                 {
                     UserManager.RemovePassword(user.Id);
-                    UserManager.AddPassword(user.Id, user.EgreetingUser.Password);
+                    UserManager.AddPassword(user.Id, egreetingUser.Password);
                     UserManager.Update(user);
                 }
                 else

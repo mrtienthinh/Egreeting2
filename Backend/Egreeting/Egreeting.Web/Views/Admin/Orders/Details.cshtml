@@ -33,7 +33,7 @@
                     @Html.Label("Select ecard")
                     @if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
                     {
-                        foreach (var orderDetail in Model.OrderDetails)
+                        foreach (var orderDetail in Model.OrderDetails.Where(x => x.Draft != true))
                         {
                             <span class="badge badge-primary" style="background-color: blue">@orderDetail.Ecard.EcardName</span>
                         }

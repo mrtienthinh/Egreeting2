@@ -112,7 +112,10 @@
                                             <button type="button" class="btn btn-success" onclick="ShowItem(@Order.OrderID)"><i class="fa fa-info-circle"></i> Show</button>
                                             <button type="button" class="btn btn-primary" onclick="EditItem(@Order.OrderID)"><i class="fa fa-pencil"></i> Edit</button>
                                             <button type="button" class="btn btn-danger" onclick="DeleteItem(@Order.OrderID)"><i class="fa fa-trash"></i> Delete</button>
-                                            <button type="button" class="btn btn-default" onclick="SendNow(@Order.OrderID)"><i class="fa fa-paper-plane"></i> Send</button>
+                                            @if (!Order.SendStatus)
+                                            {
+                                                <button type="button" class="btn btn-default" onclick="SendNow(@Order.OrderID)"><i class="fa fa-paper-plane"></i> Send</button>
+                                            }
                                         </td>
                                     </tr>
                                     sttOrder = sttOrder + 1;

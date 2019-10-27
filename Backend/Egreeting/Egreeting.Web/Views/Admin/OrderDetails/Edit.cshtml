@@ -36,7 +36,7 @@
                     string ListEcardString = "";
                     if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
                     {
-                        ListEcardString = String.Join("-", Model.OrderDetails.Select(x => x.Ecard.EcardID.ToString()).ToArray());
+                        ListEcardString = String.Join("-", Model.OrderDetails.Where(x => x.Draft != true).Select(x => x.Ecard.EcardID.ToString()).ToArray());
                     }
                 }
                 <input type="hidden" name="ListEcardString" id="ListEcardString" value="@ListEcardString" />
@@ -53,7 +53,7 @@
                 <div class="form-group" id="ListEcardBadge">
                     @if (Model.OrderDetails != null && Model.OrderDetails.Count > 0)
                     {
-                        foreach (var orderDetail in Model.OrderDetails)
+                        foreach (var orderDetail in Model.OrderDetails.Where(x => x.Draft != true))
                         {
                             <span class="badge badge-primary" style="background-color: blue" onclick="RemoveBadge(this)" value="@orderDetail.Ecard.EcardID">@orderDetail.Ecard.EcardName</span>
                         }
