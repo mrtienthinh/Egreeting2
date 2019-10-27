@@ -19,3 +19,6 @@
 /Backend/Egreeting/Egreeting.Utils/bin/Debug
 /Backend/Egreeting/Egreeting.Web/App_Data
 /Backend/Egreeting/.vscode
+/Services/EgreetingServices/bin/Debug
+/Services/EgreetingServices/packages
+/Services/EgreetingServices/obj/Debug
