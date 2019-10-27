@@ -97,7 +97,6 @@
 
                                         <td>
                                             <button type="button" class="btn btn-success" onclick="ShowItem(@Subcriber.SubcriberID)"><i class="fa fa-info-circle"></i> Show</button>
-                                            <button type="button" class="btn btn-primary" onclick="EditItem(@Subcriber.SubcriberID)"><i class="fa fa-pencil"></i> Edit</button>
                                             <button type="button" class="btn btn-danger" onclick="DeleteItem(@Subcriber.SubcriberID)"><i class="fa fa-trash"></i> Delete</button>
                                         </td>
                                     </tr>
@@ -232,10 +231,6 @@
 
             function AddItem(){
                 window.location.replace('@Url.Action("Create")');
-            }
-
-            function EditItem(id){
-                window.location.replace('@Url.Action("Edit")' + '/' + id);
             }
 
             function LoadData() {
