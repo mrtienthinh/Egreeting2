@@ -185,7 +185,7 @@ namespace Egreeting.Web.Controllers.Admin
                 using (var context = new EgreetingContext())
                 {
                     var lstRoleId = ListRole.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
-                    var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(egreetingUser.Email)).FirstOrDefault();
+                    var eUser = context.Set<EgreetingUser>().Where(x => x.Email.Equals(user.Email)).FirstOrDefault();
                     eUser.EgreetingRoles = context.Set<EgreetingRole>().Where(x => lstRoleId.Contains(x.EgreetingRoleID)).ToList();
                     context.Set<EgreetingUser>().Attach(eUser);
                     context.Entry(eUser).State = EntityState.Modified;
