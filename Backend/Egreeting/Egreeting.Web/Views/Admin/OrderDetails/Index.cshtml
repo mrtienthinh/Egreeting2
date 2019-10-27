@@ -107,10 +107,9 @@
 
                                         <td>
                                             <button type="button" class="btn btn-success" onclick="ShowItem(@OrderDetail.OrderDetailID)"><i class="fa fa-info-circle"></i> Show</button>
-                                            <button type="button" class="btn btn-primary" onclick="EditItem(@OrderDetail.OrderDetailID)"><i class="fa fa-pencil"></i> Edit</button>
-                                            <button type="button" class="btn btn-danger" onclick="DeleteItem(@OrderDetail.OrderDetailID)"><i class="fa fa-trash"></i> Delete</button>
                                             @if (!OrderDetail.SendStatus)
                                             {
+                                                <button type="button" class="btn btn-danger" onclick="DeleteItem(@OrderDetail.OrderDetailID)"><i class="fa fa-trash"></i> Delete</button>
                                                 <button type="button" class="btn btn-default" onclick="SendNow(@OrderDetail.OrderDetailID)"><i class="fa fa-paper-plane"></i> Send</button>
                                             }
 
@@ -247,10 +246,6 @@
 
         function AddItem(){
             window.location.replace('@Url.Action("Create")');
-        }
-
-        function EditItem(id){
-            window.location.replace('@Url.Action("Edit")' + '/' + id);
         }
 
         function BackToOrder() {
