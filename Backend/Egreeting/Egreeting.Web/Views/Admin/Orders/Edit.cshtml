@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group">
                     @Html.LabelFor(m => m.ScheduleTime)
-                    <input type="datetime" name="ScheduleTime" class="form-control" value="@Model.ScheduleTime" id="ScheduleTime" />
+                    <input type="datetime" name="ScheduleTime" class="form-control" value="@Model.ScheduleTime.Value.ToString("MM/dd/yyyy H:mm")" id="ScheduleTime" />
                     @Html.ValidationMessageFor(model => model.ScheduleTime, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -137,7 +137,8 @@
 
         $(function () {
             $("#ScheduleTime").datetimepicker({
-                locale: 'vn'
+                defaultDate: "11/1/2013",
+                format: 'dd/mm/yyyy HH:mm',
             });
          });
     </script>

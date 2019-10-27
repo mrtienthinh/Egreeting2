@@ -18,7 +18,7 @@ namespace Egreeting.Models.Models
 
         [DisplayName("Sended Time")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:R}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy H:mm}", ApplyFormatInEditMode = true)]
         public DateTime? SendTime { get; set; }
 
         public virtual Ecard Ecard { get; set; }
