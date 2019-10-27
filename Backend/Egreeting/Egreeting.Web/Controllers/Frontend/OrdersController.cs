@@ -10,6 +10,7 @@ using Egreeting.Web.App_Start;
 using Egreeting.Domain;
 using Egreeting.Business.IBusiness;
 using Egreeting.Models.Models;
+using Egreeting.Models.AppContext;
 
 namespace Egreeting.Web.Controllers.Frontend
 {
@@ -17,111 +18,123 @@ namespace Egreeting.Web.Controllers.Frontend
     public class OrdersController : BaseController
     {
         private IOrderBusiness OrderBusiness;
-        public OrdersController(IOrderBusiness OrderBusiness)
+        private IEcardBusiness EcardBusiness;
+        public OrdersController(IOrderBusiness OrderBusiness, IEcardBusiness EcardBusiness)
         {
             this.OrderBusiness = OrderBusiness;
+            this.EcardBusiness = EcardBusiness;
         }
 
-        // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(string ListEcardIDString)
         {
-            return View(ViewNamesConstant.FrontendOrdersIndex, OrderBusiness.All.ToList());
-        }
-
-        // GET: Orders/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
+            if (string.IsNullOrEmpty(ListEcardIDString))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Redirect("/");
             }
-            Order Order = OrderBusiness.Find(id);
-            if (Order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendOrdersDetails, Order);
+            var listEcardID = ListEcardIDString.Split('-').Where(x => !string.IsNullOrEmpty(x)).Select(x => Convert.ToInt32(x)).ToList();
+            var listEcard = EcardBusiness.All.Where(x => listEcardID.Contains(x.EcardID)).ToList();
+            ViewBag.listEcardIDstring = ListEcardIDString;
+            return View(ViewNamesConstant.FrontendOrdersIndex, listEcard);
         }
 
-        // GET: Orders/Create
-        public ActionResult Create()
-        {
-            return View(ViewNamesConstant.FrontendOrdersCreate);
-        }
-
-        // POST: Orders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrderID,SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess,CreatedDate,ModifiedDate")] Order Order)
+        public ActionResult CheckOut([Bind(Include = "SenderName,RecipientEmail,SendSubject,SendMessage")] Order order, string listEcardIDstring)
+        {
+            if (string.IsNullOrEmpty(order.RecipientEmail)){
+                return Json(new { Code = "fail", orderID = "" });
+            }
+            if (ModelState.IsValid)
+            {
+                if (Request.IsAuthenticated)
+                {
+                    using (var context = new EgreetingContext())
+                    {
+                        string email = User.Identity.Name;
+                        var userSend = context.EgreetingUsers.Where(x => x.Email == email).FirstOrDefault();
+                        bool checkPayment = false;
+                        if (userSend != null)
+                        {
+                            checkPayment = userSend.PaymentDueDate > DateTime.Now;
+                        }
+
+                        if (checkPayment) {
+                            var listEcardID = listEcardIDstring.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                            var listOrderDetails = new List<OrderDetail>();
+                            foreach (var ecardID in listEcardID)
+                            {
+                                var ecard = context.Set<Ecard>().Find(ecardID);
+                                var orderDetails = new OrderDetail
+                                {
+                                    SendStatus = false,
+                                    Ecard = ecard,
+                                    CreatedDate = DateTime.Now,
+                                };
+                                listOrderDetails.Add(orderDetails);
+                            }
+
+                            order.OrderDetails = listOrderDetails;
+                            order.SendStatus = false;
+                            order.TotalPrice = listOrderDetails.Select(x => x.Ecard.Price).Sum();
+                            order.CreatedDate = DateTime.Now;
+                            context.Set<Order>().Add(order);
+                            context.SaveChanges();
+                            return Json(new { Code = "success", orderID = order.OrderID });
+                        }
+                        else
+                        {
+                            return Json(new { Code = "subcriber", orderID = ""});
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { Code = "forsending", orderID = "" });
+                }
+                
+            }
+            return Json(new { Code = "fail", orderID = "" });
+        }
+
+        [HttpPost]
+        public ActionResult Create([Bind(Include = "SenderName,RecipientEmail,SendSubject,SendMessage")] Order order, string listEcardIDstring)
         {
             if (ModelState.IsValid)
             {
-                OrderBusiness.Insert(Order);
-                OrderBusiness.Save();
-                return RedirectToAction("Index");
-            }
+                using (var context = new EgreetingContext())
+                {
+                    var listEcardID = listEcardIDstring.Split('-').Where(x => x.Length > 0).Select(x => Convert.ToInt32(x)).ToList();
+                    var listOrderDetails = new List<OrderDetail>();
+                    foreach (var ecardID in listEcardID)
+                    {
+                        var ecard = context.Set<Ecard>().Find(ecardID);
+                        var orderDetails = new OrderDetail
+                        {
+                            SendStatus = false,
+                            Ecard = ecard,
+                            CreatedDate = DateTime.Now,
+                        };
+                        listOrderDetails.Add(orderDetails);
+                    }
 
-            return View(ViewNamesConstant.FrontendOrdersCreate, Order);
+                    order.OrderDetails = listOrderDetails;
+                    order.SendStatus = false;
+                    order.TotalPrice = listOrderDetails.Select(x => x.Ecard.Price).Sum();
+                    order.CreatedDate = DateTime.Now;
+                    context.Set<Order>().Add(order);
+                    context.SaveChanges();
+                    return Json( new { Code = "success", orderID = order.OrderID});
+
+                }
+            }
+            return Json("fail");
         }
 
-        // GET: Orders/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult RemoveCart()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order Order = OrderBusiness.Find(id);
-            if (Order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendOrdersEdit, Order);
+            return View(ViewNamesConstant.FrontendOrdersRemoveCart);
         }
 
-        // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrderID,SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess,CreatedDate,ModifiedDate")] Order Order)
-        {
-            if (ModelState.IsValid)
-            {
-                OrderBusiness.Update(Order);
-                OrderBusiness.Save();
-                return RedirectToAction("Index");
-            }
-            return View(ViewNamesConstant.FrontendOrdersEdit, Order);
-        }
-
-        // GET: Orders/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Order Order = OrderBusiness.Find(id);
-            if (Order == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.FrontendOrdersDelete, Order);
-        }
-
-        // POST: Orders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Order Order = OrderBusiness.Find(id);
-            OrderBusiness.Delete(Order);
-            OrderBusiness.Save();
-            return RedirectToAction("Index");
-        }
 
         protected override void Dispose(bool disposing)
         {

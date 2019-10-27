@@ -109,6 +109,7 @@ namespace Egreeting.Domain
         public static readonly string FrontendSubcribersEdit = "~/Views/Frontend/Subcribers/Edit.cshtml";
 
         public static readonly string FrontendOrdersIndex = "~/Views/Frontend/Orders/Index.cshtml";
+        public static readonly string FrontendOrdersRemoveCart = "~/Views/Frontend/Orders/RemoveCart.cshtml";
         public static readonly string FrontendOrdersCreate = "~/Views/Frontend/Orders/Create.cshtml";
         public static readonly string FrontendOrdersDelete = "~/Views/Frontend/Orders/Delete.cshtml";
         public static readonly string FrontendOrdersDetails = "~/Views/Frontend/Orders/Details.cshtml";

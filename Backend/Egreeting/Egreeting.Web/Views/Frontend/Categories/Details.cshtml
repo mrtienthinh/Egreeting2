@@ -128,9 +128,9 @@
                                     <div class="card-product__img">
                                         <img class="card-img" src="~/Uploads/Thumbnails/@ecard.ThumbnailUrl" alt="ecard">
                                         <ul class="card-product__imgOverlay">
-                                            <li><button onclick="LoadEcard(@ecard.EcardSlug)"><i class="ti-search"></i></button></li>
-                                            <li><button onclick="LoadEcard(@ecard.EcardSlug)"><i class="ti-shopping-cart"></i></button></li>
-                                            <li><button onclick="LoadEcard(@ecard.EcardSlug)"><i class="ti-heart"></i></button></li>
+                                            <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-search"></i></button></li>
+                                            <li><button onclick="AddToCart('@ecard.EcardID')"><i class="ti-shopping-cart"></i></button></li>
+                                            <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-heart"></i></button></li>
                                         </ul>
                                     </div>
                                     <div class="card-body">
@@ -248,11 +248,11 @@
             var search = $('#searchId').val();
             var pageSize = $('#sizeSelect').val();
             var sorting = $('#sortSelect').val();
-            window.location.replace('/categories/@ViewBag.categorySlug' + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
+            window.location.href = ('/categories/@ViewBag.categorySlug' + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
         }
 
         function LoadEcard(e) {
-            window.location.replace('/ecards/' + e);
+            window.location.href = ('/ecards/' + e);
         }
     </script>
 }

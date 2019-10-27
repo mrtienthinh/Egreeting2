@@ -113,8 +113,8 @@
                                             <button type="button" class="btn btn-danger" onclick="DeleteItem(@Order.OrderID)"><i class="fa fa-trash"></i> Delete</button>
                                             @if (!Order.SendStatus)
                                             {
-                                                <button type="button" class="btn btn-default" onclick="SendNow(@Order.OrderID)"><i class="fa fa-paper-plane"></i> Send</button>
                                                 <button type="button" class="btn btn-primary" onclick="EditItem(@Order.OrderID)"><i class="fa fa-pencil"></i> Edit</button>
+                                                <button type="button" class="btn btn-default" onclick="SendNow(@Order.OrderID)"><i class="fa fa-paper-plane"></i> Send</button>
                                             }
                                         </td>
                                     </tr>
@@ -244,15 +244,15 @@
         }
 
         function ShowItem(id) {
-            window.location.replace('@Url.Action("Details")'+'/' + id);
+            window.location.href = ('@Url.Action("Details")'+'/' + id);
         }
 
         function AddItem(){
-            window.location.replace('@Url.Action("Create")');
+            window.location.href = ('@Url.Action("Create")');
         }
 
         function EditItem(id){
-            window.location.replace('@Url.Action("Edit")' + '/' + id);
+            window.location.href = ('@Url.Action("Edit")' + '/' + id);
         }
 
         function LoadData() {
@@ -261,7 +261,7 @@
             var pageSize = $('#pageSizeId').val();
             var page = $('#page').val();
             console.log(search + '_' + pageSize + '_' + page);
-            window.location.replace('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
+            window.location.href = ('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
         }
 
 
@@ -271,7 +271,7 @@
             var search = $('#searchId').val();
             var pageSize = $('#pageSizeId').val();
             console.log(search + '_' + pageSize + '_' + page);
-            window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
+            window.location.href = ('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
         }
 
         function SendNow(ItemID) {

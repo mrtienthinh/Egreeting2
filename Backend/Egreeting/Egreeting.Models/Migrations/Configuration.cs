@@ -1,9 +1,12 @@
 namespace Egreeting.Models.Migrations
 {
+    using Bogus;
+    using Egreeting.Models.AppContext;
     using Egreeting.Models.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -16,72 +19,71 @@ namespace Egreeting.Models.Migrations
             ContextKey = "Egreeting.Models.AppContext";
         }
 
-        protected override void Seed(Egreeting.Models.AppContext.EgreetingContext context)
+        protected override void Seed(Egreeting.Models.AppContext.EgreetingContext context1)
         {
-            //context.Categories.AddOrUpdate(
-            //    new Models.Category { CategoryName = "Birthday", CategorySlug = "birthday" },
-            //    new Models.Category { CategoryName = "Wedding", CategorySlug = "wedding" },
-            //    new Models.Category { CategoryName = "New year", CategorySlug = "new-year" },
-            //    new Models.Category { CategoryName = "Festivals", CategorySlug = "festivals" }
-            //);
+            var faker = new Faker("en");
+            using (var context = new EgreetingContext())
+            {
+                //20 category;
+                var categories = new List<Category>();
+                categories.Add(new Category { CategoryID = 1, CategoryName = "Birthday", CategorySlug = "birthday" });
+                categories.Add(new Category { CategoryID = 2, CategoryName = "Wedding", CategorySlug = "wedding" });
+                categories.Add(new Category { CategoryID = 3, CategoryName = "New year", CategorySlug = "new-year" });
+                categories.Add(new Category { CategoryID = 4, CategoryName = "Festivals", CategorySlug = "festivals" });
 
-            //if (!context.Roles.Any(r => r.Name == "Admin"))
-            //{
-            //    var store = new RoleStore<ApplicationRole>(context);
-            //    var manager = new RoleManager<ApplicationRole>(store);
-            //    var role = new ApplicationRole { Name = "Admin", EgreetingRole = new Models.EgreetingRole { EgreetingRoleName = "Admin" } };
-            //    manager.Create(role);
-            //}
-            //if (!context.Roles.Any(r => r.Name == "User"))
-            //{
-            //    var store = new RoleStore<ApplicationRole>(context);
-            //    var manager = new RoleManager<ApplicationRole>(store);
-            //    var role = new ApplicationRole { Name = "User", EgreetingRole = new Models.EgreetingRole { EgreetingRoleName = "User" } };
-            //    manager.Create(role);
-            //}
-            //if (!context.Roles.Any(r => r.Name == "Subcriber"))
-            //{
-            //    var store = new RoleStore<ApplicationRole>(context);
-            //    var manager = new RoleManager<ApplicationRole>(store);
-            //    var role = new ApplicationRole { Name = "Subcriber", EgreetingRole = new Models.EgreetingRole { EgreetingRoleName = "Subcriber" } };
-            //    manager.Create(role);
-            //}
-            //if (!context.Users.Any(u => u.UserName == "mrtienthinh@gmail.com"))
-            //{
-            //    var store = new UserStore<ApplicationUser>(context);
-            //    var manager = new UserManager<ApplicationUser>(store);
-            //    var user = new ApplicationUser { UserName = "mrtienthinh@gmail.com", Email = "mrtienthinh@gmail.com", EgreetingUser = new EgreetingUser { Email = "mrtienthinh@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
+                for (int i = 5; i < 20; i++)
+                {
+                    categories.Add(new Category
+                    {
+                        CategoryID = i,
+                        CategoryName = "Category " + i,
+                        CategorySlug = "Category-" + i,
+                        CreatedDate = faker.Date.Past(),
+                    });
+                }
+                context.Set<Category>().AddRange(categories);
+                context.SaveChanges();
+            }
 
-            //    manager.Create(user, "123456aA@");
-            //    manager.AddToRole(user.Id, "Admin");
-            //}
-            //if (!context.Users.Any(u => u.UserName == "admin@gmail.com"))
-            //{
-            //    var store = new UserStore<ApplicationUser>(context);
-            //    var manager = new UserManager<ApplicationUser>(store);
-            //    var user = new ApplicationUser { UserName = "admin@gmail.com", Email = "admin@gmail.com", EgreetingUser = new EgreetingUser { Email = "admin@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
-
-            //    manager.Create(user, "123456aA@");
-            //    manager.AddToRole(user.Id, "Admin");
-            //}
-            //if (!context.Users.Any(u => u.UserName == "user@gmail.com"))
-            //{
-            //    var store = new UserStore<ApplicationUser>(context);
-            //    var manager = new UserManager<ApplicationUser>(store);
-            //    var user = new ApplicationUser { UserName = "user@gmail.com", Email = "user@gmail.com", EgreetingUser = new EgreetingUser { Email = "user@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
-
-            //    manager.Create(user, "123456aA@");
-            //    manager.AddToRole(user.Id, "User");
-            //}
-            //if (!context.Users.Any(u => u.UserName == "subcriber@gmail.com"))
-            //{
-            //    var store = new UserStore<ApplicationUser>(context);
-            //    var manager = new UserManager<ApplicationUser>(store);
-            //    var user = new ApplicationUser { UserName = "subcriber@gmail.com", Email = "subcriber@gmail.com", EgreetingUser = new EgreetingUser { Email = "subcriber@gmail.com", FirstName = "Tien Thinh", LastName = "Nguyen" } };
-
-            //    manager.Create(user, "123456aA@");
-            //    manager.AddToRole(user.Id, "Subcriber");
-            //}
+            //3 role
+            using (var context = new EgreetingContext())
+            {
+                var store = new RoleStore<ApplicationRole>(context);
+                var manager = new RoleManager<ApplicationRole>(store);
+                var role = new ApplicationRole
+                {
+                    Name = "Admin",
+                    EgreetingRole = new EgreetingRole
+                    {
+                        EgreetingRoleID = 1,
+                        EgreetingRoleName = "Admin",
+                        CreatedDate = faker.Date.Past(),
+                    }
+                };
+                manager.Create(role);
+                role = new ApplicationRole
+                {
+                    Name = "User",
+                    EgreetingRole = new EgreetingRole
+                    {
+                        EgreetingRoleID = 2,
+                        EgreetingRoleName = "User",
+                        CreatedDate = faker.Date.Past(),
+                    }
+                };
+                manager.Create(role);
+                role = new ApplicationRole
+                {
+                    Name = "Subcriber",
+                    EgreetingRole = new EgreetingRole
+                    {
+                        EgreetingRoleID = 3,
+                        EgreetingRoleName = "Subcriber",
+                        CreatedDate = faker.Date.Past(),
+                    }
+                };
+                manager.Create(role);
+            }
         }
     }
 }

@@ -280,7 +280,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\Frontend\CategoriesController.cs" />
-    <Compile Include="Controllers\Frontend\DummyDataController.cs" />
+    <Compile Include="Controllers\Admin\DummyDataController.cs" />
     <Compile Include="Controllers\Frontend\EcardsController.cs" />
     <Compile Include="Controllers\Frontend\EgreetingRolesController.cs" />
     <Compile Include="Controllers\Frontend\EgreetingUsersController.cs" />
@@ -1594,6 +1594,7 @@
     <Content Include="Views\Frontend\Payments\Subcriber.cshtml" />
     <Content Include="Views\Frontend\Tracking\Index.cshtml" />
     <Content Include="Views\Frontend\Tracking\_OrderDetail.cshtml" />
+    <Content Include="Views\Frontend\Orders\RemoveCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

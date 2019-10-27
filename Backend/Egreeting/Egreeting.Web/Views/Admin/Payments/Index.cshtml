@@ -31,7 +31,7 @@
             <div class="box">
                 <div class="box-header">
                     <button class="btn btn-primary" onclick="AddItem()"><i class="fa fa-plus"></i> Add new payment</button>
-                    <button class="btn btn-primary" onclick="SyncPayment()"><i class="fa fa-plus"></i> Sync payment</button>
+                    <button class="btn btn-primary" onclick="SyncPayment()"><i class="fa fa-refresh"></i> Sync payment</button>
 
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -233,15 +233,15 @@
         }
 
         function ShowItem(id) {
-            window.location.replace('@Url.Action("Details")'+'/' + id);
+            window.location.href = ('@Url.Action("Details")'+'/' + id);
         }
 
         function AddItem(){
-            window.location.replace('@Url.Action("Create")');
+            window.location.href = ('@Url.Action("Create")');
         }
 
         function EditItem(id){
-            window.location.replace('@Url.Action("Edit")' + '/' + id);
+            window.location.href = ('@Url.Action("Edit")' + '/' + id);
         }
 
         function LoadData() {
@@ -250,7 +250,7 @@
             var pageSize = $('#pageSizeId').val();
             var page = $('#page').val();
             console.log(search + '_' + pageSize + '_' + page);
-            window.location.replace('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
+            window.location.href = ('@Url.Action("Index")'+'?page=' + page + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search);
         }
 
 
@@ -260,7 +260,7 @@
             var search = $('#searchId').val();
             var pageSize = $('#pageSizeId').val();
             console.log(search + '_' + pageSize + '_' + page);
-            window.location.replace('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
+            window.location.href = ('@Url.Action("Index")'+'?page=' + e + '&pageSize=' + pageSize + '&search=' + search);
         }
 
         function SyncPayment() {

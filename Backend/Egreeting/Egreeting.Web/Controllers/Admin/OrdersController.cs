@@ -34,13 +34,13 @@ namespace Egreeting.Web.Controllers.Admin
             var listModel = new List<Order>();
             if (!string.IsNullOrEmpty(search))
             {
-                listModel = OrderBusiness.All.Where(x => x.SendSubject.Contains(search) && x.Draft != true).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                listModel = OrderBusiness.All.Where(x => x.SendSubject.Contains(search) && x.Draft != true).OrderByDescending(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                 ViewBag.totalItem = OrderBusiness.All.Count(x => x.SendSubject.Contains(search) && x.Draft != true);
             }
             else
             {
                 ViewBag.totalItem = OrderBusiness.All.Count(x => x.Draft != true);
-                listModel = OrderBusiness.All.Where(x => x.Draft != true).OrderBy(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                listModel = OrderBusiness.All.Where(x => x.Draft != true).OrderByDescending(x => x.OrderID).Skip((page - 1) * pageSize).Take(pageSize).ToList();
             }
             ViewBag.currentPage = page;
             ViewBag.pageSize = pageSize;
@@ -132,6 +132,9 @@ namespace Egreeting.Web.Controllers.Admin
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "OrderID,SenderName,RecipientEmail,SendSubject,SendStatus,SendMessage,ScheduleTime")] Order Order, string ListEcardString)
         {
+            if(string.IsNullOrEmpty(Order.RecipientEmail)){
+                ModelState.AddModelError("RecipientEmail", "Recipient's email can't not be empty!");
+            }
             if (ModelState.IsValid)
             {
                 using (var context = new EgreetingContext())

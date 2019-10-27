@@ -64,43 +64,6 @@ namespace Egreeting.Web.Controllers.Admin
             return View(ViewNamesConstant.AdminOrderDetailsDetails,OrderDetail);
         }
 
-        // GET: OrderDetails/Create
-        public ActionResult Create()
-        {
-            return View(ViewNamesConstant.AdminOrderDetailsCreate);
-        }
-
-        // GET: OrderDetails/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            OrderDetail OrderDetail = OrderDetailBusiness.Find(id);
-            if (OrderDetail == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ViewNamesConstant.AdminOrderDetailsEdit,OrderDetail);
-        }
-
-        // POST: OrderDetails/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SenderEmail,RecipientEmail,SendSubject,SendMessage,TimeSuccess")] OrderDetail OrderDetail)
-        {
-            if (ModelState.IsValid)
-            {
-                OrderDetailBusiness.Update(OrderDetail);
-                OrderDetailBusiness.Save();
-                return RedirectToAction("Index");
-            }
-            return View(ViewNamesConstant.AdminOrderDetailsEdit,OrderDetail);
-        }
-
         // POST: OrderDetails/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

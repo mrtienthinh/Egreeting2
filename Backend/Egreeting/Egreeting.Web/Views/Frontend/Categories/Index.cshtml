@@ -129,7 +129,7 @@
                                         <img class="card-img" src="~/Uploads/Thumbnails/@ecard.ThumbnailUrl" alt="ecard">
                                         <ul class="card-product__imgOverlay">
                                             <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-search"></i></button></li>
-                                            <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-shopping-cart"></i></button></li>
+                                            <li><button onclick="AddToCart('@ecard.EcardID', this)" value="@ecard.EcardID"><i class="ti-shopping-cart"></i></button></li>
                                             <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-heart"></i></button></li>
                                         </ul>
                                     </div>
@@ -238,6 +238,26 @@
 
 @section scripts{
     <script>
+        function AddToCart(id, e) {
+            if (localStorage.getItem('LISTECARD') === null || localStorage.getItem('LISTECARD') === '') {
+                listEcard = [id];
+                $(e).css('background', 'orange');
+            } else {
+                listEcard = localStorage.getItem('LISTECARD');
+                if (!listEcard.split('-').includes(id)) {
+                    listEcard = listEcard + '-' + id;
+                    $(e).css('background', 'orange');
+                } else {
+                    listEcard = listEcard.split('-').filter(x => x !== id).join('-');
+                    $(e).css('background', '#8894ff');
+                }
+            }
+            localStorage.setItem('LISTECARD', listEcard);
+            LoadCart();
+        }
+
+        
+
         function LoadData(e) {
             var page = 1;
             if (e !== '') {
@@ -248,11 +268,12 @@
             var search = $('#searchId').val();
             var pageSize = $('#sizeSelect').val();
             var sorting = $('#sortSelect').val();
-            window.location.replace('/categories' + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
+            window.location.href = ('/categories' + '?page=' + page + '&pageSize=' + pageSize + '&search=' + search + '&sorting=' + sorting);
         }
 
         function LoadEcard(e) {
-            window.location.replace('/ecards/' + e);
+            window.location.href = ('/ecards/' + e);
         }
+
     </script>
 }

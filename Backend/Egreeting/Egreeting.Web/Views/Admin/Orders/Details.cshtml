@@ -81,10 +81,10 @@
     <script>
         function BackToIndex()
         {
-            window.location.replace('@Url.Action("Index")');
+            window.location.href = ('@Url.Action("Index")');
         }
         function ToOrderDetail(e) {
-            window.location.replace('/admin/orderdetails?OrderID='+e);
+            window.location.href = ('/admin/orderdetails?OrderID='+e);
         }
     </script>
 }
