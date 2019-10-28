@@ -211,8 +211,10 @@
                         alert("Payment transaction not valid!");
                     } else if (data.Code === 'subcriber') {
                         alert("You need to payment for subcriber!");
+                        localStorage.setItem("ORDER", order);
                         window.location.href = "/payments/subcriber";
                     } else if (data.Code === 'forsending') {
+                        localStorage.setItem("ORDER", order);
                         window.location.href = "/payments";
                     }
                 },
