@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 
 namespace Egreeting.Web.Utils
@@ -49,18 +50,18 @@ namespace Egreeting.Web.Utils
                     mail.Attachments.Add(data);
                 }
 
-                mail.From = new MailAddress("lethanh.hlht1993@gmail.com");
+                mail.From = new MailAddress(WebConfigurationManager.AppSettings["EmailSender"]);
                 mail.To.Add(order.RecipientEmail);
                 mail.Subject = order.SendSubject + " - " + order.SenderName;
                 mail.Body = order.SendMessage;
 
                 SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("lethanh.hlht1993@gmail.com", "*******");
+                SmtpServer.Credentials = new System.Net.NetworkCredential(WebConfigurationManager.AppSettings["EmailSender"], WebConfigurationManager.AppSettings["PasswordEmail"]);
                 SmtpServer.EnableSsl = true;
 
                 try
                 {
-                    //SmtpServer.Send(mail);
+                    SmtpServer.Send(mail);
                     order.SendStatus = true;
                     foreach (var item in order.OrderDetails.Where(x => x.Draft != true && !x.SendStatus))
                     {
@@ -94,18 +95,18 @@ namespace Egreeting.Web.Utils
                 mail.Attachments.Add(data);
                 
 
-                mail.From = new MailAddress("lethanh.hlht1993@gmail.com");
+                mail.From = new MailAddress(WebConfigurationManager.AppSettings["EmailSender"]);
                 mail.To.Add(orderDetail.Order.RecipientEmail);
                 mail.Subject = orderDetail.Order.SendSubject + " - " + orderDetail.Order.SenderName;
                 mail.Body = orderDetail.Order.SendMessage;
 
                 SmtpServer.Port = 587;
-                SmtpServer.Credentials = new System.Net.NetworkCredential("lethanh.hlht1993@gmail.com", "*******");
+                SmtpServer.Credentials = new System.Net.NetworkCredential(WebConfigurationManager.AppSettings["EmailSender"], WebConfigurationManager.AppSettings["PasswordEmail"]);
                 SmtpServer.EnableSsl = true;
 
                 try
                 {
-                    //SmtpServer.Send(mail);
+                    SmtpServer.Send(mail);
                     orderDetail.SendStatus = true;
                     orderDetail.SendTime = DateTime.Now;
                     context.OrderDetails.Attach(orderDetail);
