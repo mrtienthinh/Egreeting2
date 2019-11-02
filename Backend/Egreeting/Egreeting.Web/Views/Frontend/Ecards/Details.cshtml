@@ -53,7 +53,7 @@
                         <img src="~/Uploads/Thumbnails/@Model.ThumbnailUrl" alt="thumbnail" width="100px" />
                     </p>
                     <div class="product_count">
-                        <a class="button primary-btn" href="#">Add to Cart</a>
+                        <a class="button primary-btn" href="javascript:AddToCart('@Model.EcardID');">Add to Cart</a>
                     </div>
                     <div class="card_area d-flex align-items-center">
                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
@@ -145,3 +145,25 @@
     </div>
 </section>
 <!-- ================ top product area end ================= -->
+
+@section scripts{
+    <script>
+        function AddToCart(id) {
+            if (localStorage.getItem('LISTECARD') === null || localStorage.getItem('LISTECARD') === '') {
+                listEcard = [id];
+                $('.product_count a').css('background', 'orange');
+            } else {
+                listEcard = localStorage.getItem('LISTECARD');
+                if (!listEcard.split('-').includes(id)) {
+                    listEcard = listEcard + '-' + id;
+                    $('.product_count a').css('background', 'orange');
+                } else {
+                    listEcard = listEcard.split('-').filter(x => x !== id).join('-');
+                    $('.product_count a').css('background', '#8894ff');
+                }
+            }
+            localStorage.setItem('LISTECARD', listEcard);
+            LoadCart();
+        }
+    </script>
+}

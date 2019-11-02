@@ -932,6 +932,7 @@
     <Content Include="Content\User\Aroma Shop-doc\syntax-highlighter\styles\shThemeRDark.css" />
     <Content Include="Content\User\css\main.css" />
     <Content Include="Content\User\css\style.css" />
+    <Content Include="Content\User\img\background.jpg" />
     <Content Include="Content\User\img\blog\add.jpg" />
     <Content Include="Content\User\img\blog\author.png" />
     <Content Include="Content\User\img\blog\blog1.png" />

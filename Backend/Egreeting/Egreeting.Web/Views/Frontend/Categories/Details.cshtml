@@ -16,7 +16,11 @@
 
 <!--================ End Header Menu Area =================-->
 <!-- ================ start banner area ================= -->
-<section class="blog-banner-area" id="category">
+<section class="blog-banner-area" id="category" 
+    style="background-image: url(../../../Content/User/img/background.jpg) !important;
+    position: inherit; background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;">
     <div class="container h-100">
         <div class="blog-banner">
             <div class="text-center">
@@ -129,7 +133,7 @@
                                         <img class="card-img" src="~/Uploads/Thumbnails/@ecard.ThumbnailUrl" alt="ecard">
                                         <ul class="card-product__imgOverlay">
                                             <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-search"></i></button></li>
-                                            <li><button onclick="AddToCart('@ecard.EcardID')"><i class="ti-shopping-cart"></i></button></li>
+                                            <li><button onclick="AddToCart('@ecard.EcardID', this)" value="@ecard.EcardID"><i class="ti-shopping-cart"></i></button></li>
                                             <li><button onclick="LoadEcard('@ecard.EcardSlug')"><i class="ti-heart"></i></button></li>
                                         </ul>
                                     </div>
@@ -238,6 +242,26 @@
 
 @section scripts{
     <script>
+        function AddToCart(id, e) {
+            if (localStorage.getItem('LISTECARD') === null || localStorage.getItem('LISTECARD') === '') {
+                listEcard = [id];
+                $(e).css('background', 'orange');
+            } else {
+                listEcard = localStorage.getItem('LISTECARD');
+                if (!listEcard.split('-').includes(id)) {
+                    listEcard = listEcard + '-' + id;
+                    $(e).css('background', 'orange');
+                } else {
+                    listEcard = listEcard.split('-').filter(x => x !== id).join('-');
+                    $(e).css('background', '#8894ff');
+                }
+            }
+            localStorage.setItem('LISTECARD', listEcard);
+            LoadCart();
+        }
+
+        
+
         function LoadData(e) {
             var page = 1;
             if (e !== '') {
