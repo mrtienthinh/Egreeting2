@@ -424,3 +424,11 @@ INFO  2019-11-02 18:40:16,678 328839ms EGreetingLog           OnActionExecuting 
 INFO  2019-11-02 18:40:25,123 337284ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
 INFO  2019-11-02 18:40:30,344 342505ms EGreetingLog           OnActionExecuting  - Controller:Ecards action:Details
 INFO  2019-11-02 18:40:40,899 353060ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-02 20:21:14,736 38567ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-02 20:22:30,174   529ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-02 20:22:42,594 12949ms EGreetingLog           OnActionExecuting  - Controller:orders action:Index
+INFO  2019-11-02 20:22:50,514 20869ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-03 10:09:01,119   620ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-03 20:08:53,498  1133ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-03 20:10:38,227 105863ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Details
+INFO  2019-11-03 20:10:49,243 116878ms EGreetingLog           OnActionExecuting  - Controller:Categories action:Details
