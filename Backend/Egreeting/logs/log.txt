@@ -424,3 +424,5 @@ INFO  2019-11-02 18:40:16,678 328839ms EGreetingLog           OnActionExecuting 
 INFO  2019-11-02 18:40:25,123 337284ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
 INFO  2019-11-02 18:40:30,344 342505ms EGreetingLog           OnActionExecuting  - Controller:Ecards action:Details
 INFO  2019-11-02 18:40:40,899 353060ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault
+INFO  2019-11-02 19:27:23,633 3155794ms EGreetingLog           OnActionExecuting  - Controller:orders action:Index
+INFO  2019-11-03 10:47:54,552  1523ms EGreetingLog           OnActionExecuting  - Controller:Categories action:IndexDefault

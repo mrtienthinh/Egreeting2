@@ -1493,6 +1493,7 @@
     <Content Include="Content\User\vendors\themify-icons\fonts\themify.ttf" />
     <Content Include="Content\User\vendors\themify-icons\fonts\themify.woff" />
     <Content Include="Content\User\vendors\themify-icons\Themify IconFonts 5-23-2014.json" />
+    <None Include="Properties\PublishProfiles\Eproject.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
