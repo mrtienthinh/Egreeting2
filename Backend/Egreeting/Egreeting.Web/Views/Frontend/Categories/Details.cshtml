@@ -18,7 +18,7 @@
 <!-- ================ start banner area ================= -->
 <section class="blog-banner-area" id="category" 
     style="background-image: url(../../../Content/User/img/background.jpg) !important;
-    position: inherit; background-size: cover;
+    position: relative; background-size: cover;
     background-repeat: no-repeat;
     background-position: center;">
     <div class="container h-100">
@@ -37,6 +37,47 @@
     </div>
 </section>
 <!-- ================ end banner area ================= -->
+<!-- ================ top product area start ================= -->
+<section class="related-product-area">
+    <div class="container">
+        <div class="pb-60px mt-5" style="text-align: center;">
+            <h2>Top <span class="">ecard</span></h2>
+            <p>Popular ecard in the market</p>
+        </div>
+        @{
+            var rowCount = 1;
+        }
+        @foreach (var ecard in ViewBag.topEcards as List<Ecard>)
+        {
+            if (rowCount % 4 == 1)
+            {
+                @Html.Raw("<div class='row mt-30'>");
+            }
+            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
+                <div class="single-search-product-wrapper">
+                    <div class="single-search-product d-flex">
+                        <a href="/Ecards/@ecard.EcardSlug"><img src="~/Uploads/Thumbnails/@ecard.ThumbnailUrl" alt="ecard"></a>
+                        <div class="desc">
+                            <a href="/Ecards/@ecard.EcardSlug" class="title">@ecard.EcardName</a>
+                            @{
+                                var price = string.Format("${0:N2}", ecard.Price);
+                            }
+                            <div class="price">@price</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            if (rowCount % 4 == 0)
+            {
+                @Html.Raw("</div>");
+            }
+            rowCount++;
+        }
+
+    </div>
+</section>
+<!-- ================ top product area end ================= -->
 <!-- ================ category section start ================= -->
 <section class="section-margin--small mb-5">
     <div class="container">
@@ -198,47 +239,7 @@
         </div>
 </section>
 <!-- ================ category section end ================= -->
-<!-- ================ top product area start ================= -->
-<section class="related-product-area">
-    <div class="container">
-        <div class="section-intro pb-60px">
-            <p>Popular ecard in the market</p>
-            <h2>Top <span class="section-intro__style">ecard</span></h2>
-        </div>
-        @{
-            var rowCount = 1;
-        }
-        @foreach (var ecard in ViewBag.topEcards as List<Ecard>)
-        {
-            if (rowCount % 4 == 1)
-            {
-                @Html.Raw("<div class='row mt-30'>");
-            }
-            <div class="col-sm-6 col-xl-3 mb-4 mb-xl-0">
-                <div class="single-search-product-wrapper">
-                    <div class="single-search-product d-flex">
-                        <a href="/Ecards/@ecard.EcardSlug"><img src="~/Uploads/Thumbnails/@ecard.ThumbnailUrl" alt="ecard"></a>
-                        <div class="desc">
-                            <a href="/Ecards/@ecard.EcardSlug" class="title">@ecard.EcardName</a>
-                            @{
-                                var price = string.Format("${0:N2}", ecard.Price);
-                            }
-                            <div class="price">@price</div>
-                        </div>
-                    </div>
 
-                </div>
-            </div>
-            if (rowCount % 4 == 0)
-            {
-                @Html.Raw("</div>");
-            }
-            rowCount++;
-        }
-
-    </div>
-</section>
-<!-- ================ top product area end ================= -->
 
 @section scripts{
     <script>
